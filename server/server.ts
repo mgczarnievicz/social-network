@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+// const app: Express.Application = express();
 
 const compression = require("compression");
 const path = require("path");
@@ -10,6 +11,12 @@ const COOKIE_SECRET =
 
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
+
+const {
+    cleanEmptySpaces,
+    verifyingEmptyInputs,
+    registerNewUser,
+} = require("./process");
 
 app.use(compression());
 
@@ -61,12 +68,68 @@ app.use(
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 /* -----------------------------------------------------------------------------------------------------
-RUTAS
+                    GET
 ------------------------------------------------------------------------------------------------------*/
 
 app.get("/registration", (req, res) => {
     // here the responds
+    console.log("req.body", req.body);
+    const { name, surname, email, password } = req.body;
+    if (name === "" || surname === "" || email === "" || password === "") {
+        res.json({
+            Status: "Error",
+        });
+    } else {
+        // All file has some input.
+        registerNewUser(req.body);
+    }
+    res.json({
+        Status: "Success",
+    });
+
+    console.log("Getting Home info");
+    console.log("req.body", req.body);
+    // Verify the empty Strings!   Empty inputs are not valid"
+    if (verifyingEmptyInputs(req.body)) {
+        res.json({
+            Status: "Error",
+        });
+    } else {
+        const userInfo = cleanEmptySpaces(req.body);
+        console.log("userInfo clean", userInfo);
+        registerNewUser(userInfo)
+            .then((currentUser: { id: number }) => {
+                console.log("currentUser", currentUser);
+
+                req.session.userId = currentUser.id;
+
+                res.json({
+                    Status: "Error",
+                });
+            })
+            .catch(() => {
+                res.json({
+                    Status: "Error",
+                });
+            });
+    }
 });
+
+app.get("/logout", (req, res) => {
+    console.log("I am in Logout, we clear the cookies");
+    req.session = null;
+    // res.redirect("/login");
+});
+
+app.get("/user/id.json", function (req, res) {
+    res.json({
+        userId: req.session.userId,
+    });
+});
+
+/* ---------------------------------------------------------------------------------------
+                                        THE END
+-------------------------------------------------------------------------------------------*/
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

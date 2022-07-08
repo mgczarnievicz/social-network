@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./src/",
+        // "outDir": "./b/",
         "noImplicitAny": true,
         "module": "es6",
         "target": "es5",

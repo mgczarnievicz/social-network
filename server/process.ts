@@ -9,29 +9,41 @@ interface NewUserRegistration {
     password: string;
 }
 
+interface LogInUser {
+    email: string;
+    password: string;
+}
+
 function capitalizeFirstLetter(string: string): string {
     string = string.replace(/\s\s+/g, " ").trim();
     console.log("string.trim() in process:", string);
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
-/* 
-FIXME. see the types. I want any type of input but to be an object
-*/
-exports.cleanEmptySpaces = (obj: {}): {} => {
-    const returnObj = {};
+const cleanEmptySpaces = (
+    obj: NewUserRegistration | LogInUser
+): NewUserRegistration | LogInUser => {
     for (let key in obj) {
-        returnObj[key] = obj[key].replace(/\s\s+/g, " ").trim();
+        // I need to say that the key is a typeof key from the obj.
+        obj[key as keyof typeof obj] = obj[key as keyof typeof obj]
+            .replace(/\s\s+/g, " ")
+            .trim();
     }
-    return returnObj;
+    return obj;
 };
 
 // false -> input with stuff.
 // true -> input empty.
-exports.verifyingEmptyInputs = (obj: {}): boolean => {
-    for (let key in obj) {
-        if (obj[key].trim().length !== 0) {
-            console.log("verifyingEmptyInputs: \nFound sth", obj[key].trim());
+exports.verifyingEmptyInputs = (
+    obj: NewUserRegistration | LogInUser
+): boolean => {
+    const returnObj = cleanEmptySpaces(obj);
+    for (let key in returnObj) {
+        if (returnObj[key as keyof typeof returnObj].length !== 0) {
+            console.log(
+                "verifyingEmptyInputs: \nFound sth",
+                returnObj[key as keyof typeof returnObj].trim()
+            );
             return false;
         }
     }

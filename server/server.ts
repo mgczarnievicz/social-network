@@ -1,15 +1,17 @@
 import express, { Express } from "express";
-const app = express();
+import compression from "compression";
+import cookieSession from "cookie-session";
+import path from "path";
 
-const compression = require("compression");
-const path = require("path");
+import bodyParser from "body-parser";
+
+// @ts-ignore
+// export const app: Express = express();
+const app = express();
 
 // Bc we are deploying we need to define where to get the value.
 const COOKIE_SECRET =
     process.env.COOKIE_SECRET || require("./secrets").COOKIE_SECRET;
-
-const bodyParser = require("body-parser");
-const cookieSession = require("cookie-session");
 
 const { verifyingEmptyInputs, registerNewUser } = require("./process");
 
@@ -18,7 +20,7 @@ app.use(compression());
 app.use(
     cookieSession({
         secret: COOKIE_SECRET,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
+        maxAge: 1000 * 60 * 60 * 24 * 15,
         sameSite: true,
     })
 );
@@ -48,11 +50,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    })
-);
+// app.use(bodyparser.json());
+// app.use(
+//     bodyParser.urlencoded({
+//         extended: true,
+//     })
+// );
+
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
@@ -60,8 +66,9 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
                     GET
 ------------------------------------------------------------------------------------------------------*/
 
-app.get("/registration", (req, res) => {
+app.post("/registration.json", (req, res) => {
     // here the responds
+
     console.log("req.body", req.body);
     const { name, surname, email, password } = req.body;
     if (name === "" || surname === "" || email === "" || password === "") {

@@ -1,5 +1,6 @@
-const bcrypt = require("./encryption");
+const encryption = require("./encryption");
 const { registerUser } = require("./db");
+
 import { QueryResult } from "pg"; //This bc I need the type there.
 
 interface NewUserRegistration {
@@ -56,7 +57,7 @@ FIXME. see the types. I return an : QueryResult or the rows[]
 exports.registerNewUser = (newUser: NewUserRegistration) => {
     // First hash the pass.
     // then write in db.
-    return bcrypt
+    return encryption
         .hash(newUser.password)
         .then((hashPass: string) => {
             // Saved input in the db.

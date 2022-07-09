@@ -17,8 +17,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var registration_1 = __importDefault(require("./registration"));
 var login_1 = __importDefault(require("./login"));
+var resetPassword_1 = __importDefault(require("./resetPassword"));
 var react_router_dom_1 = require("react-router-dom");
 function Welcome() {
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ id: "welcome" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome!" }), (0, jsx_runtime_1.jsx)("img", { src: "/logo.png" }), (0, jsx_runtime_1.jsx)(react_router_dom_1.BrowserRouter, { children: (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ exact: true, path: "/" }, { children: (0, jsx_runtime_1.jsx)(registration_1.default, {}) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ path: "/login" }, { children: (0, jsx_runtime_1.jsx)(login_1.default, {}) }))] }) })] })));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ id: "main-welcome" }, { children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome!" }), (0, jsx_runtime_1.jsx)("img", { src: "/logo.png" })] }), (0, jsx_runtime_1.jsx)(react_router_dom_1.BrowserRouter, { children: (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ exact: true, path: "/" }, { children: (0, jsx_runtime_1.jsx)(registration_1.default, {}) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ path: "/login" }, { children: (0, jsx_runtime_1.jsx)(login_1.default, {}) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ path: "/resetPassword" }, { children: (0, jsx_runtime_1.jsx)(resetPassword_1.default, {}) }))] }) })] })));
 }
 exports.default = Welcome;

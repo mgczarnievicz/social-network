@@ -7,7 +7,7 @@ var express_1 = __importDefault(require("express"));
 var compression_1 = __importDefault(require("compression"));
 var cookie_session_1 = __importDefault(require("cookie-session"));
 var path_1 = __importDefault(require("path"));
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail;
 // @ts-ignore
 // export const app: Express = express();
 var app = (0, express_1.default)();
@@ -33,14 +33,6 @@ app.use(function (req, res, next) {
 //         res.redirect(`https://${req.hostname}${req.url}`);
 //     });
 // }
-app.use(function (req, res, next) {
-    console.log("---------------------");
-    console.log("req.url:", req.url);
-    console.log("req.method:", req.method);
-    console.log("req.session:", req.session);
-    console.log("---------------------");
-    next();
-});
 // app.use(bodyParser.json());
 // app.use(
 //     bodyParser.urlencoded({
@@ -50,6 +42,15 @@ app.use(function (req, res, next) {
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
 app.use(express_1.default.static(path_1.default.join(__dirname, "..", "client", "public")));
+app.use(function (req, res, next) {
+    console.log("---------------------");
+    console.log("req.url:", req.url);
+    console.log("req.method:", req.method);
+    console.log("req.session:", req.session);
+    console.log("req.body:", req.body);
+    console.log("---------------------");
+    next();
+});
 /* -----------------------------------------------------------------------------------------------------
                     GET
 ------------------------------------------------------------------------------------------------------*/
@@ -132,6 +133,46 @@ app.post("/login", function (req, res) {
             });
         });
     }
+});
+app.post("/sendEmail.json", function (req, res) {
+    console.log("\tGetting Send Email info");
+    console.log("req.body", req.body);
+    /*
+    search email in db and generate and sen an email to the mail.
+
+     */
+    foundEmail(req.body.email.trim())
+        .then(function (result) {
+        console.log("result", result);
+        if (result) {
+            console.log("found email is true?!");
+            res.json({
+                status: "Success",
+            });
+        }
+        else {
+            res.json({
+                status: "Error",
+            });
+        }
+    })
+        .catch(function (err) {
+        console.log("Error in log In", err);
+        res.json({
+            status: "Error",
+        });
+    });
+});
+app.post("/setNewPassword.json", function (req, res) {
+    console.log("\tGetting Set New Password info");
+    console.log("req.body", req.body);
+    /*
+    search in the db if the code is still valid and compare, if its the same update the password.
+     
+     */
+    res.json({
+        status: "Success",
+    });
 });
 /* ---------------------------------------------------------------------------------------
                                         THE END

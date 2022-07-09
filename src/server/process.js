@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail;
+var cryptoRandomString = require("crypto-random-string");
+// import cryptoRandomString from 'crypto-random-string';
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, registerCode = _a.registerCode;
+var sendEmail = require("./ses").sendEmail;
 // REVIEW : if working delete.
 // interface NewUserRegistration {
 //     name: string;
@@ -121,4 +124,35 @@ exports.logInVerify = function (userLogIn) {
             }
         });
     });
+};
+var RESET_PASS_SUBJECT = "HorseMan Reset Password";
+var RESET_PASS_MESSAGE_GREETING = "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n";
+var RESET_PASS_MESSAGE = "\nThank you for using our services.\nHorseMan group.";
+exports.foundEmail = function (email) {
+    return searchUserByEmail(email)
+        .then(function (result) {
+        console.log("result.rows", result.rows);
+        if (result.rows[0].id) {
+            // Found something
+            console.log("result.rows[0].id", result.rows[0].id);
+            var secretCode_1 = cryptoRandomString({
+                length: 10,
+                type: "base64",
+            });
+            return registerCode(email, secretCode_1)
+                .then(function () {
+                "Dear User, here is you code";
+                // (recipient: string, message: string, subject: string)
+                sendEmail(email, RESET_PASS_MESSAGE_GREETING +
+                    secretCode_1 +
+                    RESET_PASS_MESSAGE, RESET_PASS_SUBJECT).then(function (mailResult) {
+                    console.log("mailResult", mailResult);
+                    return true;
+                });
+            })
+                .catch(function () { return false; });
+        }
+        return false;
+    })
+        .catch(function (err) { return false; });
 };

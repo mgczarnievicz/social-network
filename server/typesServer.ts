@@ -18,6 +18,10 @@ export interface UserBasicInfo {
     surname: string;
 }
 
+export interface UserLoggingIn extends NewUserRegistration {
+    id: number;
+}
+
 export type LogInResponse = string | UserBasicInfo | QueryResult;
 export type RegisterResponse = UserBasicInfo | QueryResult;
 

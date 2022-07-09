@@ -106,15 +106,20 @@ class LogIn extends Component<LogInProps, LogInState> {
                     type="email"
                     name="email"
                     placeholder="Email"
+                    required
                     onChange={this.handleChange}
                 ></input>
                 <input
                     type="password"
                     name="password"
                     placeholder="Password"
+                    required
                     onChange={this.handleChange}
                 ></input>
                 <button onClick={this.handleSubmit}>Submit</button>
+                <p>
+                    <Link to="/resetPassword"> Forgot password? </Link>
+                </p>
             </div>
         );
     }

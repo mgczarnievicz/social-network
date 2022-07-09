@@ -20,6 +20,7 @@ const {
     registerNewUser,
     logInVerify,
     noEmptyInputsValid,
+    foundEmail,
 } = require("./process");
 
 // @ts-ignore
@@ -56,15 +57,6 @@ app.use((req, res, next) => {
 //     });
 // }
 
-app.use((req, res, next) => {
-    console.log("---------------------");
-    console.log("req.url:", req.url);
-    console.log("req.method:", req.method);
-    console.log("req.session:", req.session);
-    console.log("---------------------");
-    next();
-});
-
 // app.use(bodyParser.json());
 // app.use(
 //     bodyParser.urlencoded({
@@ -76,6 +68,17 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
+
+app.use((req, res, next) => {
+    console.log("---------------------");
+    console.log("req.url:", req.url);
+    console.log("req.method:", req.method);
+    console.log("req.session:", req.session);
+    console.log("req.body:", req.body);
+
+    console.log("---------------------");
+    next();
+});
 
 /* -----------------------------------------------------------------------------------------------------
                     GET
@@ -160,6 +163,49 @@ app.post("/login", (req, res) => {
                 });
             });
     }
+});
+
+app.post("/sendEmail.json", (req, res) => {
+    console.log("\tGetting Send Email info");
+    console.log("req.body", req.body);
+    /*
+    search email in db and generate and sen an email to the mail.
+
+     */
+
+    foundEmail(req.body.email.trim())
+        .then((result: boolean) => {
+            console.log("result", result);
+            if (result) {
+                console.log("found email is true?!");
+                res.json({
+                    status: "Success",
+                });
+            } else {
+                res.json({
+                    status: "Error",
+                });
+            }
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error in log In", err);
+            res.json({
+                status: "Error",
+            });
+        });
+});
+
+app.post("/setNewPassword.json", (req, res) => {
+    console.log("\tGetting Set New Password info");
+    console.log("req.body", req.body);
+    /*
+    search in the db if the code is still valid and compare, if its the same update the password.
+     
+     */
+
+    res.json({
+        status: "Success",
+    });
 });
 
 /* ---------------------------------------------------------------------------------------

@@ -1,5 +1,14 @@
 const encryption = require("./encryption");
-const { registerUser, getUserByEmail } = require("./db");
+const cryptoRandomString = require("crypto-random-string");
+// import cryptoRandomString from 'crypto-random-string';
+const {
+    registerUser,
+    getUserByEmail,
+    searchUserByEmail,
+    registerCode,
+} = require("./db");
+
+const { sendEmail } = require("./ses");
 
 import { QueryResult } from "pg"; //This bc I need the type there.
 import {
@@ -151,4 +160,43 @@ exports.logInVerify = (userLogIn: LogInUser): LogInResponse => {
                     }
                 });
         });
+};
+
+const RESET_PASS_SUBJECT = "HorseMan Reset Password";
+const RESET_PASS_MESSAGE_GREETING =
+    "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n";
+const RESET_PASS_MESSAGE =
+    "\nThank you for using our services.\nHorseMan group.";
+
+exports.foundEmail = (email: string): boolean => {
+    return searchUserByEmail(email)
+        .then((result: QueryResult) => {
+            console.log("result.rows", result.rows);
+            if (result.rows[0].id) {
+                // Found something
+                console.log("result.rows[0].id", result.rows[0].id);
+                const secretCode = cryptoRandomString({
+                    length: 10,
+                    type: "base64",
+                });
+                return registerCode(email, secretCode)
+                    .then(() => {
+                        "Dear User, here is you code";
+                        // (recipient: string, message: string, subject: string)
+                        sendEmail(
+                            email,
+                            RESET_PASS_MESSAGE_GREETING +
+                                secretCode +
+                                RESET_PASS_MESSAGE,
+                            RESET_PASS_SUBJECT
+                        ).then((mailResult: boolean) => {
+                            console.log("mailResult", mailResult);
+                            return true;
+                        });
+                    })
+                    .catch(() => false);
+            }
+            return false;
+        })
+        .catch((err: QueryResult) => false);
 };

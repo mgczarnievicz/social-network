@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var spicedPg = require("spiced-pg");
 var USER_NAME, USER_PASSWORD;
 console.log("process.env.NODE_ENV", process.env.NODE_ENV);
@@ -19,4 +21,6 @@ module.exports.registerUser = function (name, surname, email, password) {
     var param = [name, surname, email, password];
     return db.query(q, param);
 };
-export {};
+module.exports.getUserByEmail = function (email) {
+    return db.query("SELECT * FROM users\n        WHERE email = $1", [email]);
+};

@@ -1,5 +1,5 @@
-import Registration from "./registration.js";
-import LogIn from "./login.js";
+import Registration from "./registration";
+import LogIn from "./login";
 import { BrowserRouter, Route } from "react-router-dom";
 
 export default function Welcome() {

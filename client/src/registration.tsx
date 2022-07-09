@@ -20,11 +20,11 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
     constructor(props: RegistrationProps) {
         super(props);
         this.state = {
+            error: false,
             name: "",
             surname: "",
             email: "",
             password: "",
-            error: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,15 +41,6 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
     // HTMLInputElement
     // e: ChangeEvent<{ value: string }>
 
-    /* 
-    
-    (property) React.InputHTMLAttributes<HTMLInputElement>.onChange?: React.ChangeEventHandler<HTMLInputElement>
-     React.FormEvent<HTMLInputElement>
-      React.ChangeEventHandler<HTMLInputElement>
-
-       React.ChangeEvent<HTMLInputElement>
-      React.SyntheticEvent
-    */
     handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         // console.log("Handel Change is running");
         console.log(event.target.value);
@@ -112,26 +103,47 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
         // );
     }
     handleSubmit() {
+        const { error, ...newUser } = this.state;
+        console.log("newUser", newUser);
         console.log("Clicked submit!");
-        fetch("/registration", {
+        fetch("/registration.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.state),
+            body: JSON.stringify(newUser),
         })
             .then((resp) => resp.json())
             .then((data) => {
                 console.log("data from POST/ registration", data);
 
+                if (data.status === "Success") {
+                    location.reload();
+                } else {
+                    this.setState(
+                        {
+                            error: true,
+                        },
+                        () => console.log("this.state:", this.state)
+                    );
+                }
+
                 // trigger the page to reload
-                location.reload();
+                // location.reload();
+            })
+            .catch(() => {
+                this.setState(
+                    {
+                        error: true,
+                    },
+                    () => console.log("this.state:", this.state)
+                );
             });
     }
 
     render() {
         return (
-            <div>
+            <div className="form">
                 <h1> Rendering Registration</h1>
 
                 <p>

@@ -47,28 +47,54 @@ class LogIn extends Component<LogInProps, LogInState> {
             default:
                 break;
         }
+
+        // this.setState(
+        //     {
+        //         [event.target.name as keyof typeof LogInState]:
+        //             event.target.value,
+        //     },
+        //     () => console.log("this.state:", this.state)
+        // );
     }
     handleSubmit() {
         console.log("Clicked submit!");
+        const { error, ...newUser } = this.state;
+        console.log("newUser", newUser);
         fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.state),
+            body: JSON.stringify(newUser),
         })
             .then((resp) => resp.json())
             .then((data) => {
                 console.log("data from POST/ login", data);
 
-                // trigger the page to reload
-                location.reload();
+                if (data.status === "Success") {
+                    location.reload();
+                } else {
+                    this.setState(
+                        {
+                            error: true,
+                        },
+                        () => console.log("this.state:", this.state)
+                    );
+                }
+            })
+            .catch(() => {
+                this.setState(
+                    {
+                        error: true,
+                    },
+                    () => console.log("this.state:", this.state)
+                );
             });
     }
 
     render() {
         return (
-            <div>
+            <div className="form">
                 <h1> Rendering Registration</h1>
                 <p>
                     <Link to="/"> Registration </Link> || Log in

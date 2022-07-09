@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -24,9 +25,21 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Component } from "react";
-import { Link } from "react-router-dom";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = require("react");
+var react_router_dom_1 = require("react-router-dom");
 var LogIn = /** @class */ (function (_super) {
     __extends(LogIn, _super);
     function LogIn(props) {
@@ -60,26 +73,47 @@ var LogIn = /** @class */ (function (_super) {
             default:
                 break;
         }
+        // this.setState(
+        //     {
+        //         [event.target.name as keyof typeof LogInState]:
+        //             event.target.value,
+        //     },
+        //     () => console.log("this.state:", this.state)
+        // );
     };
     LogIn.prototype.handleSubmit = function () {
+        var _this = this;
         console.log("Clicked submit!");
+        var _a = this.state, error = _a.error, newUser = __rest(_a, ["error"]);
+        console.log("newUser", newUser);
         fetch("/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.state),
+            body: JSON.stringify(newUser),
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
             console.log("data from POST/ login", data);
-            // trigger the page to reload
-            location.reload();
+            if (data.status === "Success") {
+                location.reload();
+            }
+            else {
+                _this.setState({
+                    error: true,
+                }, function () { return console.log("this.state:", _this.state); });
+            }
+        })
+            .catch(function () {
+            _this.setState({
+                error: true,
+            }, function () { return console.log("this.state:", _this.state); });
         });
     };
     LogIn.prototype.render = function () {
-        return (_jsxs("div", { children: [_jsx("h1", { children: " Rendering Registration" }), _jsxs("p", { children: [_jsx(Link, __assign({ to: "/" }, { children: " Registration " })), " || Log in"] }), this.state.error && (_jsx("p", __assign({ className: "error" }, { children: "oops, something went wrong" }))), _jsx("input", { type: "email", name: "email", placeholder: "Email", onChange: this.handleChange }), _jsx("input", { type: "password", name: "password", placeholder: "Password", onChange: this.handleChange }), _jsx("button", __assign({ onClick: this.handleSubmit }, { children: "Submit" }))] }));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: " Rendering Registration" }), (0, jsx_runtime_1.jsxs)("p", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/" }, { children: " Registration " })), " || Log in"] }), this.state.error && ((0, jsx_runtime_1.jsx)("p", __assign({ className: "error" }, { children: "oops, something went wrong" }))), (0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "password", placeholder: "Password", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSubmit }, { children: "Submit" }))] })));
     };
     return LogIn;
-}(Component));
-export default LogIn;
+}(react_1.Component));
+exports.default = LogIn;

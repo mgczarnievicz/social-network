@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
-        // "outDir": "./b/",
+        "outDir": "./src/",
         "noImplicitAny": true,
-        "module": "es6",
+        "module": "commonjs",
         "target": "es5",
         "jsx": "react-jsx",
         "allowJs": true,
         "moduleResolution": "node",
         "noEmitOnError": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
     }
 }

@@ -2,13 +2,13 @@
     "name": "spiced-social-network",
     "version": "1.0.0",
     "description": "",
-    "main": "server/server.js",
+    "main": "server/server.ts",
     "scripts": {
         "build": "webpack --mode production",
         "dev:client": "webpack serve --mode development",
-        "dev:server": "nodemon --watch server --ignore server/uploads server/server.js",
+        "dev:server": "nodemon --watch server --ignore server/uploads server/server.ts",
         "dev": "concurrently \"npm:dev:*\" --kill-others",
-        "start": "node server/server.js",
+        "start": "node server/server.ts",
         "test": "jest"
     },
     "engines": {

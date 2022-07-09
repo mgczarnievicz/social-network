@@ -3,7 +3,24 @@ import compression from "compression";
 import cookieSession from "cookie-session";
 import path from "path";
 
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
+
+// Importing the Type of data
+import {
+    NewUserRegistration,
+    LogInUser,
+    ProcessSingleRes,
+    ProcessMultiRes,
+    UserBasicInfo,
+} from "./typesServer";
+import { QueryResult } from "pg"; //This bc I need the type there.
+
+const {
+    verifyingEmptyInputs,
+    registerNewUser,
+    logInVerify,
+    noEmptyInputsValid,
+} = require("./process");
 
 // @ts-ignore
 // export const app: Express = express();
@@ -12,8 +29,6 @@ const app = express();
 // Bc we are deploying we need to define where to get the value.
 const COOKIE_SECRET =
     process.env.COOKIE_SECRET || require("./secrets").COOKIE_SECRET;
-
-const { verifyingEmptyInputs, registerNewUser } = require("./process");
 
 app.use(compression());
 
@@ -50,7 +65,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use(bodyparser.json());
+// app.use(bodyParser.json());
 // app.use(
 //     bodyParser.urlencoded({
 //         extended: true,
@@ -66,59 +81,85 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
                     GET
 ------------------------------------------------------------------------------------------------------*/
 
-app.post("/registration.json", (req, res) => {
-    // here the responds
-
-    console.log("req.body", req.body);
-    const { name, surname, email, password } = req.body;
-    if (name === "" || surname === "" || email === "" || password === "") {
-        res.json({
-            Status: "Error",
-        });
-    } else {
-        // All file has some input.
-        registerNewUser(req.body);
-    }
+app.get("/user/id.json", function (req, res) {
     res.json({
-        Status: "Success",
+        userId: req.session && req.session.userId,
     });
-
-    console.log("Getting Home info");
-    console.log("req.body", req.body);
-    // Verify the empty Strings!   Empty inputs are not valid"
-    if (verifyingEmptyInputs(req.body)) {
-        res.json({
-            Status: "Error",
-        });
-    } else {
-        registerNewUser(req.body)
-            .then((currentUser: { id: number }) => {
-                console.log("currentUser", currentUser);
-
-                if (req.session) req.session.userId = currentUser.id;
-
-                res.json({
-                    Status: "Error",
-                });
-            })
-            .catch(() => {
-                res.json({
-                    Status: "Error",
-                });
-            });
-    }
 });
 
 app.get("/logout", (req, res) => {
     console.log("I am in Logout, we clear the cookies");
     req.session = null;
-    // res.redirect("/login");
+    res.redirect("/");
 });
 
-app.get("/user/id.json", function (req, res) {
-    res.json({
-        userId: req.session && req.session.userId,
-    });
+/* -----------------------------------------------------------------------------------------------------
+                            POST
+------------------------------------------------------------------------------------------------------*/
+app.post("/registration.json", (req, res) => {
+    // here the responds
+    console.log("\tGetting Registration info");
+    console.log("req.body", req.body);
+    // Verify the empty Strings!   Empty inputs are not valid"
+    if (!noEmptyInputsValid(req.body)) {
+        console.log("/registration.json found empty string!");
+        res.json({
+            status: "Error",
+        });
+    } else {
+        /* FIXME! see why when I already have a user the error enter in the then. 
+        Response: 
+            - db Error
+            - UserBasicInfo when success
+        */
+        registerNewUser(req.body)
+            .then((currentUser: UserBasicInfo) => {
+                console.log("currentUser:", currentUser);
+                if (req.session) req.session.userId = currentUser.id;
+                res.json({
+                    status: "Success",
+                });
+            })
+            .catch((err: QueryResult) => {
+                res.json({
+                    status: "Error",
+                });
+            });
+    }
+});
+
+app.post("/login", (req, res) => {
+    console.log("\tGetting Log In info");
+    console.log("req.body", req.body);
+
+    if (!noEmptyInputsValid(req.body)) {
+        console.log("/login found empty string!");
+        res.json({
+            status: "Error",
+        });
+    } else {
+        logInVerify(req.body)
+            .then((userLogIn: string | UserBasicInfo) => {
+                console.log("logInVerify Response, userLogIn:", userLogIn);
+                if (typeof userLogIn === "string") {
+                    res.json({
+                        status: "Error",
+                    });
+                } else {
+                    console.log("userLogIn not a string");
+                    req.session.userId = userLogIn.id;
+                    res.json({
+                        status: "Success",
+                    });
+                }
+            })
+            .catch((err: QueryResult) => {
+                console.log("Error in log In", err);
+                res.json({
+                    status: "Error",
+                });
+            });
+    }
 });
 
 /* ---------------------------------------------------------------------------------------

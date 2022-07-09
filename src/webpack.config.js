@@ -4,7 +4,7 @@ module.exports = function () { return ({
     entry: [
         "@babel/polyfill",
         path.join(__dirname, "client", "style.css"),
-        path.join(__dirname, "client", "src", "start.js"),
+        path.join(__dirname, "client", "src", "start.tsx"),
     ],
     output: {
         path: path.join(__dirname, "client", "public"),
@@ -31,7 +31,8 @@ module.exports = function () { return ({
             {
                 test: /\.js$/,
                 loader: "babel-loader",
-            }, {
+            },
+            {
                 test: /\.css$/i,
                 use: [
                     MiniCssExtractPlugin.loader,
@@ -53,7 +54,9 @@ module.exports = function () { return ({
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
     },
-    plugins: [new MiniCssExtractPlugin({
-            filename: 'bundle.css',
-        })],
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "bundle.css",
+        }),
+    ],
 }); };

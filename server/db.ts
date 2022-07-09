@@ -41,3 +41,11 @@ module.exports.registerUser = (
     const param = [name, surname, email, password];
     return db.query(q, param);
 };
+
+module.exports.getUserByEmail = (email: string) => {
+    return db.query(
+        `SELECT * FROM users
+        WHERE email = $1`,
+        [email]
+    );
+};

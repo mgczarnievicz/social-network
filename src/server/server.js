@@ -1,16 +1,22 @@
-import express from "express";
-var app = express();
-var compression = require("compression");
-var path = require("path");
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var compression_1 = __importDefault(require("compression"));
+var cookie_session_1 = __importDefault(require("cookie-session"));
+var path_1 = __importDefault(require("path"));
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid;
+// @ts-ignore
+// export const app: Express = express();
+var app = (0, express_1.default)();
 // Bc we are deploying we need to define where to get the value.
 var COOKIE_SECRET = process.env.COOKIE_SECRET || require("./secrets").COOKIE_SECRET;
-var bodyParser = require("body-parser");
-var cookieSession = require("cookie-session");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser;
-app.use(compression());
-app.use(cookieSession({
+app.use((0, compression_1.default)());
+app.use((0, cookie_session_1.default)({
     secret: COOKIE_SECRET,
-    maxAge: 1000 * 60 * 60 * 24 * 14,
+    maxAge: 1000 * 60 * 60 * 24 * 15,
     sameSite: true,
 }));
 // For Protection propose
@@ -35,69 +41,103 @@ app.use(function (req, res, next) {
     console.log("---------------------");
     next();
 });
-app.use(bodyParser.urlencoded({
-    extended: true,
-}));
-app.use(express.static(path.join(__dirname, "..", "client", "public")));
+// app.use(bodyParser.json());
+// app.use(
+//     bodyParser.urlencoded({
+//         extended: true,
+//     })
+// );
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded());
+app.use(express_1.default.static(path_1.default.join(__dirname, "..", "client", "public")));
 /* -----------------------------------------------------------------------------------------------------
                     GET
 ------------------------------------------------------------------------------------------------------*/
-app.get("/registration", function (req, res) {
-    // here the responds
-    console.log("req.body", req.body);
-    var _a = req.body, name = _a.name, surname = _a.surname, email = _a.email, password = _a.password;
-    if (name === "" || surname === "" || email === "" || password === "") {
-        res.json({
-            Status: "Error",
-        });
-    }
-    else {
-        // All file has some input.
-        registerNewUser(req.body);
-    }
-    res.json({
-        Status: "Success",
-    });
-    console.log("Getting Home info");
-    console.log("req.body", req.body);
-    // Verify the empty Strings!   Empty inputs are not valid"
-    if (verifyingEmptyInputs(req.body)) {
-        res.json({
-            Status: "Error",
-        });
-    }
-    else {
-        registerNewUser(req.body)
-            .then(function (currentUser) {
-            console.log("currentUser", currentUser);
-            if (req.session)
-                req.session.userId = currentUser.id;
-            res.json({
-                Status: "Error",
-            });
-        })
-            .catch(function () {
-            res.json({
-                Status: "Error",
-            });
-        });
-    }
-});
-app.get("/logout", function (req, res) {
-    console.log("I am in Logout, we clear the cookies");
-    req.session = null;
-    // res.redirect("/login");
-});
 app.get("/user/id.json", function (req, res) {
     res.json({
         userId: req.session && req.session.userId,
     });
 });
+app.get("/logout", function (req, res) {
+    console.log("I am in Logout, we clear the cookies");
+    req.session = null;
+    res.redirect("/");
+});
+/* -----------------------------------------------------------------------------------------------------
+                            POST
+------------------------------------------------------------------------------------------------------*/
+app.post("/registration.json", function (req, res) {
+    // here the responds
+    console.log("\tGetting Registration info");
+    console.log("req.body", req.body);
+    // Verify the empty Strings!   Empty inputs are not valid"
+    if (!noEmptyInputsValid(req.body)) {
+        console.log("/registration.json found empty string!");
+        res.json({
+            status: "Error",
+        });
+    }
+    else {
+        /* FIXME! see why when I already have a user the error enter in the then.
+        Response:
+            - db Error
+            - UserBasicInfo when success
+        */
+        registerNewUser(req.body)
+            .then(function (currentUser) {
+            console.log("currentUser:", currentUser);
+            if (req.session)
+                req.session.userId = currentUser.id;
+            res.json({
+                status: "Success",
+            });
+        })
+            .catch(function (err) {
+            res.json({
+                status: "Error",
+            });
+        });
+    }
+});
+app.post("/login", function (req, res) {
+    console.log("\tGetting Log In info");
+    console.log("req.body", req.body);
+    if (!noEmptyInputsValid(req.body)) {
+        console.log("/login found empty string!");
+        res.json({
+            status: "Error",
+        });
+    }
+    else {
+        logInVerify(req.body)
+            .then(function (userLogIn) {
+            console.log("logInVerify Response, userLogIn:", userLogIn);
+            if (typeof userLogIn === "string") {
+                res.json({
+                    status: "Error",
+                });
+            }
+            else {
+                console.log("userLogIn not a string");
+                req.session.userId = userLogIn.id;
+                res.json({
+                    status: "Success",
+                });
+            }
+        })
+            .catch(function (err) {
+            console.log("Error in log In", err);
+            res.json({
+                status: "Error",
+            });
+        });
+    }
+});
 /* ---------------------------------------------------------------------------------------
                                         THE END
 -------------------------------------------------------------------------------------------*/
 app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+    res.sendFile(path_1.default.join(__dirname, "..", "client", "index.html"));
 });
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");

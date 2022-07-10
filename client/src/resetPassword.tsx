@@ -145,6 +145,8 @@ class ResetPassword extends Component<ResetProps, ResetState> {
             case 1:
                 return (
                     <div className="form">
+                        <h2>Step 1:</h2>
+                        <p>Enter your mail</p>
                         <input
                             type="email"
                             name="email"
@@ -154,12 +156,16 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                             onChange={this.handleChange}
                         ></input>
                         <button onClick={this.handleSendEmail}>Submit</button>
-                        <h1>View 1: one input (email) & one button</h1>
                     </div>
                 );
             case 2:
                 return (
                     <div className="form">
+                        <h2>Step 2:</h2>
+                        <p>
+                            Verify your email where you recived your code and
+                            enter a new password
+                        </p>
                         <input
                             type="text"
                             name="code"
@@ -179,17 +185,15 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                         <button onClick={this.handleSetNewPassword}>
                             Submit
                         </button>
-                        <h1>
-                            View 2: two inputs (reset code, new pw), & one
-                            button
-                        </h1>
                     </div>
                 );
             case 3:
                 // remember to also add a link to login ;)
                 return (
                     <div className="form">
-                        <h1>success msg & link back to Login!</h1>
+                        <h1>
+                            Your Password was successfully change. Please Log In
+                        </h1>
                         <p>
                             <Link to="/login"> Log in </Link>
                         </p>
@@ -201,9 +205,11 @@ class ResetPassword extends Component<ResetProps, ResetState> {
     render() {
         return (
             <div>
-                {this.state.error && (
-                    <p className="error">oops, something went wrong</p>
-                )}
+                <h1>Follow the next steps to reset your Password.</h1>
+                <div className="error">
+                    {this.state.error && <p>oops, something went wrong</p>}
+                </div>
+
                 {/* call the method */}
                 {this.determineViewToRender()}
             </div>

@@ -43,9 +43,8 @@ module.exports.registerUser = (
 };
 
 // If the user is not register it will return an empty array
-module.exports.getUserByEmail = (
-    email: string
-): QueryResult<UserLoggingIn | null> => {
+//<UserLoggingIn | null>
+module.exports.getUserByEmail = (email: string): QueryResult => {
     return db.query(
         `SELECT * FROM users
         WHERE email = $1`,
@@ -93,10 +92,10 @@ module.exports.registerCode = (
 module.exports.searchCode = (email: string): QueryResult<{ code: number }> => {
     console.log("Log resetpassword:\n email:", email);
     const q = `SELECT code FROM resetpassword
-    WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' AND
-    email = $1
+    WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' 
+    AND email = $1
+    ORDER BY id DESC
     LIMIT 1 
-    ORDER DEC
     `;
 
     // RETURNING all

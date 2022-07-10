@@ -51,7 +51,7 @@ main {
 
 .form {
     width: 80%;
-    min-height: 302px;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
 }
@@ -66,15 +66,27 @@ main {
 
 .form button {
     width: 50%;
+    margin-top: 10px;
     color: whitesmoke;
     font-size: 20px;
     background-color: var(--color-dark);
     border: 2px solid var(--color-dark);
     border-radius: 12px;
     padding: 2px;
+    align-self: center;
 }
 
 .form button:hover {
     background-color: var(--color-board);
-    color: var(--color-dark);
+    color: var(--color-light);
+}
+
+.error {
+    width: 100%;
+    min-height: 20px;
+}
+
+.form h1,
+p {
+    text-align: center;
 }

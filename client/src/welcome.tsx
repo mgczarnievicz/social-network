@@ -3,6 +3,7 @@ import LogIn from "./login";
 import ResetPassword from "./resetPassword";
 
 import { BrowserRouter, Route } from "react-router-dom";
+import React from "react";
 
 export default function Welcome() {
     return (

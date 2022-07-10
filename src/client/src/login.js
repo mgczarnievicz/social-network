@@ -73,13 +73,6 @@ var LogIn = /** @class */ (function (_super) {
             default:
                 break;
         }
-        // this.setState(
-        //     {
-        //         [event.target.name as keyof typeof LogInState]:
-        //             event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // );
     };
     LogIn.prototype.handleSubmit = function () {
         var _this = this;
@@ -112,7 +105,7 @@ var LogIn = /** @class */ (function (_super) {
         });
     };
     LogIn.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: " Rendering Registration" }), (0, jsx_runtime_1.jsxs)("p", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/" }, { children: " Registration " })), " || Log in"] }), this.state.error && ((0, jsx_runtime_1.jsx)("p", __assign({ className: "error" }, { children: "oops, something went wrong" }))), (0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", required: true, onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "password", placeholder: "Password", required: true, onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSubmit }, { children: "Submit" })), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/resetPassword" }, { children: " Forgot password? " })) })] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: " Log In" }), (0, jsx_runtime_1.jsxs)("p", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/" }, { children: " Registration " })), " || Log in"] }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "error" }, { children: this.state.error && (0, jsx_runtime_1.jsx)("p", { children: "oops, something went wrong" }) })), (0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", required: true, onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "password", placeholder: "Password", required: true, onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSubmit }, { children: "Submit" })), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/resetPassword" }, { children: " Forgot password? " })) })] })));
     };
     return LogIn;
 }(react_1.Component));

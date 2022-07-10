@@ -21,6 +21,7 @@ const {
     logInVerify,
     noEmptyInputsValid,
     foundEmail,
+    setNewPassword,
 } = require("./process");
 
 // @ts-ignore
@@ -150,7 +151,7 @@ app.post("/login", (req, res) => {
                     });
                 } else {
                     console.log("userLogIn not a string");
-                    req.session.userId = userLogIn.id;
+                    if (req.session) req.session.userId = userLogIn.id;
                     res.json({
                         status: "Success",
                     });
@@ -170,8 +171,13 @@ app.post("/resetPassword/sendEmail.json", (req, res) => {
     console.log("req.body", req.body);
     /*
     search email in db and generate and sen an email to the mail.
-
      */
+    if (req.body.email.trim().length === 0) {
+        console.log("No email was enter");
+        res.json({
+            status: "Error",
+        });
+    }
 
     foundEmail(req.body.email.trim())
         .then((result: boolean) => {
@@ -200,12 +206,26 @@ app.post("/resetPassword/setNewPassword.json", (req, res) => {
     console.log("req.body", req.body);
     /*
     search in the db if the code is still valid and compare, if its the same update the password.
-     
      */
-
-    res.json({
-        status: "Success",
-    });
+    // FIXME! must validate the code and pass is not empty! see error in the functions already made.
+    setNewPassword(req.body)
+        .then((result: boolean) => {
+            console.log("Result in setNewPassword", result);
+            if (result) {
+                res.json({
+                    status: "Success",
+                });
+            } else {
+                res.json({
+                    status: "Error",
+                });
+            }
+        })
+        .catch(() =>
+            res.json({
+                status: "Error",
+            })
+        );
 });
 
 /* ---------------------------------------------------------------------------------------

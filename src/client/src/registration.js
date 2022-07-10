@@ -66,7 +66,6 @@ var Registration = /** @class */ (function (_super) {
     // e: ChangeEvent<{ value: string }>
     Registration.prototype.handleChange = function (event) {
         var _a, _b, _c, _d;
-        var _this = this;
         // console.log("Handel Change is running");
         console.log(event.target.value);
         /*
@@ -77,26 +76,27 @@ var Registration = /** @class */ (function (_super) {
             case "name":
                 this.setState((_a = {},
                     _a[event.target.name] = event.target.value,
-                    _a), function () { return console.log("this.state:", _this.state); });
+                    _a));
                 break;
             case "surname":
                 this.setState((_b = {},
                     _b[event.target.name] = event.target.value,
-                    _b), function () { return console.log("this.state:", _this.state); });
+                    _b));
                 break;
             case "email":
                 this.setState((_c = {},
                     _c[event.target.name] = event.target.value,
-                    _c), function () { return console.log("this.state:", _this.state); });
+                    _c));
                 break;
             case "password":
                 this.setState((_d = {},
                     _d[event.target.name] = event.target.value,
-                    _d), function () { return console.log("this.state:", _this.state); });
+                    _d));
                 break;
             default:
                 break;
         }
+        console.log("this.state:", this.state);
         // if (key === "name" || key === "surname" || key === "email") {
         //     this.setState(
         //         {
@@ -111,12 +111,19 @@ var Registration = /** @class */ (function (_super) {
         //     },
         //     () => console.log("this.state:", this.state)
         // );
+        // this.setState(
+        //     {
+        //         [event.target.name as keyof typeof LogInState]:
+        //             event.target.value,
+        //     },
+        //     () => console.log("this.state:", this.state)
+        // );
     };
     Registration.prototype.handleSubmit = function () {
         var _this = this;
         var _a = this.state, error = _a.error, newUser = __rest(_a, ["error"]);
+        console.log("Clicked submit in Registration!");
         console.log("newUser", newUser);
-        console.log("Clicked submit!");
         fetch("/registration.json", {
             method: "POST",
             headers: {
@@ -133,10 +140,9 @@ var Registration = /** @class */ (function (_super) {
             else {
                 _this.setState({
                     error: true,
-                }, function () { return console.log("this.state:", _this.state); });
+                });
             }
-            // trigger the page to reload
-            // location.reload();
+            console.log("this.state:", _this.state);
         })
             .catch(function () {
             _this.setState({
@@ -145,7 +151,7 @@ var Registration = /** @class */ (function (_super) {
         });
     };
     Registration.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: " Rendering Registration" }), (0, jsx_runtime_1.jsxs)("p", { children: ["Registration ||", (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/login" }, { children: " Log in " }))] }), this.state.error && ((0, jsx_runtime_1.jsx)("p", __assign({ className: "error" }, { children: "oops, something went wrong" }))), (0, jsx_runtime_1.jsx)("input", { type: "text", name: "name", placeholder: "Name", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("input", { type: "text", name: "surname", placeholder: "Surname", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "password", placeholder: "Password", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSubmit }, { children: "Submit" }))] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Join our community" }), (0, jsx_runtime_1.jsxs)("p", { children: ["Registration ||", (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/login" }, { children: " Log in " }))] }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "error" }, { children: this.state.error && (0, jsx_runtime_1.jsx)("p", { children: "oops, something went wrong" }) })), (0, jsx_runtime_1.jsx)("input", { type: "text", name: "name", placeholder: "Name", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("input", { type: "text", name: "surname", placeholder: "Surname", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "password", placeholder: "Password", onChange: this.handleChange, required: true }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSubmit }, { children: "Submit" }))] })));
     };
     return Registration;
 }(react_1.Component));

@@ -24,6 +24,8 @@ export interface UserResetPassword {
     newPassword: string;
 }
 
+export type StringObject = NewUserRegistration | LogInUser | UserResetPassword;
+
 export interface UserLoggingIn extends NewUserRegistration {
     id: number;
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import { Component } from "react";
 import { ChangeEvent } from "react";
 import { Link } from "react-router-dom";
@@ -51,41 +52,29 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
          */
         switch (event.target.name) {
             case "name":
-                this.setState(
-                    {
-                        [event.target.name]: event.target.value,
-                    },
-                    () => console.log("this.state:", this.state)
-                );
+                this.setState({
+                    [event.target.name]: event.target.value,
+                });
                 break;
             case "surname":
-                this.setState(
-                    {
-                        [event.target.name]: event.target.value,
-                    },
-                    () => console.log("this.state:", this.state)
-                );
+                this.setState({
+                    [event.target.name]: event.target.value,
+                });
                 break;
             case "email":
-                this.setState(
-                    {
-                        [event.target.name]: event.target.value,
-                    },
-                    () => console.log("this.state:", this.state)
-                );
+                this.setState({
+                    [event.target.name]: event.target.value,
+                });
                 break;
             case "password":
-                this.setState(
-                    {
-                        [event.target.name]: event.target.value,
-                    },
-                    () => console.log("this.state:", this.state)
-                );
+                this.setState({
+                    [event.target.name]: event.target.value,
+                });
                 break;
             default:
                 break;
         }
-
+        console.log("this.state:", this.state);
         // if (key === "name" || key === "surname" || key === "email") {
         //     this.setState(
         //         {
@@ -101,11 +90,20 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
         //     },
         //     () => console.log("this.state:", this.state)
         // );
+
+        // this.setState(
+        //     {
+        //         [event.target.name as keyof typeof LogInState]:
+        //             event.target.value,
+        //     },
+        //     () => console.log("this.state:", this.state)
+        // );
     }
     handleSubmit() {
         const { error, ...newUser } = this.state;
+        console.log("Clicked submit in Registration!");
         console.log("newUser", newUser);
-        console.log("Clicked submit!");
+
         fetch("/registration.json", {
             method: "POST",
             headers: {
@@ -120,16 +118,11 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
                 if (data.status === "Success") {
                     location.reload();
                 } else {
-                    this.setState(
-                        {
-                            error: true,
-                        },
-                        () => console.log("this.state:", this.state)
-                    );
+                    this.setState({
+                        error: true,
+                    });
                 }
-
-                // trigger the page to reload
-                // location.reload();
+                console.log("this.state:", this.state);
             })
             .catch(() => {
                 this.setState(
@@ -144,15 +137,16 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
     render() {
         return (
             <div className="form">
-                <h1> Rendering Registration</h1>
+                <h1>Join our community</h1>
 
                 <p>
                     Registration ||
                     <Link to="/login"> Log in </Link>
                 </p>
-                {this.state.error && (
-                    <p className="error">oops, something went wrong</p>
-                )}
+                <div className="error">
+                    {this.state.error && <p>oops, something went wrong</p>}
+                </div>
+
                 <input
                     type="text"
                     name="name"

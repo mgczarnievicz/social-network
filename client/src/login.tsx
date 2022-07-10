@@ -1,3 +1,4 @@
+import React from "react";
 import { Component } from "react";
 import { ChangeEvent } from "react";
 import { Link } from "react-router-dom";
@@ -47,14 +48,6 @@ class LogIn extends Component<LogInProps, LogInState> {
             default:
                 break;
         }
-
-        // this.setState(
-        //     {
-        //         [event.target.name as keyof typeof LogInState]:
-        //             event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // );
     }
     handleSubmit() {
         console.log("Clicked submit!");
@@ -95,13 +88,14 @@ class LogIn extends Component<LogInProps, LogInState> {
     render() {
         return (
             <div className="form">
-                <h1> Rendering Registration</h1>
+                <h1> Log In</h1>
                 <p>
                     <Link to="/"> Registration </Link> || Log in
                 </p>
-                {this.state.error && (
-                    <p className="error">oops, something went wrong</p>
-                )}
+                <div className="error">
+                    {this.state.error && <p>oops, something went wrong</p>}
+                </div>
+
                 <input
                     type="email"
                     name="email"

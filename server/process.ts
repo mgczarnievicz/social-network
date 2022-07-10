@@ -22,6 +22,7 @@ import {
     LogInResponse,
     RegisterResponse,
     UserResetPassword,
+    StringObject,
 } from "./typesServer";
 
 // REVIEW : if working delete.
@@ -67,7 +68,7 @@ function cleanEmptySpaces(obj: NewUserRegistration | LogInUser) {
 //
 /* 
 If there is an empty input, that an ERROR!
-
+REVIEW : HOW TO MAKE IT ACCEPT ANY OBJECT WITH STRING AS KEY PROP. 
  */
 exports.noEmptyInputsValid = (
     obj: NewUserRegistration | LogInUser
@@ -227,10 +228,7 @@ exports.setNewPassword = (userInput: UserResetPassword) => {
                 return encryptPassword(userInput.newPassword).then(
                     (hash: string) => {
                         console.log("encryptPassword result:", hash);
-                        return updatePassword(
-                            userInput.email,
-                            userInput.newPassword
-                        )
+                        return updatePassword(userInput.email, hash)
                             .then(() => true)
                             .catch(() => false);
                     }

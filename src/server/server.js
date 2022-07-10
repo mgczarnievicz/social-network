@@ -7,7 +7,7 @@ var express_1 = __importDefault(require("express"));
 var compression_1 = __importDefault(require("compression"));
 var cookie_session_1 = __importDefault(require("cookie-session"));
 var path_1 = __importDefault(require("path"));
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword;
 // @ts-ignore
 // export const app: Express = express();
 var app = (0, express_1.default)();
@@ -120,7 +120,8 @@ app.post("/login", function (req, res) {
             }
             else {
                 console.log("userLogIn not a string");
-                req.session.userId = userLogIn.id;
+                if (req.session)
+                    req.session.userId = userLogIn.id;
                 res.json({
                     status: "Success",
                 });
@@ -139,8 +140,13 @@ app.post("/resetPassword/sendEmail.json", function (req, res) {
     console.log("req.body", req.body);
     /*
     search email in db and generate and sen an email to the mail.
-
      */
+    if (req.body.email.trim().length === 0) {
+        console.log("No email was enter");
+        res.json({
+            status: "Error",
+        });
+    }
     foundEmail(req.body.email.trim())
         .then(function (result) {
         console.log("found email result", result);
@@ -168,10 +174,26 @@ app.post("/resetPassword/setNewPassword.json", function (req, res) {
     console.log("req.body", req.body);
     /*
     search in the db if the code is still valid and compare, if its the same update the password.
-     
      */
-    res.json({
-        status: "Success",
+    // FIXME! must validate the code and pass is not empty! see error in the functions already made.
+    setNewPassword(req.body)
+        .then(function (result) {
+        console.log("Result in setNewPassword", result);
+        if (result) {
+            res.json({
+                status: "Success",
+            });
+        }
+        else {
+            res.json({
+                status: "Error",
+            });
+        }
+    })
+        .catch(function () {
+        return res.json({
+            status: "Error",
+        });
     });
 });
 /* ---------------------------------------------------------------------------------------

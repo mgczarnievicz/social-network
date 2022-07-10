@@ -43,7 +43,7 @@ function cleanEmptySpaces(obj) {
 //
 /*
 If there is an empty input, that an ERROR!
-
+REVIEW : HOW TO MAKE IT ACCEPT ANY OBJECT WITH STRING AS KEY PROP.
  */
 exports.noEmptyInputsValid = function (obj) {
     var returnObj = cleanEmptySpaces(obj);
@@ -173,7 +173,7 @@ exports.setNewPassword = function (userInput) {
             console.log("The codes are the same. I can has and save the new Pass.");
             return encryptPassword(userInput.newPassword).then(function (hash) {
                 console.log("encryptPassword result:", hash);
-                return updatePassword(userInput.email, userInput.newPassword)
+                return updatePassword(userInput.email, hash)
                     .then(function () { return true; })
                     .catch(function () { return false; });
             });

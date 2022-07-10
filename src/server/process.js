@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var cryptoRandomString = require("crypto-random-string");
 // import cryptoRandomString from 'crypto-random-string';
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, registerCode = _a.registerCode;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode;
 var sendEmail = require("./ses").sendEmail;
 // REVIEW : if working delete.
 // interface NewUserRegistration {
@@ -70,6 +70,12 @@ exports.verifyingIfThereIsInputs = function (obj) {
     }
     return true;
 };
+function encryptPassword(password) {
+    return encryption
+        .hash(password)
+        .then(function (hashPass) { return hashPass; })
+        .catch(function (hashErr) { return hashErr; });
+}
 /*
 FIXME. see the types. I return an : QueryResult or the rows[]
 Response:
@@ -126,31 +132,51 @@ exports.logInVerify = function (userLogIn) {
     });
 };
 var RESET_PASS_SUBJECT = "HorseMan Reset Password";
-var RESET_PASS_MESSAGE_GREETING = "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n";
+var RESET_PASS_MESSAGE_GREETING = "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n\t";
 var RESET_PASS_MESSAGE = "\nThank you for using our services.\nHorseMan group.";
+function setCodeAndSendEmail(email) {
+    var secretCode = cryptoRandomString({
+        length: 10,
+        type: "base64",
+    });
+    return registerCode(email, secretCode)
+        .then(function () {
+        // (recipient: string, message: string, subject: string)
+        return sendEmail(email, RESET_PASS_MESSAGE_GREETING + secretCode + RESET_PASS_MESSAGE, RESET_PASS_SUBJECT).then(function (mailResult) {
+            console.log("mailResult", mailResult);
+            return true;
+        });
+    })
+        .catch(function () { return false; });
+}
 exports.foundEmail = function (email) {
     return searchUserByEmail(email)
         .then(function (result) {
         console.log("result.rows", result.rows);
         if (result.rows[0].id) {
-            // Found something
             console.log("result.rows[0].id", result.rows[0].id);
-            var secretCode_1 = cryptoRandomString({
-                length: 10,
-                type: "base64",
+            return setCodeAndSendEmail(email);
+        }
+        return false;
+    })
+        .catch(function (err) { return false; });
+};
+exports.setNewPassword = function (userInput) {
+    console.log("userInput", userInput);
+    // Search for email in dataBase in reset Password.
+    // Compare code.
+    // if codes are the same then hash the new password and save it in db.
+    return searchCode(userInput.email)
+        .then(function (result) {
+        console.log("search code result", result.rows);
+        if (result.rows[0].code === userInput.code) {
+            console.log("The codes are the same. I can has and save the new Pass.");
+            return encryptPassword(userInput.newPassword).then(function (hash) {
+                console.log("encryptPassword result:", hash);
+                return updatePassword(userInput.email, userInput.newPassword)
+                    .then(function () { return true; })
+                    .catch(function () { return false; });
             });
-            return registerCode(email, secretCode_1)
-                .then(function () {
-                "Dear User, here is you code";
-                // (recipient: string, message: string, subject: string)
-                sendEmail(email, RESET_PASS_MESSAGE_GREETING +
-                    secretCode_1 +
-                    RESET_PASS_MESSAGE, RESET_PASS_SUBJECT).then(function (mailResult) {
-                    console.log("mailResult", mailResult);
-                    return true;
-                });
-            })
-                .catch(function () { return false; });
         }
         return false;
     })

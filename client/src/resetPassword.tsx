@@ -72,7 +72,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
         const { error, view, ...userInput } = this.state;
         console.log("userInput", userInput);
 
-        fetch("/sendEmail.json", {
+        fetch("/resetPassword/sendEmail.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -109,7 +109,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
         console.log("Set New Password");
         const { error, view, ...userInput } = this.state;
         console.log("userInput", userInput);
-        fetch("/setNewPassword.json", {
+        fetch("/resetPassword/setNewPassword.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -144,7 +144,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
         switch (this.state.view) {
             case 1:
                 return (
-                    <div>
+                    <div className="form">
                         <input
                             type="email"
                             name="email"
@@ -159,7 +159,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                 );
             case 2:
                 return (
-                    <div>
+                    <div className="form">
                         <input
                             type="text"
                             name="code"
@@ -188,7 +188,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
             case 3:
                 // remember to also add a link to login ;)
                 return (
-                    <div>
+                    <div className="form">
                         <h1>success msg & link back to Login!</h1>
                         <p>
                             <Link to="/login"> Log in </Link>

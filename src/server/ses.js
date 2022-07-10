@@ -19,7 +19,6 @@ var ses = new aws_sdk_1.default.SES({
     region: "eu-west-1", // Make sure this corresponds to the region in which you have verified your email address (or 'eu-west-1' if you are using the Spiced credentials)
 });
 exports.sendEmail = function (recipient, message, subject) {
-    console.log("\tSENDING EMAIL \nRecipient ".concat(recipient, "\nmessage ").concat(message, "\nSubject").concat(subject));
     return ses
         .sendEmail({
         // Put here the mail that was provided by spiced or my own

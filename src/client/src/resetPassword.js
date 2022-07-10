@@ -96,7 +96,7 @@ var ResetPassword = /** @class */ (function (_super) {
         console.log("this.state.email", this.state.email);
         var _a = this.state, error = _a.error, view = _a.view, userInput = __rest(_a, ["error", "view"]);
         console.log("userInput", userInput);
-        fetch("/sendEmail.json", {
+        fetch("/resetPassword/sendEmail.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -132,7 +132,7 @@ var ResetPassword = /** @class */ (function (_super) {
         console.log("Set New Password");
         var _a = this.state, error = _a.error, view = _a.view, userInput = __rest(_a, ["error", "view"]);
         console.log("userInput", userInput);
-        fetch("/setNewPassword.json", {
+        fetch("/resetPassword/setNewPassword.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -165,12 +165,12 @@ var ResetPassword = /** @class */ (function (_super) {
         // this method determines what the render!
         switch (this.state.view) {
             case 1:
-                return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", required: true, ref: "emailRef", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSendEmail }, { children: "Submit" })), (0, jsx_runtime_1.jsx)("h1", { children: "View 1: one input (email) & one button" })] }));
+                return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("input", { type: "email", name: "email", placeholder: "Email", required: true, ref: "emailRef", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSendEmail }, { children: "Submit" })), (0, jsx_runtime_1.jsx)("h1", { children: "View 1: one input (email) & one button" })] })));
             case 2:
-                return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("input", { type: "text", name: "code", placeholder: "code", required: true, ref: "codeRef", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "newPassword", placeholder: "Password", required: true, ref: "passwordRef", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSetNewPassword }, { children: "Submit" })), (0, jsx_runtime_1.jsx)("h1", { children: "View 2: two inputs (reset code, new pw), & one button" })] }));
+                return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("input", { type: "text", name: "code", placeholder: "code", required: true, ref: "codeRef", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("input", { type: "password", name: "newPassword", placeholder: "Password", required: true, ref: "passwordRef", onChange: this.handleChange }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.handleSetNewPassword }, { children: "Submit" })), (0, jsx_runtime_1.jsx)("h1", { children: "View 2: two inputs (reset code, new pw), & one button" })] })));
             case 3:
                 // remember to also add a link to login ;)
-                return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "success msg & link back to Login!" }), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/login" }, { children: " Log in " })) })] }));
+                return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "form" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "success msg & link back to Login!" }), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/login" }, { children: " Log in " })) })] })));
         }
     };
     ResetPassword.prototype.render = function () {

@@ -42,3 +42,10 @@ module.exports.registerCode = function (email, code) {
     var param = [email, code];
     return db.query(q, param);
 };
+module.exports.searchCode = function (email) {
+    console.log("Log resetpassword:\n email:", email);
+    var q = "SELECT code FROM resetpassword\n    WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' AND\n    email = $1\n    LIMIT 1 \n    ORDER DEC\n    ";
+    // RETURNING all
+    var param = [email];
+    return db.query(q, param);
+};

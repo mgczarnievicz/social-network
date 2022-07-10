@@ -134,7 +134,7 @@ app.post("/login", function (req, res) {
         });
     }
 });
-app.post("/sendEmail.json", function (req, res) {
+app.post("/resetPassword/sendEmail.json", function (req, res) {
     console.log("\tGetting Send Email info");
     console.log("req.body", req.body);
     /*
@@ -143,7 +143,7 @@ app.post("/sendEmail.json", function (req, res) {
      */
     foundEmail(req.body.email.trim())
         .then(function (result) {
-        console.log("result", result);
+        console.log("found email result", result);
         if (result) {
             console.log("found email is true?!");
             res.json({
@@ -163,7 +163,7 @@ app.post("/sendEmail.json", function (req, res) {
         });
     });
 });
-app.post("/setNewPassword.json", function (req, res) {
+app.post("/resetPassword/setNewPassword.json", function (req, res) {
     console.log("\tGetting Set New Password info");
     console.log("req.body", req.body);
     /*

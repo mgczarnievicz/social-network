@@ -5,11 +5,14 @@ const {
     registerUser,
     getUserByEmail,
     searchUserByEmail,
+    updatePassword,
     registerCode,
+    searchCode,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
 
+import { String } from "aws-sdk/clients/apigateway";
 import { QueryResult } from "pg"; //This bc I need the type there.
 import {
     NewUserRegistration,
@@ -18,6 +21,7 @@ import {
     ProcessMultiRes,
     LogInResponse,
     RegisterResponse,
+    UserResetPassword,
 } from "./typesServer";
 
 // REVIEW : if working delete.
@@ -99,6 +103,13 @@ exports.verifyingIfThereIsInputs = (
     return true;
 };
 
+function encryptPassword(password: string) {
+    return encryption
+        .hash(password)
+        .then((hashPass: string) => hashPass)
+        .catch((hashErr: QueryResult) => hashErr);
+}
+
 /* 
 FIXME. see the types. I return an : QueryResult or the rows[]
 Response: 
@@ -164,37 +175,66 @@ exports.logInVerify = (userLogIn: LogInUser): LogInResponse => {
 
 const RESET_PASS_SUBJECT = "HorseMan Reset Password";
 const RESET_PASS_MESSAGE_GREETING =
-    "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n";
+    "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n\t";
 const RESET_PASS_MESSAGE =
     "\nThank you for using our services.\nHorseMan group.";
+
+function setCodeAndSendEmail(email: string) {
+    const secretCode = cryptoRandomString({
+        length: 10,
+        type: "base64",
+    });
+    return registerCode(email, secretCode)
+        .then(() => {
+            // (recipient: string, message: string, subject: string)
+            return sendEmail(
+                email,
+                RESET_PASS_MESSAGE_GREETING + secretCode + RESET_PASS_MESSAGE,
+                RESET_PASS_SUBJECT
+            ).then((mailResult: boolean) => {
+                console.log("mailResult", mailResult);
+                return true;
+            });
+        })
+        .catch(() => false);
+}
 
 exports.foundEmail = (email: string): boolean => {
     return searchUserByEmail(email)
         .then((result: QueryResult) => {
             console.log("result.rows", result.rows);
             if (result.rows[0].id) {
-                // Found something
                 console.log("result.rows[0].id", result.rows[0].id);
-                const secretCode = cryptoRandomString({
-                    length: 10,
-                    type: "base64",
-                });
-                return registerCode(email, secretCode)
-                    .then(() => {
-                        "Dear User, here is you code";
-                        // (recipient: string, message: string, subject: string)
-                        sendEmail(
-                            email,
-                            RESET_PASS_MESSAGE_GREETING +
-                                secretCode +
-                                RESET_PASS_MESSAGE,
-                            RESET_PASS_SUBJECT
-                        ).then((mailResult: boolean) => {
-                            console.log("mailResult", mailResult);
-                            return true;
-                        });
-                    })
-                    .catch(() => false);
+                return setCodeAndSendEmail(email);
+            }
+            return false;
+        })
+        .catch((err: QueryResult) => false);
+};
+
+exports.setNewPassword = (userInput: UserResetPassword) => {
+    console.log("userInput", userInput);
+    // Search for email in dataBase in reset Password.
+    // Compare code.
+    // if codes are the same then hash the new password and save it in db.
+    return searchCode(userInput.email)
+        .then((result: QueryResult) => {
+            console.log("search code result", result.rows);
+            if (result.rows[0].code === userInput.code) {
+                console.log(
+                    "The codes are the same. I can has and save the new Pass."
+                );
+                return encryptPassword(userInput.newPassword).then(
+                    (hash: string) => {
+                        console.log("encryptPassword result:", hash);
+                        return updatePassword(
+                            userInput.email,
+                            userInput.newPassword
+                        )
+                            .then(() => true)
+                            .catch(() => false);
+                    }
+                );
             }
             return false;
         })

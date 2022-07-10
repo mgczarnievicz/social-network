@@ -18,6 +18,12 @@ export interface UserBasicInfo {
     surname: string;
 }
 
+export interface UserResetPassword {
+    email: string;
+    code: string;
+    newPassword: string;
+}
+
 export interface UserLoggingIn extends NewUserRegistration {
     id: number;
 }

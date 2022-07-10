@@ -7,12 +7,11 @@ import { BrowserRouter, Route } from "react-router-dom";
 export default function Welcome() {
     return (
         <div id="main-welcome">
-            <div>
-                <h1>Welcome!</h1>
-                <img src="/logo.png" />
+            <div className="image-welcome">
+                <img src="/HorseMan pink.png" />
             </div>
             <BrowserRouter>
-                <div>
+                <div className="access-welcome">
                     <Route exact path="/">
                         <Registration />
                     </Route>

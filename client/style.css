@@ -1,19 +1,80 @@
+:root {
+    --color-dark: #f4716d;
+    --color-light: #fbd5c0;
+    --color-board: #ffae00;
+}
+
+* {
+    font-family: "Arima", cursive;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
 body {
     height: 100vh;
     width: 100%;
-    background-color: rgb(164, 164, 213);
+    background-color: white;
+}
+main {
+    height: 100vh;
+    width: 100%;
+}
+
+/* ----------------------------------------------------------------------
+                                    WELCOME 
+------------------------------------------------------------------------*/
+#main-welcome {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.image-welcome {
+    width: 120%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.access-welcome {
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+    background-color: var(--color-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .form {
-    width: 50%;
+    width: 80%;
+    min-height: 302px;
     display: flex;
     flex-direction: column;
 }
 .form input {
     margin: 10px;
     font-size: 20px;
+    background-color: var(--color-light);
+    border: none;
+    border-bottom: var(--color-dark) 2px solid;
+    padding-left: 5px;
 }
 
 .form button {
     width: 50%;
+    color: whitesmoke;
+    font-size: 20px;
+    background-color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+    border-radius: 12px;
+    padding: 2px;
+}
+
+.form button:hover {
+    background-color: var(--color-board);
+    color: var(--color-dark);
 }

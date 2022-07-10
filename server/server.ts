@@ -165,7 +165,7 @@ app.post("/login", (req, res) => {
     }
 });
 
-app.post("/sendEmail.json", (req, res) => {
+app.post("/resetPassword/sendEmail.json", (req, res) => {
     console.log("\tGetting Send Email info");
     console.log("req.body", req.body);
     /*
@@ -175,7 +175,7 @@ app.post("/sendEmail.json", (req, res) => {
 
     foundEmail(req.body.email.trim())
         .then((result: boolean) => {
-            console.log("result", result);
+            console.log("found email result", result);
             if (result) {
                 console.log("found email is true?!");
                 res.json({
@@ -195,7 +195,7 @@ app.post("/sendEmail.json", (req, res) => {
         });
 });
 
-app.post("/setNewPassword.json", (req, res) => {
+app.post("/resetPassword/setNewPassword.json", (req, res) => {
     console.log("\tGetting Set New Password info");
     console.log("req.body", req.body);
     /*

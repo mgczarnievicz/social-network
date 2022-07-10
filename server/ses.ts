@@ -16,9 +16,6 @@ const ses = new aws.SES({
 });
 
 exports.sendEmail = (recipient: string, message: string, subject: string) => {
-    console.log(
-        `\tSENDING EMAIL \nRecipient ${recipient}\nmessage ${message}\nSubject${subject}`
-    );
     return ses
         .sendEmail({
             // Put here the mail that was provided by spiced or my own

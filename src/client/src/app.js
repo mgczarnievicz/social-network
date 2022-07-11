@@ -14,6 +14,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -34,6 +45,7 @@ var App = /** @class */ (function (_super) {
             photoUrl: "",
             uploaderVisible: false,
         };
+        _this.toggleModal = _this.toggleModal.bind(_this);
         return _this;
     }
     App.prototype.componentDidMount = function () {
@@ -54,7 +66,7 @@ var App = /** @class */ (function (_super) {
         console.log("This is arg", arg);
     };
     App.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)(logo_1.default, {}), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photoUrl }), (0, jsx_runtime_1.jsx)("h1", { children: "Profile Picture Component." }), this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { methodInApp: this.methodInApp }))] }));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "app-container" }, { children: [(0, jsx_runtime_1.jsx)(logo_1.default, {}), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photoUrl, toggleModal: this.toggleModal }), (0, jsx_runtime_1.jsx)("h1", { children: "Profile Picture Component." }), (0, jsx_runtime_1.jsxs)("h1", { children: ["Welcome ", this.state.name, " ", this.state.surname] }), this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { methodInApp: this.methodInApp }))] })));
     };
     return App;
 }(react_1.Component));

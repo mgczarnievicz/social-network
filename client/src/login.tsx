@@ -24,9 +24,6 @@ class LogIn extends Component<LogInProps, LogInState> {
     }
 
     handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        // console.log("Handel Change is running");
-        console.log(event.target.value);
-
         this.setState(
             {
                 // Bc not all of the key are optional i always need to set them. So I deconstruct and set the one that i want

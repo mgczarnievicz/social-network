@@ -56,8 +56,6 @@ var LogIn = /** @class */ (function (_super) {
     LogIn.prototype.handleChange = function (event) {
         var _a;
         var _this = this;
-        // console.log("Handel Change is running");
-        console.log(event.target.value);
         this.setState(__assign(__assign({}, this.state), (_a = {}, _a[event.target.name] = event.target.value, _a)), function () { return console.log("this.state in handleChange:", _this.state); });
     };
     LogIn.prototype.handleSubmit = function () {

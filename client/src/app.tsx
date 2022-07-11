@@ -7,7 +7,6 @@ import Uploader from "./uploader";
 interface AppState {
     name?: string;
     surname?: string;
-    // email?: string;
     photoUrl?: string;
     uploaderVisible: boolean;
 }
@@ -24,6 +23,7 @@ export default class App extends Component<AppProps, AppState> {
             photoUrl: "",
             uploaderVisible: false,
         };
+        this.toggleModal = this.toggleModal.bind(this);
     }
 
     componentDidMount(): void {
@@ -47,14 +47,18 @@ export default class App extends Component<AppProps, AppState> {
     }
     render() {
         return (
-            <div>
+            <div className="app-container">
                 <Logo />
                 <ProfilePhoto
                     name={this.state.name}
                     surname={this.state.surname}
                     photoUrl={this.state.photoUrl}
+                    toggleModal={this.toggleModal}
                 />
                 <h1>Profile Picture Component.</h1>
+                <h1>
+                    Welcome {this.state.name} {this.state.surname}
+                </h1>
 
                 {this.state.uploaderVisible && (
                     <Uploader methodInApp={this.methodInApp} />

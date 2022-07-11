@@ -58,37 +58,9 @@ var ResetPassword = /** @class */ (function (_super) {
         return _this;
     }
     ResetPassword.prototype.handleChange = function (event) {
-        var _a, _b, _c;
-        // console.log("Handel Change is running");
-        console.log("event.target.value", event.target.value);
-        // FIXME! see a nicer way to do it!
-        switch (event.target.name) {
-            case "email":
-                this.setState((_a = {},
-                    _a[event.target.name] = event.target.value,
-                    _a));
-                break;
-            case "code":
-                this.setState((_b = {},
-                    _b[event.target.name] = event.target.value,
-                    _b));
-                break;
-            case "newPassword":
-                this.setState((_c = {},
-                    _c[event.target.name] = event.target.value,
-                    _c));
-                break;
-            default:
-                break;
-        }
-        console.log("this.state:", this.state);
-        // this.setState(
-        //     {
-        //         [event.target.name as keyof typeof LogInState]:
-        //             event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // ); e: Event & { target: Element }
+        var _a;
+        var _this = this;
+        this.setState(__assign(__assign({}, this.state), (_a = {}, _a[event.target.name] = event.target.value, _a)), function () { return console.log("this.state in handleChange:", _this.state); });
     };
     ResetPassword.prototype.handleSendEmail = function () {
         var _this = this;

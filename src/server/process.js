@@ -28,22 +28,6 @@ function cleanEmptySpaces(obj) {
     });
     return result;
 }
-// REVIEW: if function above work, delete this.
-// function cleanEmptySpaces(obj: NewUserRegistration | LogInUser) {
-//     let returnObj;
-//     for (let key in obj) {
-//         // I need to say that the key is a typeof key from the obj
-//         obj[key as keyof typeof obj] = obj[key as keyof typeof obj]
-//             .replace(/\s\s+/g, " ")
-//             .trim();
-//     }
-//     return obj;
-// }
-//
-/*
-If there is an empty input, that an ERROR!
-REVIEW : HOW TO MAKE IT ACCEPT ANY OBJECT WITH STRING AS KEY PROP.
- */
 exports.noEmptyInputsValid = function (obj) {
     var returnObj = cleanEmptySpaces(obj);
     for (var key in returnObj) {
@@ -54,33 +38,26 @@ exports.noEmptyInputsValid = function (obj) {
     }
     return true;
 };
-// function cleanEmptySpaces<T>(obj: T): T { FIXME!
-// type M = NewUserRegistration | LogInUser | UserResetPassword;
-// exports.noEmptyInputsValid = <M>(obj: M): boolean => {
-//     const returnObj = cleanEmptySpaces(obj);
-//     for (let key in returnObj) {
-//         if (returnObj[key as keyof typeof returnObj].length === 0) {
-//             console.log("Found empty input!:");
-//             return false;
-//         }
-//     }
-//     return true;
-// };
 /*
 Verifying if there is something, it could have empty inputs
     false -> input with stuff.
     true -> input empty.
 */
-exports.verifyingIfThereIsInputs = function (obj) {
-    var returnObj = cleanEmptySpaces(obj);
-    for (var key in returnObj) {
-        if (returnObj[key].length !== 0) {
-            console.log("verifyingEmptyInputs: \nFound sth", returnObj[key].trim());
-            return false;
-        }
-    }
-    return true;
-};
+// exports.verifyingIfThereIsInputs = (
+//     obj: NewUserRegistration | LogInUser
+// ): boolean => {
+//     const returnObj = cleanEmptySpaces(obj);
+//     for (let key in returnObj) {
+//         if (returnObj[key as keyof typeof returnObj].length !== 0) {
+//             console.log(
+//                 "verifyingEmptyInputs: \nFound sth",
+//                 returnObj[key as keyof typeof returnObj].trim()
+//             );
+//             return false;
+//         }
+//     }
+//     return true;
+// };
 function encryptPassword(password) {
     return encryption
         .hash(password)

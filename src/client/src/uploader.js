@@ -38,13 +38,45 @@ var Uploader = /** @class */ (function (_super) {
     Uploader.prototype.componentDidMount = function () {
         console.log("Uploader just mount");
     };
-    Uploader.prototype.methodInUploader = function () {
+    Uploader.prototype.methodInUploader = function (event) {
+        console.log("I am clicking accept!");
+        event.preventDefault();
+        // /upload.json
+        fetch("/upload.json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        })
+            .then(function (resp) { return resp.json(); })
+            .then(function (data) {
+            console.log("Data received POST load.json", data);
+            // if (data.status === "Success") {
+            //     location.reload();
+            // } else {
+            //     this.setState({
+            //         error: true,
+            //     });
+            // }
+            // console.log("this.state:", this.state);
+        })
+            .catch(function () {
+            // this.setState(
+            //     {
+            //         error: true,
+            //     },
+            //     () => console.log("this.state:", this.state)
+            // );
+        });
         // Here we want to call the method of my parent. That live in props.
         //  this.props.methodInApp(true);
     };
     Uploader.prototype.render = function () {
         var _this = this;
-        return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "I am the Uploader!" }), (0, jsx_runtime_1.jsx)("h2", __assign({ onClick: function () { return _this.methodInUploader; } }, { children: "Click me!" }))] }));
+        return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "I am the Uploader!" }), (0, jsx_runtime_1.jsxs)("form", __assign({ encType: "multipart/form-data" }, { children: [(0, jsx_runtime_1.jsx)("input", { type: "file", name: "image", accept: "image/*", ref: "file", id: "inputTag" }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: function (e) {
+                                _this.methodInUploader(e);
+                            } }, { children: "Accept" }))] }))] }));
     };
     return Uploader;
 }(react_1.Component));

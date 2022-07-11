@@ -7,6 +7,11 @@ var express_1 = __importDefault(require("express"));
 var compression_1 = __importDefault(require("compression"));
 var cookie_session_1 = __importDefault(require("cookie-session"));
 var path_1 = __importDefault(require("path"));
+// This is a hack to make Multer available in the Express namespace
+var multer_1 = __importDefault(require("multer"));
+// import uidSafe from "uid-safe";
+var uidSafe = require("uid-safe");
+var s3 = require("./s3");
 var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword;
 // @ts-ignore
 // export const app: Express = express();
@@ -19,6 +24,24 @@ app.use((0, cookie_session_1.default)({
     maxAge: 1000 * 60 * 60 * 24 * 15,
     sameSite: true,
 }));
+var storage = multer_1.default.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "uploads");
+    },
+    filename: function (req, file, callback) {
+        // const randomFileName =
+        //  how to keep the extension
+        uidSafe(24).then(function (randomString) {
+            callback(null, "".concat(randomString).concat(path_1.default.extname(file.originalname)));
+        });
+    },
+});
+var uploader = (0, multer_1.default)({
+    storage: storage,
+    limits: {
+        fileSize: 2097155,
+    },
+});
 // For Protection propose
 app.use(function (req, res, next) {
     res.setHeader("x-frame-options", "deny");
@@ -194,6 +217,32 @@ app.post("/resetPassword/setNewPassword.json", function (req, res) {
         return res.json({
             status: "Error",
         });
+    });
+});
+// uploader.single("image") image is the name of the input filed.
+app.post("/upload.json", uploader.single("image"), s3.upload, function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t UpLoading Image");
+    /* NOTE:
+    Upload the image in AWS and then, ones we know that is uploaded we save it in our date base
+     with the url to be able to display it later. */
+    // If I use the other credentials
+    var url = "https://s3.amazonaws.com/spicedling/".concat(req.file.filename);
+    // const url = `https://imageboard-cy.s3.eu-central-1.amazonaws.com/${req.file.filename}`;
+    // we need to generate the url of the image.
+    // https://s3.amazonaws.com/:yourBucketName/:filename
+    // https://:yourBucketName.s3.eu-central-1.amazonaws.com/:filename.
+    console.log("\t url: ".concat(url));
+    // saveImage(url, user, title, description)
+    //     .then((result) => {
+    //         console.log("result.rows[0]", result.rows[0]);
+    //         res.json({
+    //             success: true,
+    //             image: result.rows[0],
+    //         });
+    //     })
+    //     .catch((err) => console.log("err db", er));
+    res.json({
+        status: "Success",
     });
 });
 /* ---------------------------------------------------------------------------------------

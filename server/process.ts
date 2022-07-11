@@ -57,24 +57,10 @@ function cleanEmptySpaces<T>(obj: T): T {
 If there is an empty input, that an ERROR!
 REVIEW : HOW TO MAKE IT ACCEPT ANY OBJECT WITH STRING AS KEY PROP. 
  */
-exports.noEmptyInputsValid = (
-    obj: NewUserRegistration | LogInUser
-): boolean => {
-    const returnObj = cleanEmptySpaces(obj);
-    for (let key in returnObj) {
-        if (returnObj[key as keyof typeof returnObj].length === 0) {
-            console.log("Found empty input!:");
-            return false;
-        }
-    }
-    return true;
-};
-
-// function cleanEmptySpaces<T>(obj: T): T { FIXME!
-// type M = NewUserRegistration | LogInUser | UserResetPassword;
-// exports.noEmptyInputsValid = <M>(obj: M): boolean => {
+// exports.noEmptyInputsValid = (
+//     obj: NewUserRegistration | LogInUser
+// ): boolean => {
 //     const returnObj = cleanEmptySpaces(obj);
-
 //     for (let key in returnObj) {
 //         if (returnObj[key as keyof typeof returnObj].length === 0) {
 //             console.log("Found empty input!:");
@@ -84,26 +70,41 @@ exports.noEmptyInputsValid = (
 //     return true;
 // };
 
-/* 
-Verifying if there is something, it could have empty inputs
-    false -> input with stuff.
-    true -> input empty.
-*/
-exports.verifyingIfThereIsInputs = (
-    obj: NewUserRegistration | LogInUser
-): boolean => {
+// FIXME!
+// function cleanEmptySpaces<T>(obj: T): T {
+type M = NewUserRegistration | LogInUser | UserResetPassword;
+exports.noEmptyInputsValid = (obj: M): boolean => {
     const returnObj = cleanEmptySpaces(obj);
+
     for (let key in returnObj) {
-        if (returnObj[key as keyof typeof returnObj].length !== 0) {
-            console.log(
-                "verifyingEmptyInputs: \nFound sth",
-                returnObj[key as keyof typeof returnObj].trim()
-            );
+        if (returnObj[key as keyof typeof obj].length === 0) {
+            console.log("Found empty input!:");
             return false;
         }
     }
     return true;
 };
+
+/* 
+Verifying if there is something, it could have empty inputs
+    false -> input with stuff.
+    true -> input empty.
+*/
+// exports.verifyingIfThereIsInputs = (
+//     obj: NewUserRegistration | LogInUser
+// ): boolean => {
+//     const returnObj = cleanEmptySpaces(obj);
+//     for (let key in returnObj) {
+//         if (returnObj[key as keyof typeof returnObj].length !== 0) {
+//             console.log(
+//                 "verifyingEmptyInputs: \nFound sth",
+//                 returnObj[key as keyof typeof returnObj].trim()
+//             );
+//             return false;
+//         }
+//     }
+//     return true;
+// };
 
 function encryptPassword(password: string) {
     return encryption

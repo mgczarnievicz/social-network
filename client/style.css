@@ -2,6 +2,7 @@
     --color-dark: #f4716d;
     --color-light: #fbd5c0;
     --color-board: #ffae00;
+    --color-green: #d9ebc5;
 }
 
 * {
@@ -89,4 +90,24 @@ main {
 .form h1,
 p {
     text-align: center;
+}
+
+/* --------------------------------------------------------------------
+                        LOGO IMG
+-----------------------------------------------------------------------*/
+.logo-img img {
+    width: 150px;
+    border-radius: 50%;
+}
+
+.profilePhoto img {
+    width: 250px;
+    border: 2px solid var(--color-board);
+    border-radius: 12px;
+    margin: 10px;
+}
+
+.app-container {
+    height: 100vh;
+    background-color: var(--color-green);
 }

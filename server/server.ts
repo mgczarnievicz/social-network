@@ -3,6 +3,16 @@ import compression from "compression";
 import cookieSession from "cookie-session";
 import path from "path";
 
+// This is a hack to make Multer available in the Express namespace
+import multer, { FileFilterCallback, Multer } from "multer";
+
+type DestinationCallback = (error: Error | null, destination: string) => void;
+type FileNameCallback = (error: Error | null, filename: string) => void;
+
+// import uidSafe from "uid-safe";
+const uidSafe = require("uid-safe");
+const s3 = require("./s3");
+
 // import bodyParser from "body-parser";
 
 // Importing the Type of data
@@ -41,6 +51,26 @@ app.use(
         sameSite: true,
     })
 );
+
+const storage = multer.diskStorage({
+    destination(req, file: Express.Multer.File, callback: DestinationCallback) {
+        callback(null, "uploads");
+    },
+    filename(req, file: Express.Multer.File, callback: FileNameCallback) {
+        // const randomFileName =
+        //  how to keep the extension
+        uidSafe(24).then((randomString: string) => {
+            callback(null, `${randomString}${path.extname(file.originalname)}`);
+        });
+    },
+});
+
+const uploader = multer({
+    storage,
+    limits: {
+        fileSize: 2097155,
+    },
+});
 
 // For Protection propose
 app.use((req, res, next) => {
@@ -226,6 +256,40 @@ app.post("/resetPassword/setNewPassword.json", (req, res) => {
                 status: "Error",
             })
         );
+});
+
+// uploader.single("image") image is the name of the input filed.
+app.post("/upload.json", uploader.single("image"), s3.upload, (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t UpLoading Image`
+    );
+
+    /* NOTE: 
+    Upload the image in AWS and then, ones we know that is uploaded we save it in our date base
+     with the url to be able to display it later. */
+
+    // If I use the other credentials
+    const url = `https://s3.amazonaws.com/spicedling/${req.file.filename}`;
+    // const url = `https://imageboard-cy.s3.eu-central-1.amazonaws.com/${req.file.filename}`;
+
+    // we need to generate the url of the image.
+    // https://s3.amazonaws.com/:yourBucketName/:filename
+    // https://:yourBucketName.s3.eu-central-1.amazonaws.com/:filename.
+
+    console.log(`\t url: ${url}`);
+
+    // saveImage(url, user, title, description)
+    //     .then((result) => {
+    //         console.log("result.rows[0]", result.rows[0]);
+    //         res.json({
+    //             success: true,
+    //             image: result.rows[0],
+    //         });
+    //     })
+    //     .catch((err) => console.log("err db", er));
+    res.json({
+        status: "Success",
+    });
 });
 
 /* ---------------------------------------------------------------------------------------

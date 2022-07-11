@@ -32,39 +32,14 @@ class ResetPassword extends Component<ResetProps, ResetState> {
     }
 
     handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        // console.log("Handel Change is running");
-        console.log("event.target.value", event.target.value);
-
-        // FIXME! see a nicer way to do it!
-        switch (event.target.name) {
-            case "email":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-            case "code":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-            case "newPassword":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-
-            default:
-                break;
-        }
-        console.log("this.state:", this.state);
-
-        // this.setState(
-        //     {
-        //         [event.target.name as keyof typeof LogInState]:
-        //             event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // ); e: Event & { target: Element }
+        this.setState(
+            {
+                // Bc not all of the key are optional i always need to set them. So I deconstruct and set the one that i want
+                ...this.state,
+                [event.target.name]: event.target.value,
+            },
+            () => console.log("this.state in handleChange:", this.state)
+        );
     }
     handleSendEmail() {
         console.log("Send Email!");
@@ -101,7 +76,6 @@ class ResetPassword extends Component<ResetProps, ResetState> {
             });
         // (e.target as HTMLInputElement)
         // emailRef.current.value = "";
-
         console.log("this.state:", this.state);
     }
 

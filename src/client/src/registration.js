@@ -55,15 +55,6 @@ var Registration = /** @class */ (function (_super) {
         _this.handleSubmit = _this.handleSubmit.bind(_this);
         return _this;
     }
-    /* TODO:
-    1. render 4 inputs fields + button
-    2. capture the users input ans store it state
-    3. when the user submit, we want to send that data to the server
-    4. if sth goes  wrong conditional render and error.
-    4. if everything goes well shw them the logo.
-    */
-    // HTMLInputElement
-    // e: ChangeEvent<{ value: string }>
     Registration.prototype.handleChange = function (event) {
         var _a;
         var _this = this;

@@ -27,27 +27,14 @@ class LogIn extends Component<LogInProps, LogInState> {
         // console.log("Handel Change is running");
         console.log(event.target.value);
 
-        // FIXME! see a nicer way to do it!
-        switch (event.target.name) {
-            case "email":
-                this.setState(
-                    {
-                        [event.target.name]: event.target.value,
-                    },
-                    () => console.log("this.state:", this.state)
-                );
-                break;
-            case "password":
-                this.setState(
-                    {
-                        [event.target.name]: event.target.value,
-                    },
-                    () => console.log("this.state:", this.state)
-                );
-                break;
-            default:
-                break;
-        }
+        this.setState(
+            {
+                // Bc not all of the key are optional i always need to set them. So I deconstruct and set the one that i want
+                ...this.state,
+                [event.target.name]: event.target.value,
+            },
+            () => console.log("this.state in handleChange:", this.state)
+        );
     }
     handleSubmit() {
         console.log("Clicked submit!");

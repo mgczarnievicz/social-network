@@ -54,25 +54,11 @@ var LogIn = /** @class */ (function (_super) {
         return _this;
     }
     LogIn.prototype.handleChange = function (event) {
-        var _a, _b;
+        var _a;
         var _this = this;
         // console.log("Handel Change is running");
         console.log(event.target.value);
-        // FIXME! see a nicer way to do it!
-        switch (event.target.name) {
-            case "email":
-                this.setState((_a = {},
-                    _a[event.target.name] = event.target.value,
-                    _a), function () { return console.log("this.state:", _this.state); });
-                break;
-            case "password":
-                this.setState((_b = {},
-                    _b[event.target.name] = event.target.value,
-                    _b), function () { return console.log("this.state:", _this.state); });
-                break;
-            default:
-                break;
-        }
+        this.setState(__assign(__assign({}, this.state), (_a = {}, _a[event.target.name] = event.target.value, _a)), function () { return console.log("this.state in handleChange:", _this.state); });
     };
     LogIn.prototype.handleSubmit = function () {
         var _this = this;

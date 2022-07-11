@@ -39,63 +39,14 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
     // e: ChangeEvent<{ value: string }>
 
     handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        // console.log("Handel Change is running");
-        console.log(event.target.value);
-
-        /* 
-        FIXME!!!!!!!!
-        look for a nice solution!!!
-         */
-        // switch (event.target.name) {
-        //     case "name":
-        //         this.setState({
-        //             [event.target.name]: event.target.value,
-        //         });
-        //         break;
-        //     case "surname":
-        //         this.setState({
-        //             [event.target.name]: event.target.value,
-        //         });
-        //         break;
-        //     case "email":
-        //         this.setState({
-        //             [event.target.name]: event.target.value,
-        //         });
-        //         break;
-        //     case "password":
-        //         this.setState({
-        //             [event.target.name]: event.target.value,
-        //         });
-        //         break;
-        //     default:
-        //         break;
-        // }
-        console.log("this.state:", this.state);
-        // if (key === "name" || key === "surname" || key === "email") {
-        //     this.setState(
-        //         {
-        //             [key]: event.target.value,
-        //         },
-        //         () => console.log("this.state:", this.state)
-        //     );
-        // }
-
         this.setState(
             {
-                // Bc not all of the key are optional i always need to set them. So I disconstract and set the one that i want
+                // Bc not all of the key are optional i always need to set them. So I deconstruct and set the one that i want
                 ...this.state,
                 [event.target.name]: event.target.value,
             },
-            () => console.log("this.state:", this.state)
+            () => console.log("this.state in handleChange:", this.state)
         );
-
-        // this.setState(
-        //     {
-        //         [event.target.name as keyof typeof LogInState]:
-        //             event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // );
     }
     handleSubmit() {
         const { error, ...newUser } = this.state;

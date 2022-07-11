@@ -3,10 +3,6 @@ import { Component } from "react";
 import { ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 
-interface IProps {
-    id: string;
-}
-
 interface RegistrationState {
     name?: string;
     surname?: string;
@@ -50,30 +46,30 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
         FIXME!!!!!!!!
         look for a nice solution!!!
          */
-        switch (event.target.name) {
-            case "name":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-            case "surname":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-            case "email":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-            case "password":
-                this.setState({
-                    [event.target.name]: event.target.value,
-                });
-                break;
-            default:
-                break;
-        }
+        // switch (event.target.name) {
+        //     case "name":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     case "surname":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     case "email":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     case "password":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     default:
+        //         break;
+        // }
         console.log("this.state:", this.state);
         // if (key === "name" || key === "surname" || key === "email") {
         //     this.setState(
@@ -84,12 +80,14 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
         //     );
         // }
 
-        // this.setState(
-        //     {
-        //         [event.target.name as "name"]: event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // );
+        this.setState(
+            {
+                // Bc not all of the key are optional i always need to set them. So I disconstract and set the one that i want
+                ...this.state,
+                [event.target.name]: event.target.value,
+            },
+            () => console.log("this.state:", this.state)
+        );
 
         // this.setState(
         //     {

@@ -65,37 +65,38 @@ var Registration = /** @class */ (function (_super) {
     // HTMLInputElement
     // e: ChangeEvent<{ value: string }>
     Registration.prototype.handleChange = function (event) {
-        var _a, _b, _c, _d;
+        var _a;
+        var _this = this;
         // console.log("Handel Change is running");
         console.log(event.target.value);
         /*
         FIXME!!!!!!!!
         look for a nice solution!!!
          */
-        switch (event.target.name) {
-            case "name":
-                this.setState((_a = {},
-                    _a[event.target.name] = event.target.value,
-                    _a));
-                break;
-            case "surname":
-                this.setState((_b = {},
-                    _b[event.target.name] = event.target.value,
-                    _b));
-                break;
-            case "email":
-                this.setState((_c = {},
-                    _c[event.target.name] = event.target.value,
-                    _c));
-                break;
-            case "password":
-                this.setState((_d = {},
-                    _d[event.target.name] = event.target.value,
-                    _d));
-                break;
-            default:
-                break;
-        }
+        // switch (event.target.name) {
+        //     case "name":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     case "surname":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     case "email":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     case "password":
+        //         this.setState({
+        //             [event.target.name]: event.target.value,
+        //         });
+        //         break;
+        //     default:
+        //         break;
+        // }
         console.log("this.state:", this.state);
         // if (key === "name" || key === "surname" || key === "email") {
         //     this.setState(
@@ -105,12 +106,7 @@ var Registration = /** @class */ (function (_super) {
         //         () => console.log("this.state:", this.state)
         //     );
         // }
-        // this.setState(
-        //     {
-        //         [event.target.name as "name"]: event.target.value,
-        //     },
-        //     () => console.log("this.state:", this.state)
-        // );
+        this.setState(__assign(__assign({}, this.state), (_a = {}, _a[event.target.name] = event.target.value, _a)), function () { return console.log("this.state:", _this.state); });
         // this.setState(
         //     {
         //         [event.target.name as keyof typeof LogInState]:

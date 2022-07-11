@@ -1,45 +1,44 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var cryptoRandomString = require("crypto-random-string");
 // import cryptoRandomString from 'crypto-random-string';
 var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode;
 var sendEmail = require("./ses").sendEmail;
-// REVIEW : if working delete.
-// interface NewUserRegistration {
-//     name: string;
-//     surname: string;
-//     email: string;
-//     password: string;
-// }
-// interface LogInUser {
-//     email: string;
-//     password: string;
-// }
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
-// function cleanEmptySpaces<T extends NewUserRegistration | LogInUser>(obj: T) {
-//     let returnObj: T;
+function cleanEmptySpaces(obj) {
+    var result = __assign({}, obj);
+    Object.entries(obj).forEach(function (_a) {
+        var key = _a[0], value = _a[1];
+        result[key] = value.replace(/\s\s+/g, " ").trim();
+    });
+    return result;
+}
+// REVIEW: if function above work, delete this.
+// function cleanEmptySpaces(obj: NewUserRegistration | LogInUser) {
+//     let returnObj;
 //     for (let key in obj) {
-//         // I need to say that the key is a typeof key from the obj.
-//         returnObj[key as keyof typeof obj] = obj[key as keyof typeof obj]
+//         // I need to say that the key is a typeof key from the obj
+//         obj[key as keyof typeof obj] = obj[key as keyof typeof obj]
 //             .replace(/\s\s+/g, " ")
 //             .trim();
 //     }
-//     return returnObj;
-// } <T extends NewUserRegistration | LogInUser>
-function cleanEmptySpaces(obj) {
-    var returnObj;
-    for (var key in obj) {
-        // I need to say that the key is a typeof key from the obj
-        obj[key] = obj[key]
-            .replace(/\s\s+/g, " ")
-            .trim();
-    }
-    return obj;
-}
+//     return obj;
+// }
 //
 /*
 If there is an empty input, that an ERROR!
@@ -55,6 +54,18 @@ exports.noEmptyInputsValid = function (obj) {
     }
     return true;
 };
+// function cleanEmptySpaces<T>(obj: T): T { FIXME!
+// type M = NewUserRegistration | LogInUser | UserResetPassword;
+// exports.noEmptyInputsValid = <M>(obj: M): boolean => {
+//     const returnObj = cleanEmptySpaces(obj);
+//     for (let key in returnObj) {
+//         if (returnObj[key as keyof typeof returnObj].length === 0) {
+//             console.log("Found empty input!:");
+//             return false;
+//         }
+//     }
+//     return true;
+// };
 /*
 Verifying if there is something, it could have empty inputs
     false -> input with stuff.
@@ -92,9 +103,9 @@ exports.registerNewUser = function (newUser) {
         // Saved input in the db.
         // FIXME! ERROR WITH TYPES!
         // i don't clean the input the extra spaces!!!
-        // const cleanNewUser = cleanEmptySpaces(newUser);
+        var cleanNewUser = cleanEmptySpaces(newUser);
         //  cleanNewUser = cleanEmptySpaces(newUser);
-        return registerUser(capitalizeFirstLetter(newUser.name), capitalizeFirstLetter(newUser.surname), newUser.email.toLowerCase(), hashPass)
+        return registerUser(capitalizeFirstLetter(cleanNewUser.name), capitalizeFirstLetter(cleanNewUser.surname), newUser.email.toLowerCase(), hashPass)
             .then(function (dbResult) { return dbResult.rows[0]; })
             .catch(function (err) { return err; });
     })
@@ -111,8 +122,7 @@ exports.logInVerify = function (userLogIn) {
     return getUserByEmail(userLogIn.email.toLowerCase())
         .catch(function (err) { return err; })
         .then(function (result) {
-        // See what we recived and if there is a result, then se
-        // if its empty or not.
+        // See what we recived and if there is a result, then se ?if its empty or not.
         if (result.rows.length === 0) {
             console.log("Email not register");
             return "Error";

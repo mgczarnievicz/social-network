@@ -1,5 +1,6 @@
 import React, { Component, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
+import { runInThisContext } from "vm";
 import { parentPort } from "worker_threads";
 
 interface BioState {
@@ -22,6 +23,7 @@ class BioEditor extends Component<BioProps, BioState> {
         this.toggleBioEditor = this.toggleBioEditor.bind(this);
         this.handleBioChange = this.handleBioChange.bind(this);
         this.submitBio = this.submitBio.bind(this);
+        this.editBio = this.editBio.bind(this);
     }
 
     // React.TextareaHTMLAttributes<HTMLTextAreaElement> ChangeEventHandler<HTMLTextAreaElement>
@@ -31,7 +33,6 @@ class BioEditor extends Component<BioProps, BioState> {
             {
                 // Bc not all of the key are optional i always need to set them. So I deconstruct and set the one that i want
                 ...this.state,
-                // [event.target.name]: event.target.value,
                 draftBio: event.target.value,
             },
             () => console.log("this.state in handleBioChange:", this.state)
@@ -57,6 +58,11 @@ class BioEditor extends Component<BioProps, BioState> {
             .then((data) => {
                 console.log("Data from update Bio", data);
                 if (data.status === "Success") {
+                    this.props.upDateBio(data.bio);
+                    this.setState({
+                        showTextArea: false,
+                        draftBio: "",
+                    });
                 }
             });
     }
@@ -67,12 +73,24 @@ class BioEditor extends Component<BioProps, BioState> {
             showTextArea: !this.state.showTextArea,
         });
     }
+    editBio() {
+        this.setState({
+            showTextArea: true,
+            draftBio: this.props.bio,
+        });
+    }
     render() {
         return (
             <div className="bio">
                 <h1>Hi I am the Bio Editor</h1>
 
-                <p>{this.props.bio}</p>
+                {this.props.bio && !this.state.showTextArea && (
+                    <div>
+                        <p>{this.props.bio}</p>
+                        <a onClick={this.editBio}>Edit Bio</a>
+                    </div>
+                )}
+
                 {!this.props.bio && !this.state.showTextArea && (
                     <button onClick={this.toggleBioEditor}>Add Bio</button>
                 )}

@@ -258,11 +258,11 @@ app.post("/upload.json", uploader.single("image"), s3.upload, function (req, res
 app.post("/setBioInfo.json", function (req, res) {
     console.log("Data received Set Bio", req.body);
     upDateBio(req.session.userId, req.body.data)
-        .then(function (result) {
-        console.log("Respond from process:", result);
+        .then(function (bio) {
+        console.log("Respond from process:", bio);
         res.json({
             status: "Success",
-            result: result,
+            bio: bio,
         });
     })
         .catch(function () {

@@ -28,6 +28,7 @@ export default class App extends Component<AppProps, AppState> {
         };
         this.toggleUploader = this.toggleUploader.bind(this);
         this.upDatingPhoto = this.upDatingPhoto.bind(this);
+        this.upDateBio = this.upDateBio.bind(this);
     }
 
     componentDidMount(): void {
@@ -63,6 +64,11 @@ export default class App extends Component<AppProps, AppState> {
 
     upDateBio(newBio: string) {
         // Here we want to update the bio.
+        console.log("Getting data from edit Bio", newBio);
+        this.setState({
+            bio: newBio,
+        });
+        console.log("loging this after bio", this);
     }
 
     render() {
@@ -86,7 +92,9 @@ export default class App extends Component<AppProps, AppState> {
                         name={this.state.name}
                         surname={this.state.surname}
                         photoUrl={this.state.photourl}
+                        bio={this.state.bio}
                         toggleUploader={this.toggleUploader}
+                        upDateBio={this.upDateBio}
                     />
                 }
             </div>

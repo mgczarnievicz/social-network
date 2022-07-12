@@ -307,12 +307,12 @@ app.post("/upload.json", uploader.single("image"), s3.upload, (req, res) => {
 app.post("/setBioInfo.json", (req, res) => {
     console.log("Data received Set Bio", req.body);
     upDateBio(req.session.userId, req.body.data)
-        .then((result: string) => {
-            console.log("Respond from process:", result);
+        .then((bio: string) => {
+            console.log("Respond from process:", bio);
 
             res.json({
                 status: "Success",
-                result,
+                bio,
             });
         })
         .catch(() =>

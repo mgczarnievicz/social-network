@@ -48,6 +48,7 @@ var App = /** @class */ (function (_super) {
         };
         _this.toggleUploader = _this.toggleUploader.bind(_this);
         _this.upDatingPhoto = _this.upDatingPhoto.bind(_this);
+        _this.upDateBio = _this.upDateBio.bind(_this);
         return _this;
     }
     App.prototype.componentDidMount = function () {
@@ -75,9 +76,14 @@ var App = /** @class */ (function (_super) {
     };
     App.prototype.upDateBio = function (newBio) {
         // Here we want to update the bio.
+        console.log("Getting data from edit Bio", newBio);
+        this.setState({
+            bio: newBio,
+        });
+        console.log("loging this after bio", this);
     };
     App.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "app-container" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "header" }, { children: [(0, jsx_runtime_1.jsx)(logo_1.default, {}), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })), this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { upDatingPhoto: this.upDatingPhoto })), (0, jsx_runtime_1.jsx)(profile_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "app-container" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "header" }, { children: [(0, jsx_runtime_1.jsx)(logo_1.default, {}), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })), this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { upDatingPhoto: this.upDatingPhoto })), (0, jsx_runtime_1.jsx)(profile_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, bio: this.state.bio, toggleUploader: this.toggleUploader, upDateBio: this.upDateBio })] })));
     };
     return App;
 }(react_1.Component));

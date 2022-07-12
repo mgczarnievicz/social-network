@@ -39,17 +39,17 @@ var BioEditor = /** @class */ (function (_super) {
         _this.toggleBioEditor = _this.toggleBioEditor.bind(_this);
         _this.handleBioChange = _this.handleBioChange.bind(_this);
         _this.submitBio = _this.submitBio.bind(_this);
+        _this.editBio = _this.editBio.bind(_this);
         return _this;
     }
     // React.TextareaHTMLAttributes<HTMLTextAreaElement> ChangeEventHandler<HTMLTextAreaElement>
     // DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>'
     BioEditor.prototype.handleBioChange = function (event) {
         var _this = this;
-        this.setState(__assign(__assign({}, this.state), { 
-            // [event.target.name]: event.target.value,
-            draftBio: event.target.value }), function () { return console.log("this.state in handleBioChange:", _this.state); });
+        this.setState(__assign(__assign({}, this.state), { draftBio: event.target.value }), function () { return console.log("this.state in handleBioChange:", _this.state); });
     };
     BioEditor.prototype.submitBio = function () {
+        var _this = this;
         console.log("U clicked Save Bio!");
         /* TODO: When user press submit:
      1. we want to do a post request to the server to save the new bio.
@@ -66,6 +66,11 @@ var BioEditor = /** @class */ (function (_super) {
             .then(function (data) {
             console.log("Data from update Bio", data);
             if (data.status === "Success") {
+                _this.props.upDateBio(data.bio);
+                _this.setState({
+                    showTextArea: false,
+                    draftBio: "",
+                });
             }
         });
     };
@@ -75,8 +80,14 @@ var BioEditor = /** @class */ (function (_super) {
             showTextArea: !this.state.showTextArea,
         });
     };
+    BioEditor.prototype.editBio = function () {
+        this.setState({
+            showTextArea: true,
+            draftBio: this.props.bio,
+        });
+    };
     BioEditor.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Hi I am the Bio Editor" }), (0, jsx_runtime_1.jsx)("p", { children: this.props.bio }), !this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Add Bio" }))), this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("textarea", { value: this.state.draftBio, onChange: this.handleBioChange, rows: 10, cols: 100 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.submitBio }, { children: "Save Changes" }))] }))] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Hi I am the Bio Editor" }), this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("p", { children: this.props.bio }), (0, jsx_runtime_1.jsx)("a", __assign({ onClick: this.editBio }, { children: "Edit Bio" }))] })), !this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Add Bio" }))), this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("textarea", { value: this.state.draftBio, onChange: this.handleBioChange, rows: 10, cols: 100 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.submitBio }, { children: "Save Changes" }))] }))] })));
     };
     return BioEditor;
 }(react_1.Component));

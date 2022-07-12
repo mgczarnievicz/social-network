@@ -78,13 +78,28 @@ module.exports.updateProfileImage = (
     url: string
 ): QueryResult => {
     const q = ` UPDATE users
-            SET photoUrl = $2
+            SET photourl = $2
             WHERE id = $1
-            RETURNING photoUrl;`;
+            RETURNING photourl;`;
     const param = [userId, url];
     return db.query(q, param);
 };
 
+exports.getUserDataById = (userId: number): QueryResult => {
+    const q = ` SELECT * FROM users
+            WHERE id = $1`;
+    const param = [userId];
+    return db.query(q, param);
+};
+
+exports.upDateBioByUserId = (userId: number, newBio: string): QueryResult => {
+    const q = ` UPDATE users
+            SET bio = $2
+            WHERE id = $1
+            RETURNING bio`;
+    const param = [userId, newBio];
+    return db.query(q, param);
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

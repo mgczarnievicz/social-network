@@ -3,7 +3,7 @@ import { Component } from "react";
 
 // Function
 interface UploaderProps {
-    methodInApp?: (a: string) => void;
+    upDatingPhoto?: (a: string) => void;
     // methodInApp?: Function;
 }
 
@@ -11,21 +11,22 @@ export default class Uploader extends Component<UploaderProps> {
     constructor(props: UploaderProps) {
         super(props);
         this.state = {};
+
+        this.setNewPhoto = this.setNewPhoto.bind(this);
     }
     componentDidMount() {
         console.log("Uploader just mount");
     }
-    methodInUploader(event: React.SyntheticEvent) {
+    // HTMLFormElement HTMLFormElement React.SyntheticEvent
+    setNewPhoto(event: React.ChangeEvent<HTMLFormElement>) {
         console.log("I am clicking accept!");
         event.preventDefault();
         // /upload.json
+        console.log("event target in setNewPhoto:", event.target);
 
         fetch("/upload.json", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(event.target),
+            body: new FormData(event.target),
         })
             .then((resp) => resp.json())
             .then((data) => {
@@ -33,7 +34,7 @@ export default class Uploader extends Component<UploaderProps> {
 
                 if (data.status === "Success") {
                     // Call function form parent with the argument as the url.
-                    this.props.methodInApp(data.imageUrl);
+                    this.props.upDatingPhoto(data.photourl);
                 } else {
                     this.setState({
                         error: true,
@@ -55,14 +56,9 @@ export default class Uploader extends Component<UploaderProps> {
     }
     render() {
         return (
-            <div>
-                <h1>I am the Uploader!</h1>
-                <form
-                    encType="multipart/form-data"
-                    onSubmit={(e) => {
-                        this.methodInUploader(e);
-                    }}
-                >
+            <div className="uploader">
+                <h1>Update your Photo</h1>
+                <form encType="multipart/form-data" onSubmit={this.setNewPhoto}>
                     <input
                         type="file"
                         name="image"

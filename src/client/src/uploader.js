@@ -33,33 +33,36 @@ var Uploader = /** @class */ (function (_super) {
     function Uploader(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {};
+        _this.setNewPhoto = _this.setNewPhoto.bind(_this);
         return _this;
     }
     Uploader.prototype.componentDidMount = function () {
         console.log("Uploader just mount");
     };
-    Uploader.prototype.methodInUploader = function (event) {
+    // HTMLFormElement HTMLFormElement React.SyntheticEvent
+    Uploader.prototype.setNewPhoto = function (event) {
+        var _this = this;
         console.log("I am clicking accept!");
         event.preventDefault();
         // /upload.json
+        console.log("event target in setNewPhoto:", event.target);
         fetch("/upload.json", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
+            body: new FormData(event.target),
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
             console.log("Data received POST load.json", data);
-            // if (data.status === "Success") {
-            //     location.reload();
-            // } else {
-            //     this.setState({
-            //         error: true,
-            //     });
-            // }
-            // console.log("this.state:", this.state);
+            if (data.status === "Success") {
+                // Call function form parent with the argument as the url.
+                _this.props.upDatingPhoto(data.photourl);
+            }
+            else {
+                _this.setState({
+                    error: true,
+                });
+            }
+            console.log("this.state:", _this.state);
         })
             .catch(function () {
             // this.setState(
@@ -73,10 +76,7 @@ var Uploader = /** @class */ (function (_super) {
         //  this.props.methodInApp(true);
     };
     Uploader.prototype.render = function () {
-        var _this = this;
-        return ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "I am the Uploader!" }), (0, jsx_runtime_1.jsxs)("form", __assign({ encType: "multipart/form-data" }, { children: [(0, jsx_runtime_1.jsx)("input", { type: "file", name: "image", accept: "image/*", ref: "file", id: "inputTag" }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: function (e) {
-                                _this.methodInUploader(e);
-                            } }, { children: "Accept" }))] }))] }));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "uploader" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Update your Photo" }), (0, jsx_runtime_1.jsxs)("form", __assign({ encType: "multipart/form-data", onSubmit: this.setNewPhoto }, { children: [(0, jsx_runtime_1.jsx)("input", { type: "file", name: "image", accept: "image/*", ref: "file", id: "inputTag" }), (0, jsx_runtime_1.jsx)("button", __assign({ type: "submit" }, { children: "Accept" }))] }))] })));
     };
     return Uploader;
 }(react_1.Component));

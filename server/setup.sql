@@ -9,9 +9,9 @@ CREATE TABLE users (
     name VARCHAR NOT NULL CHECK (name != ''),
     surname VARCHAR NOT NULL CHECK (surname != ''),
     email VARCHAR NOT NULL CHECK (email != '') UNIQUE,
-    password VARCHAR NOT NULL CHECK (password != '')
-    photoUrl VARCHAR NOT NULL CHECK (surname != ''),
-
+    password VARCHAR NOT NULL CHECK (password != ''),
+    photourl VARCHAR,
+    bio VARCHAR
 );
 
 

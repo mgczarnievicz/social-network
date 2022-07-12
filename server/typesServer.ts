@@ -18,6 +18,12 @@ export interface UserBasicInfo {
     surname: string;
 }
 
+export interface UserInfo extends UserBasicInfo {
+    photoUrl: string;
+    bio: string;
+    email: string;
+}
+
 export interface UserResetPassword {
     email: string;
     code: string;
@@ -38,8 +44,3 @@ export type SingleResponseSuccess = string | {};
 
 export type ProcessMultiRes = MultiResponseSuccess | QueryResult;
 export type ProcessSingleRes = SingleResponseSuccess | QueryResult;
-
-// import { Request } from "express";
-// export interface IFileRequest extends Request {
-//     file: string; // or any other type
-// }

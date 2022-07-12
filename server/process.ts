@@ -9,6 +9,8 @@ const {
     registerCode,
     searchCode,
     updateProfileImage,
+    getUserDataById,
+    upDateBioByUserId,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -24,6 +26,7 @@ import {
     RegisterResponse,
     UserResetPassword,
     StringObject,
+    UserInfo,
 } from "./typesServer";
 
 function capitalizeFirstLetter(string: string): string {
@@ -244,9 +247,33 @@ exports.setNewPassword = (userInput: UserResetPassword) => {
 
 exports.saveProfileImage = (userId: number, url: string) => {
     return updateProfileImage(userId, url)
-        .then((result: QueryResult) => result.rows[0])
+        .then((result: QueryResult) => {
+            console.log("Save img result.rows[0]", result.rows[0]);
+            return result.rows[0].photourl;
+        })
         .catch((err: QueryResult) => {
             console.log("Error Updating the url", err);
             return false;
         });
+};
+
+exports.getUserInfo = (userId: number) => {
+    console.log("Process GetUser Info id", userId);
+    return getUserDataById(userId)
+        .then((result: QueryResult) => {
+            console.log("User Data:", result.rows[0]);
+            const { password, ...userInfo } = result.rows[0];
+            console.log("userInfo", userInfo);
+            return userInfo;
+        })
+        .catch((err: QueryResult) => err);
+};
+
+exports.upDateBio = (userId: number, newBio: string) => {
+    return upDateBioByUserId(userId, newBio)
+        .then((result: QueryResult) => {
+            console.log("Query result", result.rows);
+            return result.rows[0].bio;
+        })
+        .catch((err: QueryResult) => err);
 };

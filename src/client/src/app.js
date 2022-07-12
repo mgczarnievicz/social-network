@@ -33,6 +33,7 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var logo_1 = __importDefault(require("./logo"));
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
+var profile_1 = __importDefault(require("./profile"));
 var uploader_1 = __importDefault(require("./uploader"));
 // <AppProps, AppState>
 var App = /** @class */ (function (_super) {
@@ -40,33 +41,43 @@ var App = /** @class */ (function (_super) {
     function App(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            name: "Maria",
-            surname: "Inciarte",
-            photoUrl: "",
+            name: "",
+            surname: "",
+            photourl: "",
             uploaderVisible: false,
         };
-        _this.toggleModal = _this.toggleModal.bind(_this);
+        _this.toggleUploader = _this.toggleUploader.bind(_this);
+        _this.upDatingPhoto = _this.upDatingPhoto.bind(_this);
         return _this;
     }
     App.prototype.componentDidMount = function () {
-        console.log("App Mounted!");
-        /* TODO:
-        We want the user info:
-            name, surname, photo. When we have it we want to set ir to the state. (this.setState)
-
-        */
+        var _this = this;
+        fetch("/getUserInfo.json")
+            .then(function (resp) { return resp.json(); })
+            .then(function (data) {
+            console.log("data from GET / UserInfo", data);
+            _this.setState(__assign(__assign({}, _this.state), data.data), function () { return console.log("this.state:", _this.state); });
+        })
+            .catch(function () { });
     };
-    App.prototype.toggleModal = function () {
+    App.prototype.toggleUploader = function () {
         console.log("ToggleModal is running");
         this.setState({
             uploaderVisible: !this.state.uploaderVisible,
         });
     };
-    App.prototype.methodInApp = function (arg) {
-        console.log("This is arg", arg);
+    App.prototype.upDatingPhoto = function (url) {
+        console.log("This is arg", url);
+        this.setState({
+            photourl: url,
+            uploaderVisible: false,
+        });
+    };
+    App.prototype.upDateBio = function (newBio) {
+        // Here we want to update the bio.
     };
     App.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "app-container" }, { children: [(0, jsx_runtime_1.jsx)(logo_1.default, {}), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photoUrl, toggleModal: this.toggleModal }), (0, jsx_runtime_1.jsx)("h1", { children: "Profile Picture Component." }), (0, jsx_runtime_1.jsxs)("h1", { children: ["Welcome ", this.state.name, " ", this.state.surname] }), this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { methodInApp: this.methodInApp }))] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "app-container" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "header" }, { children: [(0, jsx_runtime_1.jsx)(logo_1.default, {}), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })), this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { upDatingPhoto: this.upDatingPhoto })), (0, jsx_runtime_1.jsx)(profile_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })));
     };
     return App;
 }(react_1.Component));

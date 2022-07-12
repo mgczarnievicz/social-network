@@ -2,12 +2,15 @@ import React from "react";
 import { Component } from "react";
 import Logo from "./logo";
 import ProfilePhoto from "./profilePhoto";
+import Profile from "./profile";
 import Uploader from "./uploader";
 
 interface AppState {
     name?: string;
     surname?: string;
-    photoUrl?: string;
+    photourl?: string;
+    bio?: string;
+    email?: string;
     uploaderVisible: boolean;
 }
 
@@ -18,54 +21,74 @@ export default class App extends Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
         this.state = {
-            name: "Maria",
-            surname: "Inciarte",
-            photoUrl: "",
+            name: "",
+            surname: "",
+            photourl: "",
             uploaderVisible: false,
         };
-        this.toggleModal = this.toggleModal.bind(this);
+        this.toggleUploader = this.toggleUploader.bind(this);
+        this.upDatingPhoto = this.upDatingPhoto.bind(this);
     }
 
     componentDidMount(): void {
-        console.log("App Mounted!");
-
-        /* TODO:
-        We want the user info:
-            name, surname, photo. When we have it we want to set ir to the state. (this.setState)
-
-        */
+        fetch("/getUserInfo.json")
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log("data from GET / UserInfo", data);
+                this.setState(
+                    {
+                        ...this.state,
+                        ...data.data,
+                    },
+                    () => console.log("this.state:", this.state)
+                );
+            })
+            .catch(() => {});
     }
-    toggleModal() {
+
+    toggleUploader() {
         console.log("ToggleModal is running");
         this.setState({
             uploaderVisible: !this.state.uploaderVisible,
         });
     }
 
-    methodInApp(url: string) {
+    upDatingPhoto(url: string) {
         console.log("This is arg", url);
         this.setState({
-            photoUrl: url,
+            photourl: url,
+            uploaderVisible: false,
         });
     }
+
+    upDateBio(newBio: string) {
+        // Here we want to update the bio.
+    }
+
     render() {
         return (
             <div className="app-container">
-                <Logo />
-                <ProfilePhoto
-                    name={this.state.name}
-                    surname={this.state.surname}
-                    photoUrl={this.state.photoUrl}
-                    toggleModal={this.toggleModal}
-                />
-                <h1>Profile Picture Component.</h1>
-                <h1>
-                    Welcome {this.state.name} {this.state.surname}
-                </h1>
-
+                <div className="header">
+                    <Logo />
+                    <ProfilePhoto
+                        name={this.state.name}
+                        surname={this.state.surname}
+                        photoUrl={this.state.photourl}
+                        toggleUploader={this.toggleUploader}
+                    />
+                </div>
                 {this.state.uploaderVisible && (
-                    <Uploader methodInApp={this.methodInApp} />
+                    <Uploader upDatingPhoto={this.upDatingPhoto} />
                 )}
+
+                {
+                    <Profile
+                        name={this.state.name}
+                        surname={this.state.surname}
+                        photoUrl={this.state.photourl}
+                        toggleUploader={this.toggleUploader}
+                    />
+                }
             </div>
         );
     }

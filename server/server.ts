@@ -33,6 +33,8 @@ const {
     foundEmail,
     setNewPassword,
     saveProfileImage,
+    getUserInfo,
+    upDateBio,
 } = require("./process");
 
 // @ts-ignore
@@ -55,7 +57,7 @@ app.use(
 
 const storage = multer.diskStorage({
     destination(req, file: Express.Multer.File, callback: DestinationCallback) {
-        callback(null, "uploads");
+        callback(null, path.join(__dirname, "uploads"));
     },
     filename(req, file: Express.Multer.File, callback: FileNameCallback) {
         // const randomFileName =
@@ -128,6 +130,14 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/getUserInfo.json", (req, res) => {
+    getUserInfo(req.session.userId).then((data: {}) => {
+        res.json({
+            status: "Success",
+            data: data,
+        });
+    });
+});
 /* -----------------------------------------------------------------------------------------------------
                             POST
 ------------------------------------------------------------------------------------------------------*/
@@ -278,16 +288,34 @@ app.post("/upload.json", uploader.single("image"), s3.upload, (req, res) => {
     // https://:yourBucketName.s3.eu-central-1.amazonaws.com/:filename.
 
     console.log(`\t url: ${url}`);
-    const userId = req.session.id;
+    const userId = req.session.userId;
     saveProfileImage(userId, url)
         .then((result: string) => {
             console.log("result form database", result);
             res.json({
                 status: "Success",
-                imageUrl: result,
+                photourl: result,
             });
         })
         .catch((err: boolean) =>
+            res.json({
+                status: "Error",
+            })
+        );
+});
+
+app.post("/setBioInfo.json", (req, res) => {
+    console.log("Data received Set Bio", req.body);
+    upDateBio(req.session.userId, req.body.data)
+        .then((result: string) => {
+            console.log("Respond from process:", result);
+
+            res.json({
+                status: "Success",
+                result,
+            });
+        })
+        .catch(() =>
             res.json({
                 status: "Error",
             })

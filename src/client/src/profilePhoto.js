@@ -17,6 +17,6 @@ function ProfilePhoto(props) {
     // Save in public a "default.png" onClick={props.toggleModal()}
     var photoUrl = props.photoUrl || "defaultProfile.png";
     var altName = "".concat(props.name, " ").concat(props.surname);
-    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "profilePhoto" }, { children: (0, jsx_runtime_1.jsx)("img", { src: photoUrl, alt: altName, onClick: function () { return props.toggleModal(); } }) })));
+    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "profilePhoto" }, { children: (0, jsx_runtime_1.jsx)("img", { src: photoUrl, alt: altName, onClick: function () { return props.toggleUploader(); } }) })));
 }
 exports.default = ProfilePhoto;

@@ -1,11 +1,14 @@
 import React from "react";
 
-export default function ProfilePhoto(props: {
+interface ProfilePhotoProps {
     name: string;
     surname: string;
     photoUrl: string;
-    toggleModal: Function;
-}) {
+
+    toggleUploader: Function;
+}
+
+export default function ProfilePhoto(props: ProfilePhotoProps) {
     console.log("Log the prop in PhotoProfile", props);
 
     // Save in public a "default.png" onClick={props.toggleModal()}
@@ -16,7 +19,7 @@ export default function ProfilePhoto(props: {
             <img
                 src={photoUrl}
                 alt={altName}
-                onClick={() => props.toggleModal()}
+                onClick={() => props.toggleUploader()}
             />
         </div>
     );

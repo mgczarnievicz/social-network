@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio;
 // @ts-ignore
 // export const app: Express = express();
 var app = (0, express_1.default)();
@@ -26,7 +26,7 @@ app.use((0, cookie_session_1.default)({
 }));
 var storage = multer_1.default.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, "uploads");
+        callback(null, path_1.default.join(__dirname, "uploads"));
     },
     filename: function (req, file, callback) {
         // const randomFileName =
@@ -86,6 +86,14 @@ app.get("/logout", function (req, res) {
     console.log("I am in Logout, we clear the cookies");
     req.session = null;
     res.redirect("/");
+});
+app.get("/getUserInfo.json", function (req, res) {
+    getUserInfo(req.session.userId).then(function (data) {
+        res.json({
+            status: "Success",
+            data: data,
+        });
+    });
 });
 /* -----------------------------------------------------------------------------------------------------
                             POST
@@ -232,17 +240,35 @@ app.post("/upload.json", uploader.single("image"), s3.upload, function (req, res
     // https://s3.amazonaws.com/:yourBucketName/:filename
     // https://:yourBucketName.s3.eu-central-1.amazonaws.com/:filename.
     console.log("\t url: ".concat(url));
-    // saveImage(url, user, title, description)
-    //     .then((result) => {
-    //         console.log("result.rows[0]", result.rows[0]);
-    //         res.json({
-    //             success: true,
-    //             image: result.rows[0],
-    //         });
-    //     })
-    //     .catch((err) => console.log("err db", er));
-    res.json({
-        status: "Success",
+    var userId = req.session.userId;
+    saveProfileImage(userId, url)
+        .then(function (result) {
+        console.log("result form database", result);
+        res.json({
+            status: "Success",
+            photourl: result,
+        });
+    })
+        .catch(function (err) {
+        return res.json({
+            status: "Error",
+        });
+    });
+});
+app.post("/setBioInfo.json", function (req, res) {
+    console.log("Data received Set Bio", req.body);
+    upDateBio(req.session.userId, req.body.data)
+        .then(function (result) {
+        console.log("Respond from process:", result);
+        res.json({
+            status: "Success",
+            result: result,
+        });
+    })
+        .catch(function () {
+        return res.json({
+            status: "Error",
+        });
     });
 });
 /* ---------------------------------------------------------------------------------------

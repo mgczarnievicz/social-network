@@ -33,6 +33,21 @@ module.exports.updatePassword = function (email, newPassword) {
     var param = [email, newPassword];
     return db.query(q, param);
 };
+module.exports.updateProfileImage = function (userId, url) {
+    var q = " UPDATE users\n            SET photourl = $2\n            WHERE id = $1\n            RETURNING photourl;";
+    var param = [userId, url];
+    return db.query(q, param);
+};
+exports.getUserDataById = function (userId) {
+    var q = " SELECT * FROM users\n            WHERE id = $1";
+    var param = [userId];
+    return db.query(q, param);
+};
+exports.upDateBioByUserId = function (userId, newBio) {
+    var q = " UPDATE users\n            SET bio = $2\n            WHERE id = $1\n            RETURNING bio";
+    var param = [userId, newBio];
+    return db.query(q, param);
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

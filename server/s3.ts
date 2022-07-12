@@ -16,7 +16,7 @@ That give us a bunch of methods to communication
 and interact with our s3 cloud storage that amazon calls buckets
 */
 
-export {};
+// export {};
 
 const s3 = new aws.S3({
     accessKeyId: secrets.AWS_KEY,
@@ -24,12 +24,13 @@ const s3 = new aws.S3({
 });
 
 // @ts-ignore
-module.exports.upload = (req: Request, res: Response, next: NextFunction) => {
+module.exports.upload = (req, res: Response, next: NextFunction) => {
     // We valid that we have a file.
     // console.log("in S3 req", req);
+    console.log("inside s3,ts");
     if (!req.file) {
         console.log("no file on request");
-        return req.sendStatus(500);
+        return res.sendStatus(500);
     }
     const { filename, mimetype, size, path } = req.file;
 

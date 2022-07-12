@@ -10,11 +10,22 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var cryptoRandomString = require("crypto-random-string");
 // import cryptoRandomString from 'crypto-random-string';
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId;
 var sendEmail = require("./ses").sendEmail;
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -168,4 +179,34 @@ exports.setNewPassword = function (userInput) {
         return false;
     })
         .catch(function (err) { return false; });
+};
+exports.saveProfileImage = function (userId, url) {
+    return updateProfileImage(userId, url)
+        .then(function (result) {
+        console.log("Save img result.rows[0]", result.rows[0]);
+        return result.rows[0].photourl;
+    })
+        .catch(function (err) {
+        console.log("Error Updating the url", err);
+        return false;
+    });
+};
+exports.getUserInfo = function (userId) {
+    console.log("Process GetUser Info id", userId);
+    return getUserDataById(userId)
+        .then(function (result) {
+        console.log("User Data:", result.rows[0]);
+        var _a = result.rows[0], password = _a.password, userInfo = __rest(_a, ["password"]);
+        console.log("userInfo", userInfo);
+        return userInfo;
+    })
+        .catch(function (err) { return err; });
+};
+exports.upDateBio = function (userId, newBio) {
+    return upDateBioByUserId(userId, newBio)
+        .then(function (result) {
+        console.log("Query result", result.rows);
+        return result.rows[0].bio;
+    })
+        .catch(function (err) { return err; });
 };

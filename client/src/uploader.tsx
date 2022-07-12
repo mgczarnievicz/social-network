@@ -3,7 +3,7 @@ import { Component } from "react";
 
 // Function
 interface UploaderProps {
-    methodInApp?: (a: boolean) => void;
+    methodInApp?: (a: string) => void;
     // methodInApp?: Function;
 }
 
@@ -15,7 +15,7 @@ export default class Uploader extends Component<UploaderProps> {
     componentDidMount() {
         console.log("Uploader just mount");
     }
-    methodInUploader(event: React.MouseEvent) {
+    methodInUploader(event: React.SyntheticEvent) {
         console.log("I am clicking accept!");
         event.preventDefault();
         // /upload.json
@@ -25,20 +25,21 @@ export default class Uploader extends Component<UploaderProps> {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({}),
+            body: JSON.stringify(event.target),
         })
             .then((resp) => resp.json())
             .then((data) => {
                 console.log("Data received POST load.json", data);
 
-                // if (data.status === "Success") {
-                //     location.reload();
-                // } else {
-                //     this.setState({
-                //         error: true,
-                //     });
-                // }
-                // console.log("this.state:", this.state);
+                if (data.status === "Success") {
+                    // Call function form parent with the argument as the url.
+                    this.props.methodInApp(data.imageUrl);
+                } else {
+                    this.setState({
+                        error: true,
+                    });
+                }
+                console.log("this.state:", this.state);
             })
             .catch(() => {
                 // this.setState(
@@ -56,7 +57,12 @@ export default class Uploader extends Component<UploaderProps> {
         return (
             <div>
                 <h1>I am the Uploader!</h1>
-                <form encType="multipart/form-data">
+                <form
+                    encType="multipart/form-data"
+                    onSubmit={(e) => {
+                        this.methodInUploader(e);
+                    }}
+                >
                     <input
                         type="file"
                         name="image"
@@ -64,13 +70,7 @@ export default class Uploader extends Component<UploaderProps> {
                         ref="file"
                         id="inputTag"
                     />
-                    <button
-                        onClick={(e) => {
-                            this.methodInUploader(e);
-                        }}
-                    >
-                        Accept
-                    </button>
+                    <button type="submit">Accept</button>
                 </form>
             </div>
         );

@@ -10,14 +10,16 @@ CREATE TABLE users (
     surname VARCHAR NOT NULL CHECK (surname != ''),
     email VARCHAR NOT NULL CHECK (email != '') UNIQUE,
     password VARCHAR NOT NULL CHECK (password != '')
-);
-
-
-CREATE TABLE users_profile (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) UNIQUE,
     photoUrl VARCHAR NOT NULL CHECK (surname != ''),
+
 );
+
+
+-- CREATE TABLE users_profile (
+--     id SERIAL PRIMARY KEY,
+--     user_id INT REFERENCES users(id) UNIQUE,
+--     photoUrl VARCHAR NOT NULL CHECK (surname != ''),
+-- );
 
 CREATE TABLE resetpassword (
     id SERIAL PRIMARY KEY,

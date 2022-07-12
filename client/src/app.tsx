@@ -42,8 +42,11 @@ export default class App extends Component<AppProps, AppState> {
         });
     }
 
-    methodInApp(arg: boolean) {
-        console.log("This is arg", arg);
+    methodInApp(url: string) {
+        console.log("This is arg", url);
+        this.setState({
+            photoUrl: url,
+        });
     }
     render() {
         return (

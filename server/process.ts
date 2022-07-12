@@ -8,6 +8,7 @@ const {
     updatePassword,
     registerCode,
     searchCode,
+    updateProfileImage,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -239,4 +240,13 @@ exports.setNewPassword = (userInput: UserResetPassword) => {
             return false;
         })
         .catch((err: QueryResult) => false);
+};
+
+exports.saveProfileImage = (userId: number, url: string) => {
+    return updateProfileImage(userId, url)
+        .then((result: QueryResult) => result.rows[0])
+        .catch((err: QueryResult) => {
+            console.log("Error Updating the url", err);
+            return false;
+        });
 };

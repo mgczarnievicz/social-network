@@ -73,6 +73,18 @@ module.exports.updatePassword = (
     return db.query(q, param);
 };
 
+module.exports.updateProfileImage = (
+    userId: number,
+    url: string
+): QueryResult => {
+    const q = ` UPDATE users
+            SET photoUrl = $2
+            WHERE id = $1
+            RETURNING photoUrl;`;
+    const param = [userId, url];
+    return db.query(q, param);
+};
+
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

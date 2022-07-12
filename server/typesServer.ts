@@ -38,3 +38,8 @@ export type SingleResponseSuccess = string | {};
 
 export type ProcessMultiRes = MultiResponseSuccess | QueryResult;
 export type ProcessSingleRes = SingleResponseSuccess | QueryResult;
+
+// import { Request } from "express";
+// export interface IFileRequest extends Request {
+//     file: string; // or any other type
+// }

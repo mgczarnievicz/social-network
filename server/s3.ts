@@ -16,6 +16,8 @@ That give us a bunch of methods to communication
 and interact with our s3 cloud storage that amazon calls buckets
 */
 
+export {};
+
 const s3 = new aws.S3({
     accessKeyId: secrets.AWS_KEY,
     secretAccessKey: secrets.AWS_SECRET,

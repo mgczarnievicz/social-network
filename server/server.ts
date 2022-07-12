@@ -32,6 +32,7 @@ const {
     noEmptyInputsValid,
     foundEmail,
     setNewPassword,
+    saveProfileImage,
 } = require("./process");
 
 // @ts-ignore
@@ -277,19 +278,20 @@ app.post("/upload.json", uploader.single("image"), s3.upload, (req, res) => {
     // https://:yourBucketName.s3.eu-central-1.amazonaws.com/:filename.
 
     console.log(`\t url: ${url}`);
-
-    // saveImage(url, user, title, description)
-    //     .then((result) => {
-    //         console.log("result.rows[0]", result.rows[0]);
-    //         res.json({
-    //             success: true,
-    //             image: result.rows[0],
-    //         });
-    //     })
-    //     .catch((err) => console.log("err db", er));
-    res.json({
-        status: "Success",
-    });
+    const userId = req.session.id;
+    saveProfileImage(userId, url)
+        .then((result: string) => {
+            console.log("result form database", result);
+            res.json({
+                status: "Success",
+                imageUrl: result,
+            });
+        })
+        .catch((err: boolean) =>
+            res.json({
+                status: "Error",
+            })
+        );
 });
 
 /* ---------------------------------------------------------------------------------------

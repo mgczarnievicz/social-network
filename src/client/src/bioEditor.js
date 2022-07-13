@@ -76,8 +76,16 @@ var BioEditor = /** @class */ (function (_super) {
             draftBio: this.props.bio,
         });
     };
+    /* FIXME: when the user does enter, we don't display it! */
+    /* TODO. In server, Create an array of bio and then here in map through the array
+    const string = 'split-by-dash';
+
+    const usingSplit = string.split('-');
+    result =  [ 'split', 'by', 'dash' ]
+    
+    */
     BioEditor.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Hi I am the Bio Editor" }), this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("p", { children: this.props.bio }), (0, jsx_runtime_1.jsx)("a", __assign({ onClick: this.toggleBioEditor }, { children: "Edit Bio" }))] })), !this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Add Bio" }))), this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("textarea", { value: this.state.draftBio, onChange: this.handleBioChange, rows: 10, cols: 100 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.submitBio }, { children: "Save Changes" }))] }))] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-container" }, { children: [this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("h3", { children: this.props.bio }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Edit Bio" }))] }))), !this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Add Bio" }))), this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: this.state.draftBio, onChange: this.handleBioChange, rows: 5, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.submitBio }, { children: "Save Changes" }))] })))] })));
     };
     return BioEditor;
 }(react_1.Component));

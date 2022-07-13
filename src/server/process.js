@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var cryptoRandomString = require("crypto-random-string");
 // import cryptoRandomString from 'crypto-random-string';
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends;
 var sendEmail = require("./ses").sendEmail;
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -195,9 +195,7 @@ exports.getUserInfo = function (userId) {
     console.log("Process GetUser Info id", userId);
     return getUserDataById(userId)
         .then(function (result) {
-        console.log("User Data:", result.rows[0]);
         var _a = result.rows[0], password = _a.password, userInfo = __rest(_a, ["password"]);
-        console.log("userInfo", userInfo);
         return userInfo;
     })
         .catch(function (err) { return err; });
@@ -209,4 +207,51 @@ exports.upDateBio = function (userId, newBio) {
         return result.rows[0].bio;
     })
         .catch(function (err) { return err; });
+};
+// FriendInfo
+exports.searchForFiends = function (nameToSearch) {
+    console.log("nameToSearch in searchForFriend", nameToSearch);
+    return getMatchingFriends(nameToSearch)
+        .then(function (result) {
+        console.log("result.rows", result.rows);
+        return result.rows;
+    })
+        .catch(function (err) {
+        err;
+    });
+};
+exports.searchNewestFiends = function () {
+    return getNewestUsers()
+        .then(function (result) {
+        console.log("result.rows", result.rows);
+        return result.rows;
+    })
+        .catch(function (err) {
+        err;
+    });
+};
+exports.searchForFiends = function (nameToSearch) {
+    console.log("nameToSearch in searchForFriend", nameToSearch);
+    if (nameToSearch !== "") {
+        // Here search in db the value of input
+        return getMatchingFriends(nameToSearch)
+            .then(function (result) {
+            console.log("result.rows", result.rows);
+            return result.rows;
+        })
+            .catch(function (err) {
+            err;
+        });
+    }
+    else {
+        // Send the last 20 friends.
+        return getNewestUsers()
+            .then(function (result) {
+            console.log("result.rows", result.rows);
+            return result.rows;
+        })
+            .catch(function (err) {
+            err;
+        });
+    }
 };

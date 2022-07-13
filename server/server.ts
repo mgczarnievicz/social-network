@@ -35,6 +35,8 @@ const {
     saveProfileImage,
     getUserInfo,
     upDateBio,
+    searchForFiends,
+    searchNewestFiends,
 } = require("./process");
 
 // @ts-ignore
@@ -138,6 +140,41 @@ app.get("/getUserInfo.json", (req, res) => {
         });
     });
 });
+
+app.get("/searchFriend/", (req, res) => {
+    console.log("In /searchFriend/  ----------");
+    console.log("req.params", req.query);
+
+    searchForFiends(req.query.search)
+        .then((friends: []) => {
+            res.json({
+                status: "Success",
+                friends,
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
+});
+
+// app.get("/searchFriend/:input", (req, res) => {
+//     console.log("In /searchFriend/ with input ----------");
+//     console.log("req.params", req.params);
+//     searchForFiends(req.params.input)
+//         .then((friends: []) => {
+//             res.json({
+//                 status: "Success",
+//                 friends,
+//             });
+//         })
+//         .catch((err: QueryResult) => {
+//             res.json({
+//                 status: "Error",
+//             });
+//         });
+// });
 /* -----------------------------------------------------------------------------------------------------
                             POST
 ------------------------------------------------------------------------------------------------------*/

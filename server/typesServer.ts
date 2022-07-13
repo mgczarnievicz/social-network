@@ -24,6 +24,10 @@ export interface UserInfo extends UserBasicInfo {
     email: string;
 }
 
+export interface FriendInfo extends UserBasicInfo {
+    photoUrl: string;
+}
+
 export interface UserResetPassword {
     email: string;
     code: string;

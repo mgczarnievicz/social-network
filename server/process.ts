@@ -11,6 +11,8 @@ const {
     updateProfileImage,
     getUserDataById,
     upDateBioByUserId,
+    getNewestUsers,
+    getMatchingFriends,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -261,9 +263,7 @@ exports.getUserInfo = (userId: number) => {
     console.log("Process GetUser Info id", userId);
     return getUserDataById(userId)
         .then((result: QueryResult) => {
-            console.log("User Data:", result.rows[0]);
             const { password, ...userInfo } = result.rows[0];
-            console.log("userInfo", userInfo);
             return userInfo;
         })
         .catch((err: QueryResult) => err);
@@ -276,4 +276,53 @@ exports.upDateBio = (userId: number, newBio: string) => {
             return result.rows[0].bio;
         })
         .catch((err: QueryResult) => err);
+};
+
+// FriendInfo
+exports.searchForFiends = (nameToSearch: string) => {
+    console.log("nameToSearch in searchForFriend", nameToSearch);
+    return getMatchingFriends(nameToSearch)
+        .then((result: QueryResult) => {
+            console.log("result.rows", result.rows);
+            return result.rows;
+        })
+        .catch((err: QueryResult) => {
+            err;
+        });
+};
+
+exports.searchNewestFiends = () => {
+    return getNewestUsers()
+        .then((result: QueryResult) => {
+            console.log("result.rows", result.rows);
+            return result.rows;
+        })
+        .catch((err: QueryResult) => {
+            err;
+        });
+};
+
+exports.searchForFiends = (nameToSearch: string) => {
+    console.log("nameToSearch in searchForFriend", nameToSearch);
+    if (nameToSearch !== "") {
+        // Here search in db the value of input
+        return getMatchingFriends(nameToSearch)
+            .then((result: QueryResult) => {
+                console.log("result.rows", result.rows);
+                return result.rows;
+            })
+            .catch((err: QueryResult) => {
+                err;
+            });
+    } else {
+        // Send the last 20 friends.
+        return getNewestUsers()
+            .then((result: QueryResult) => {
+                console.log("result.rows", result.rows);
+                return result.rows;
+            })
+            .catch((err: QueryResult) => {
+                err;
+            });
+    }
 };

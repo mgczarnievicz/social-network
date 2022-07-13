@@ -3,6 +3,7 @@
     --color-light: #fbd5c0;
     --color-board: #ffae00;
     --color-green: #d9ebc5;
+    --color-lighter: #fbd5c0ac;
 }
 
 * {
@@ -15,11 +16,14 @@
 body {
     height: 100vh;
     width: 100%;
-    background-color: white;
 }
 main {
     min-height: 100vh;
     width: 100%;
+    background-color: var(--color-lighter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 button {
@@ -48,6 +52,7 @@ textarea {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    background-color: white;
 }
 .image-welcome {
     width: 120%;
@@ -137,26 +142,48 @@ p {
                         HEADER SECTION
 -----------------------------------------------------------------------*/
 
-.header {
+header {
     width: 100%;
-    height: 100px;
+    height: 120px;
     padding: 0px 10px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: #94b49f;
+    border-bottom: 2px solid var(--color-dark);
 }
 
-.header .logo-img img {
+header .logo-img img {
     width: auto;
     height: 100px;
+    margin-top: 6px;
 }
 
-.header .profilePhoto img {
+header .profilePhoto img {
     width: 100px;
     height: 100px;
     object-fit: cover;
     /* border-radius: 50%; */
+}
+
+header nav {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+header nav a {
+    height: 50%;
+    margin-left: 10px;
+    padding: 10px 30px;
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: white;
+}
+
+header nav a:hover {
+    color: var(--color-board);
 }
 
 /* --------------------------------------------------------------------
@@ -188,6 +215,8 @@ label {
 -----------------------------------------------------------------------*/
 .profile-component {
     width: 80%;
+    padding-top: 20px;
+    flex-grow: 2;
     display: flex;
     flex-direction: row;
 }
@@ -221,4 +250,48 @@ label {
     border-radius: 12px;
     padding: 2px;
     align-self: flex-start;
+}
+
+/* --------------------------------------------------------------------
+                        SEARCH SECTION
+-----------------------------------------------------------------------*/
+.search-container {
+    width: 90%;
+}
+
+.search-inputs {
+    display: flex;
+    flex-direction: row;
+    /* height: 30px; */
+
+    padding: 10px 0px;
+}
+
+.search-inputs input {
+    margin: 10px;
+    font-size: 20px;
+    background-color: none;
+
+    border: none;
+    border-bottom: var(--color-dark) 2px solid;
+    padding-left: 5px;
+}
+
+.friend-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.friend-container .friend-info {
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.friend-container img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
 }

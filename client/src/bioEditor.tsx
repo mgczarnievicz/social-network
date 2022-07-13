@@ -69,7 +69,14 @@ class BioEditor extends Component<BioProps, BioState> {
         });
     }
 
-    /* FIXME: when the user does enter, we dont display it! */
+    /* FIXME: when the user does enter, we don't display it! */
+    /* TODO. In server, Create an array of bio and then here in map through the array 
+    const string = 'split-by-dash';
+
+    const usingSplit = string.split('-');
+    result =  [ 'split', 'by', 'dash' ]
+    
+    */
     render() {
         return (
             <div className="bio-container">

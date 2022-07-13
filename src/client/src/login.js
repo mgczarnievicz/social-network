@@ -74,7 +74,7 @@ var LogIn = /** @class */ (function (_super) {
             .then(function (data) {
             console.log("data from POST/ login", data);
             if (data.status === "Success") {
-                location.reload();
+                location.replace("/");
             }
             else {
                 _this.setState({

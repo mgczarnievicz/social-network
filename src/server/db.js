@@ -48,6 +48,12 @@ exports.upDateBioByUserId = function (userId, newBio) {
     var param = [userId, newBio];
     return db.query(q, param);
 };
+exports.getMatchingFriends = function (val) {
+    return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE name ILIKE $1;", [val + "%"]);
+};
+exports.getNewestUsers = function () {
+    return db.query("SELECT id, name, surname, photoUrl FROM users \n        ORDER BY id DESC\n        LIMIT 15;", []);
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

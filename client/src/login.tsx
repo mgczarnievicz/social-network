@@ -49,7 +49,7 @@ class LogIn extends Component<LogInProps, LogInState> {
                 console.log("data from POST/ login", data);
 
                 if (data.status === "Success") {
-                    location.reload();
+                    location.replace("/");
                 } else {
                     this.setState(
                         {

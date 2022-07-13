@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchNewestFiends = _a.searchNewestFiends;
 // @ts-ignore
 // export const app: Express = express();
 var app = (0, express_1.default)();
@@ -95,6 +95,38 @@ app.get("/getUserInfo.json", function (req, res) {
         });
     });
 });
+app.get("/searchFriend/", function (req, res) {
+    console.log("In /searchFriend/  ----------");
+    console.log("req.params", req.query);
+    searchForFiends(req.query.search)
+        .then(function (friends) {
+        res.json({
+            status: "Success",
+            friends: friends,
+        });
+    })
+        .catch(function (err) {
+        res.json({
+            status: "Error",
+        });
+    });
+});
+// app.get("/searchFriend/:input", (req, res) => {
+//     console.log("In /searchFriend/ with input ----------");
+//     console.log("req.params", req.params);
+//     searchForFiends(req.params.input)
+//         .then((friends: []) => {
+//             res.json({
+//                 status: "Success",
+//                 friends,
+//             });
+//         })
+//         .catch((err: QueryResult) => {
+//             res.json({
+//                 status: "Error",
+//             });
+//         });
+// });
 /* -----------------------------------------------------------------------------------------------------
                             POST
 ------------------------------------------------------------------------------------------------------*/

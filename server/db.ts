@@ -100,6 +100,23 @@ exports.upDateBioByUserId = (userId: number, newBio: string): QueryResult => {
     const param = [userId, newBio];
     return db.query(q, param);
 };
+
+exports.getMatchingFriends = (val: string): QueryResult => {
+    return db.query(
+        `SELECT id, name, surname, photoUrl FROM users 
+        WHERE name ILIKE $1;`,
+        [val + "%"]
+    );
+};
+
+exports.getNewestUsers = (): QueryResult => {
+    return db.query(
+        `SELECT id, name, surname, photoUrl FROM users 
+        ORDER BY id DESC
+        LIMIT 15;`,
+        []
+    );
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

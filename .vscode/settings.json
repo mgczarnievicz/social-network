@@ -1,4 +1,10 @@
 {
     "javascript.suggest.autoImports": false,
-    "cSpell.words": ["imageboard", "Inciarte", "photourl", "spicedling"]
+    "cSpell.words": [
+        "ILIKE",
+        "imageboard",
+        "Inciarte",
+        "photourl",
+        "spicedling"
+    ]
 }

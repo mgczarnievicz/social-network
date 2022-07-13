@@ -57,15 +57,24 @@ export default class Uploader extends Component<UploaderProps> {
     render() {
         return (
             <div className="uploader">
-                <h1>Update your Photo</h1>
                 <form encType="multipart/form-data" onSubmit={this.setNewPhoto}>
-                    <input
-                        type="file"
-                        name="image"
-                        accept="image/*"
-                        ref="file"
-                        id="inputTag"
-                    />
+                    <div className="select-img">
+                        <label htmlFor="inputTag">
+                            <i className="fa fa-2x fa-camera"></i>
+                            <br /> Select Image
+                            <input
+                                type="file"
+                                className="hidden"
+                                name="image"
+                                accept="image/*"
+                                ref="file"
+                                id="inputTag"
+                            />
+                            <br />
+                            <span id="imageName"></span>
+                        </label>
+                    </div>
+
                     <button type="submit">Accept</button>
                 </form>
             </div>

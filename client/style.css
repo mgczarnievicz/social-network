@@ -20,7 +20,22 @@ body {
 main {
     min-height: 100vh;
     width: 100%;
-    background-color: var(--color-green);
+}
+
+button {
+    margin-top: 10px;
+    color: whitesmoke;
+    font-size: 20px;
+    background-color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+    border-radius: 12px;
+    padding: 2px;
+    align-self: center;
+}
+
+textarea {
+    font-size: 1.2rem;
+    padding: 10px;
 }
 
 /* ----------------------------------------------------------------------
@@ -108,8 +123,14 @@ p {
 }
 
 .app-container {
+    width: 100%;
     min-height: 100vh;
-    background-color: var(--color-green);
+    /* background-color: var(--color-green); */
+    background-color: #fbd5c096;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* --------------------------------------------------------------------
@@ -119,7 +140,8 @@ p {
 .header {
     width: 100%;
     height: 100px;
-    padding: 20px;
+    padding: 0px 10px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -131,15 +153,72 @@ p {
 }
 
 .header .profilePhoto img {
-    width: auto;
+    width: 100px;
     height: 100px;
+    object-fit: cover;
+    /* border-radius: 50%; */
 }
+
+/* --------------------------------------------------------------------
+                        UPLOADER SECTION
+-----------------------------------------------------------------------*/
 
 .uploader {
     width: 500px;
     height: 250px;
-    background: rgba(39, 37, 37, 0.544);
-    border: solid 2px black;
+    /* #ffae00   0.808*/
+    background: #ffae00c4;
+    border: solid 2px var(--color-board);
     border-radius: 12px;
     padding: 5%;
+
+    position: absolute;
+    top: 25%;
+}
+
+.hidden {
+    display: none;
+}
+label {
+    cursor: pointer;
+}
+
+/* --------------------------------------------------------------------
+                        PROFILE SECTION
+-----------------------------------------------------------------------*/
+.profile-component {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-info {
+    flex-grow: 2;
+    padding: 10px 10px;
+}
+
+.bio-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 160px;
+}
+
+.bio-container .bio-in-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 150px;
+}
+
+.bio-container button {
+    width: 20%;
+    margin-top: 10px;
+    color: whitesmoke;
+    font-size: 20px;
+    background-color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+    border-radius: 12px;
+    padding: 2px;
+    align-self: flex-start;
 }

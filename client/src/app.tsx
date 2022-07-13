@@ -1,5 +1,7 @@
 import React from "react";
 import { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+
 import Logo from "./logo";
 import ProfilePhoto from "./profilePhoto";
 import Profile from "./profile";

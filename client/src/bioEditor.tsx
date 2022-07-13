@@ -23,7 +23,6 @@ class BioEditor extends Component<BioProps, BioState> {
         this.toggleBioEditor = this.toggleBioEditor.bind(this);
         this.handleBioChange = this.handleBioChange.bind(this);
         this.submitBio = this.submitBio.bind(this);
-        this.editBio = this.editBio.bind(this);
     }
 
     // React.TextareaHTMLAttributes<HTMLTextAreaElement> ChangeEventHandler<HTMLTextAreaElement>
@@ -41,11 +40,6 @@ class BioEditor extends Component<BioProps, BioState> {
 
     submitBio() {
         console.log("U clicked Save Bio!");
-
-        /* TODO: When user press submit:
-     1. we want to do a post request to the server to save the new bio.
-     2. after the draft was successfully inserted into the db, make sure
-     */
 
         fetch("/setBioInfo.json", {
             method: "POST",
@@ -71,23 +65,18 @@ class BioEditor extends Component<BioProps, BioState> {
         console.log("ToggleModal is running");
         this.setState({
             showTextArea: !this.state.showTextArea,
-        });
-    }
-    editBio() {
-        this.setState({
-            showTextArea: true,
             draftBio: this.props.bio,
         });
     }
+
+    /* FIXME: when the user does enter, we dont display it! */
     render() {
         return (
-            <div className="bio">
-                <h1>Hi I am the Bio Editor</h1>
-
+            <div className="bio-container">
                 {this.props.bio && !this.state.showTextArea && (
-                    <div>
-                        <p>{this.props.bio}</p>
-                        <a onClick={this.editBio}>Edit Bio</a>
+                    <div className="bio-in-display">
+                        <h3>{this.props.bio}</h3>
+                        <button onClick={this.toggleBioEditor}>Edit Bio</button>
                     </div>
                 )}
 
@@ -96,12 +85,12 @@ class BioEditor extends Component<BioProps, BioState> {
                 )}
 
                 {this.state.showTextArea && (
-                    <div>
+                    <div className="bio-in-display">
                         <textarea
                             value={this.state.draftBio}
                             onChange={this.handleBioChange}
-                            rows={10}
-                            cols={100}
+                            rows={5}
+                            cols={50}
                         ></textarea>
                         <button onClick={this.submitBio}>Save Changes</button>
                     </div>

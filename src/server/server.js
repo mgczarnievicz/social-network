@@ -85,7 +85,10 @@ app.get("/user/id.json", function (req, res) {
 app.get("/logout", function (req, res) {
     console.log("I am in Logout, we clear the cookies");
     req.session = null;
-    res.redirect("/");
+    res.json({
+        status: "Success",
+    });
+    // res.redirect("/");
 });
 app.get("/getUserInfo.json", function (req, res) {
     getUserInfo(req.session.userId).then(function (data) {

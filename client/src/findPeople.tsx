@@ -57,6 +57,7 @@ export default function FindPeople() {
                     onChange={(e) => setSearch(e.target.value)}
                     value={searchInput}
                 />
+                {!searchInput && <h1>See the newest Users!</h1>}
             </div>
             <div className="friend-container">
                 {friends &&
@@ -64,7 +65,11 @@ export default function FindPeople() {
                         console.log("Friend", friend);
                         return (
                             <div key={friend.id} className="friend-info">
-                                <img src={friend.photourl} />
+                                <img
+                                    src={
+                                        friend.photourl || "defaultProfile.png"
+                                    }
+                                />
                                 <h3>
                                     {friend.name}
                                     {friend.surname}

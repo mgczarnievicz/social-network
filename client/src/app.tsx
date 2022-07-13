@@ -73,7 +73,15 @@ export default class App extends Component<AppProps, AppState> {
         });
         console.log("logging this after bio", this);
     }
-    logOutFunction() {}
+    logOutFunction() {
+        fetch("/logout")
+            .then((resp) => resp.json())
+            .then((data) => {
+                if (data.status === "Success") {
+                    location.reload();
+                }
+            });
+    }
 
     /* TODO: app-container can go and the header div can actually be a header 
     

@@ -84,7 +84,15 @@ var App = /** @class */ (function (_super) {
         });
         console.log("logging this after bio", this);
     };
-    App.prototype.logOutFunction = function () { };
+    App.prototype.logOutFunction = function () {
+        fetch("/logout")
+            .then(function (resp) { return resp.json(); })
+            .then(function (data) {
+            if (data.status === "Success") {
+                location.reload();
+            }
+        });
+    };
     /* TODO: app-container can go and the header div can actually be a header
     
     div className="app-container"

@@ -24,6 +24,7 @@ import {
     UserBasicInfo,
 } from "./typesServer";
 import { QueryResult } from "pg"; //This bc I need the type there.
+import { read } from "fs";
 
 const {
     verifyingEmptyInputs,
@@ -36,7 +37,7 @@ const {
     getUserInfo,
     upDateBio,
     searchForFiends,
-    searchNewestFiends,
+    searchForProfile,
 } = require("./process");
 
 // @ts-ignore
@@ -165,6 +166,31 @@ app.get("/searchFriend/", (req, res) => {
                 status: "Error",
             });
         });
+});
+
+app.get("/api/profile/:id", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Profile id:`,
+        req.params.id
+    );
+
+    if (req.params.id == req.session.userId) {
+        console.log("I am Equal, I am calling myself");
+        res.json({
+            status: "Equal",
+        });
+    } else {
+        // I search in my db and send it back.
+        searchForProfile(req.params.id)
+            .then((result: {}) => {
+                res.json(result);
+            })
+            .catch((err: QueryResult) =>
+                res.json({
+                    status: "Error",
+                })
+            );
+    }
 });
 
 /* -----------------------------------------------------------------------------------------------------

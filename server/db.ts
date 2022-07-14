@@ -114,6 +114,14 @@ exports.getNewestUsers = (userId: number): QueryResult => {
         [userId]
     );
 };
+
+exports.searchProfileByUserId = (id: number): QueryResult => {
+    return db.query(
+        `SELECT name, surname, photoUrl, bio FROM users 
+        WHERE id=$1;`,
+        [id]
+    );
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

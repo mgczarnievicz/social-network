@@ -7,7 +7,7 @@ import ProfilePhoto from "./profilePhoto";
 import Profile from "./profile";
 import Uploader from "./uploader";
 import FindPeople from "./findPeople";
-import OtherProfile from "./otherProfile"
+import OtherProfile from "./otherProfile";
 
 interface AppState {
     name?: string;
@@ -139,7 +139,7 @@ export default class App extends Component<AppProps, AppState> {
                         <Route path="/searchPeople">
                             <FindPeople />
                         </Route>
-                        <Route exact path="/user/:otherUserId">
+                        <Route exact path="/user/:idUserToSee">
                             <OtherProfile />
                         </Route>
                     </Switch>

@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchNewestFiends = _a.searchNewestFiends;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile;
 // @ts-ignore
 var app = (0, express_1.default)();
 // Bc we are deploying we need to define where to get the value.
@@ -110,6 +110,27 @@ app.get("/searchFriend/", function (req, res) {
             status: "Error",
         });
     });
+});
+app.get("/api/profile/:id", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Profile id:", req.params.id);
+    if (req.params.id == req.session.userId) {
+        console.log("I am Equal, I am calling myself");
+        res.json({
+            status: "Equal",
+        });
+    }
+    else {
+        // I search in my db and send it back.
+        searchForProfile(req.params.id)
+            .then(function (result) {
+            res.json(result);
+        })
+            .catch(function (err) {
+            return res.json({
+                status: "Error",
+            });
+        });
+    }
 });
 /* -----------------------------------------------------------------------------------------------------
                             POST

@@ -53,6 +53,9 @@ exports.getMatchingFriends = function (val, userId) {
 exports.getNewestUsers = function (userId) {
     return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE id!=$1\n        ORDER BY id DESC\n        LIMIT 15;", [userId]);
 };
+exports.searchProfileByUserId = function (id) {
+    return db.query("SELECT name, surname, photoUrl, bio FROM users \n        WHERE id=$1;", [id]);
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/

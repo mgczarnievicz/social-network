@@ -13,6 +13,7 @@ const {
     upDateBioByUserId,
     getNewestUsers,
     getMatchingFriends,
+    searchProfileByUserId,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -30,6 +31,7 @@ import {
     StringObject,
     UserInfo,
 } from "./typesServer";
+import { DataBrew } from "aws-sdk";
 
 function capitalizeFirstLetter(string: string): string {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -282,4 +284,19 @@ exports.searchForFiends = (nameToSearch: string, userId: number) => {
         // Send the last 15 friends.
         return searchNewestFiends(userId);
     }
+};
+
+exports.searchForProfile = (id: number) => {
+    return searchProfileByUserId(id)
+        .then((result: QueryResult) => {
+            console.log("result.rows", result.rows);
+            if (result.rows.length === 0) {
+                // No match found
+                return { status: "Not Found" };
+            } else {
+                console.log("Found Profile.");
+                return { status: "Success", profile: result.rows[0] };
+            }
+        })
+        .catch((err: QueryResult) => err);
 };

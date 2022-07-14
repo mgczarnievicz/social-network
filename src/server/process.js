@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId;
 var sendEmail = require("./ses").sendEmail;
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -242,4 +242,19 @@ exports.searchForFiends = function (nameToSearch, userId) {
         // Send the last 15 friends.
         return searchNewestFiends(userId);
     }
+};
+exports.searchForProfile = function (id) {
+    return searchProfileByUserId(id)
+        .then(function (result) {
+        console.log("result.rows", result.rows);
+        if (result.rows.length === 0) {
+            // No match found
+            return { status: "Not Found" };
+        }
+        else {
+            console.log("Found Profile.");
+            return { status: "Success", profile: result.rows[0] };
+        }
+    })
+        .catch(function (err) { return err; });
 };

@@ -65,8 +65,6 @@ export default function OtherProfile() {
                             case "Equal":
                                 // I called myself
                                 // go to my profile user.
-                                console.log("I am Equal");
-
                                 history.push("/");
                                 break;
                             case "Success":
@@ -93,6 +91,12 @@ export default function OtherProfile() {
     }, []);
     return (
         <>
+            {!user && (
+                <div>
+                    <br />
+                    <h1> User Not Found!</h1>
+                </div>
+            )}
             {user && (
                 <div className="profile-component">
                     <ProfilePhoto
@@ -110,12 +114,6 @@ export default function OtherProfile() {
                                 return <h3 key={i}>{bioSentence}</h3>;
                             })}
                     </div>
-                </div>
-            )}
-            {!user && (
-                <div>
-                    <br />
-                    <h1> User Not Found!</h1>
                 </div>
             )}
         </>

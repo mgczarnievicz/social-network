@@ -42,6 +42,9 @@ textarea {
     padding: 10px;
 }
 
+button:hover {
+    cursor: pointer;
+}
 /* ----------------------------------------------------------------------
                                     WELCOME 
 ------------------------------------------------------------------------*/
@@ -127,6 +130,10 @@ p {
     margin: 10px;
 }
 
+.profilePhoto img:hover {
+    cursor: pointer;
+}
+
 .app-container {
     width: 100%;
     min-height: 100vh;
@@ -197,10 +204,28 @@ header nav a:hover {
     background: #ffae00c4;
     border: solid 2px var(--color-board);
     border-radius: 12px;
-    padding: 5%;
+    /* padding: 5%; */
 
     position: absolute;
     top: 25%;
+    display: flex;
+    flex-direction: column;
+    /* text-align: center; */
+}
+
+.uploader form {
+    flex-grow: 2;
+    text-align: center;
+}
+
+.uploader h2 {
+    text-align: right;
+    padding-right: 5px;
+    cursor: pointer;
+}
+
+.uploader button {
+    width: 50%;
 }
 
 .hidden {

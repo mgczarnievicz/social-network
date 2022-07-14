@@ -37,7 +37,7 @@ var Uploader = /** @class */ (function (_super) {
         return _this;
     }
     Uploader.prototype.componentDidMount = function () {
-        console.log("Uploader just mount");
+        console.log("Uploader just mount this.props", this.props);
     };
     // HTMLFormElement HTMLFormElement React.SyntheticEvent
     Uploader.prototype.setNewPhoto = function (event) {
@@ -76,7 +76,10 @@ var Uploader = /** @class */ (function (_super) {
         //  this.props.methodInApp(true);
     };
     Uploader.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "uploader" }, { children: (0, jsx_runtime_1.jsxs)("form", __assign({ encType: "multipart/form-data", onSubmit: this.setNewPhoto }, { children: [(0, jsx_runtime_1.jsx)("div", __assign({ className: "select-img" }, { children: (0, jsx_runtime_1.jsxs)("label", __assign({ htmlFor: "inputTag" }, { children: [(0, jsx_runtime_1.jsx)("i", { className: "fa fa-2x fa-camera" }), (0, jsx_runtime_1.jsx)("br", {}), " Select Image", (0, jsx_runtime_1.jsx)("input", { type: "file", className: "hidden", name: "image", accept: "image/*", ref: "file", id: "inputTag" }), (0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("span", { id: "imageName" })] })) })), (0, jsx_runtime_1.jsx)("button", __assign({ type: "submit" }, { children: "Accept" }))] })) })));
+        var _this = this;
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "uploader" }, { children: [(0, jsx_runtime_1.jsx)("h1", __assign({ onClick: function () {
+                        _this.props.toggleUploader();
+                    } }, { children: "X" })), (0, jsx_runtime_1.jsxs)("form", __assign({ encType: "multipart/form-data", onSubmit: this.setNewPhoto }, { children: [(0, jsx_runtime_1.jsx)("div", __assign({ className: "select-img" }, { children: (0, jsx_runtime_1.jsxs)("label", __assign({ htmlFor: "inputTag" }, { children: [(0, jsx_runtime_1.jsx)("i", { className: "fa fa-2x fa-camera" }), (0, jsx_runtime_1.jsx)("br", {}), " Select Image", (0, jsx_runtime_1.jsx)("input", { type: "file", className: "hidden", name: "image", accept: "image/*", ref: "file", id: "inputTag" }), (0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("span", { id: "imageName" })] })) })), (0, jsx_runtime_1.jsx)("button", __assign({ type: "submit" }, { children: "Accept" }))] }))] })));
     };
     return Uploader;
 }(react_1.Component));

@@ -4,6 +4,7 @@ import { Component } from "react";
 // Function
 interface UploaderProps {
     upDatingPhoto?: (a: string) => void;
+    toggleUploader: Function;
     // methodInApp?: Function;
 }
 
@@ -15,7 +16,7 @@ export default class Uploader extends Component<UploaderProps> {
         this.setNewPhoto = this.setNewPhoto.bind(this);
     }
     componentDidMount() {
-        console.log("Uploader just mount");
+        console.log("Uploader just mount this.props", this.props);
     }
     // HTMLFormElement HTMLFormElement React.SyntheticEvent
     setNewPhoto(event: React.ChangeEvent<HTMLFormElement>) {
@@ -57,6 +58,13 @@ export default class Uploader extends Component<UploaderProps> {
     render() {
         return (
             <div className="uploader">
+                <h2
+                    onClick={() => {
+                        this.props.toggleUploader();
+                    }}
+                >
+                    X
+                </h2>
                 <form encType="multipart/form-data" onSubmit={this.setNewPhoto}>
                     <div className="select-img">
                         <label htmlFor="inputTag">

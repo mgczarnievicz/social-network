@@ -88,15 +88,15 @@ export default class App extends Component<AppProps, AppState> {
             });
     }
 
-    /* TODO: app-container can go and the header div can actually be a header 
-    
-    div className="app-container"
-    */
+
     render() {
         return (
             <>
                 {this.state.uploaderVisible && (
-                    <Uploader upDatingPhoto={this.upDatingPhoto} />
+                    <Uploader
+                        upDatingPhoto={this.upDatingPhoto}
+                        toggleUploader={this.toggleUploader}
+                    />
                 )}
 
                 <BrowserRouter>

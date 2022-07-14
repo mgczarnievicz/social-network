@@ -71,9 +71,14 @@ var BioEditor = /** @class */ (function (_super) {
     };
     BioEditor.prototype.toggleBioEditor = function () {
         console.log("ToggleModal is running");
+        var setDraftBio = "";
+        console.log("this.props is toggle bioEditor", this.props);
+        if (this.props.bio)
+            setDraftBio = this.props.bio.join("\n");
+        console.log("bio as string setDraftBio", setDraftBio);
         this.setState({
             showTextArea: !this.state.showTextArea,
-            draftBio: this.props.bio,
+            draftBio: setDraftBio,
         });
     };
     /* FIXME: when the user does enter, we don't display it! */
@@ -85,7 +90,11 @@ var BioEditor = /** @class */ (function (_super) {
     
     */
     BioEditor.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-container" }, { children: [this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("h3", { children: this.props.bio }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Edit Bio" }))] }))), !this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Add Bio" }))), this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: this.state.draftBio, onChange: this.handleBioChange, rows: 5, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.submitBio }, { children: "Save Changes" }))] })))] })));
+        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-container" }, { children: [this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [this.props.bio &&
+                            this.props.bio.map(function (bioSentence, i) {
+                                console.log("Bio ", bioSentence);
+                                return (0, jsx_runtime_1.jsx)("h3", { children: bioSentence }, i);
+                            }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Edit Bio" }))] }))), !this.props.bio && !this.state.showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.toggleBioEditor }, { children: "Add Bio" }))), this.state.showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: this.state.draftBio, onChange: this.handleBioChange, rows: 5, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: this.submitBio }, { children: "Save Changes" }))] })))] })));
     };
     return BioEditor;
 }(react_1.Component));

@@ -1,6 +1,6 @@
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
-exports.hash = (password: string): string => {
+exports.hash = (password: string) => {
     return bcrypt.genSalt().then((salt: string) => {
         return bcrypt.hash(password, salt);
     });

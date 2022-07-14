@@ -40,7 +40,6 @@ const {
 } = require("./process");
 
 // @ts-ignore
-// export const app: Express = express();
 const app = express();
 
 // Bc we are deploying we need to define where to get the value.
@@ -62,8 +61,6 @@ const storage = multer.diskStorage({
         callback(null, path.join(__dirname, "uploads"));
     },
     filename(req, file: Express.Multer.File, callback: FileNameCallback) {
-        // const randomFileName =
-        //  how to keep the extension
         uidSafe(24).then((randomString: string) => {
             callback(null, `${randomString}${path.extname(file.originalname)}`);
         });
@@ -111,7 +108,6 @@ app.use((req, res, next) => {
     console.log("req.method:", req.method);
     console.log("req.session:", req.session);
     console.log("req.body:", req.body);
-
     console.log("---------------------");
     next();
 });
@@ -121,21 +117,28 @@ app.use((req, res, next) => {
 ------------------------------------------------------------------------------------------------------*/
 
 app.get("/user/id.json", function (req, res) {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get User Id`
+    );
     res.json({
         userId: req.session && req.session.userId,
     });
 });
 
 app.get("/logout", (req, res) => {
-    console.log("I am in Logout, we clear the cookies");
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Log out`
+    );
     req.session = null;
     res.json({
         status: "Success",
     });
-    // res.redirect("/");
 });
 
 app.get("/getUserInfo.json", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get User Info`
+    );
     getUserInfo(req.session.userId).then((data: {}) => {
         res.json({
             status: "Success",
@@ -145,10 +148,12 @@ app.get("/getUserInfo.json", (req, res) => {
 });
 
 app.get("/searchFriend/", (req, res) => {
-    console.log("In /searchFriend/  ----------");
-    console.log("req.params", req.query);
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Search Friend:`,
+        req.query
+    );
 
-    searchForFiends(req.query.search)
+    searchForFiends(req.query.search, req.session.userId)
         .then((friends: []) => {
             res.json({
                 status: "Success",
@@ -162,29 +167,14 @@ app.get("/searchFriend/", (req, res) => {
         });
 });
 
-// app.get("/searchFriend/:input", (req, res) => {
-//     console.log("In /searchFriend/ with input ----------");
-//     console.log("req.params", req.params);
-//     searchForFiends(req.params.input)
-//         .then((friends: []) => {
-//             res.json({
-//                 status: "Success",
-//                 friends,
-//             });
-//         })
-//         .catch((err: QueryResult) => {
-//             res.json({
-//                 status: "Error",
-//             });
-//         });
-// });
 /* -----------------------------------------------------------------------------------------------------
                             POST
 ------------------------------------------------------------------------------------------------------*/
 app.post("/registration.json", (req, res) => {
-    // here the responds
-    console.log("\tGetting Registration info");
-    console.log("req.body", req.body);
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Registration:`,
+        req.body
+    );
     // Verify the empty Strings!   Empty inputs are not valid"
     if (!noEmptyInputsValid(req.body)) {
         console.log("/registration.json found empty string!");
@@ -214,8 +204,10 @@ app.post("/registration.json", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    console.log("\tGetting Log In info");
-    console.log("req.body", req.body);
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Log In:`,
+        req.body
+    );
 
     if (!noEmptyInputsValid(req.body)) {
         console.log("/login found empty string!");
@@ -248,11 +240,11 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/resetPassword/sendEmail.json", (req, res) => {
-    console.log("\tGetting Send Email info");
-    console.log("req.body", req.body);
-    /*
-    search email in db and generate and sen an email to the mail.
-     */
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Res Pass: Send Email:`,
+        req.body
+    );
+
     if (req.body.email.trim().length === 0) {
         console.log("No email was enter");
         res.json({
@@ -283,30 +275,41 @@ app.post("/resetPassword/sendEmail.json", (req, res) => {
 });
 
 app.post("/resetPassword/setNewPassword.json", (req, res) => {
-    console.log("\tGetting Set New Password info");
-    console.log("req.body", req.body);
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Reset Pass: Set New Pass:`,
+        req.body
+    );
+
     /*
     search in the db if the code is still valid and compare, if its the same update the password.
      */
     // FIXME! must validate the code and pass is not empty! see error in the functions already made.
-    setNewPassword(req.body)
-        .then((result: boolean) => {
-            console.log("Result in setNewPassword", result);
-            if (result) {
-                res.json({
-                    status: "Success",
-                });
-            } else {
+
+    if (!noEmptyInputsValid(req.body)) {
+        console.log("/reset found empty string!");
+        res.json({
+            status: "Error",
+        });
+    } else {
+        setNewPassword(req.body)
+            .then((result: boolean) => {
+                console.log("Result in setNewPassword", result);
+                if (result) {
+                    res.json({
+                        status: "Success",
+                    });
+                } else {
+                    res.json({
+                        status: "Error",
+                    });
+                }
+            })
+            .catch(() =>
                 res.json({
                     status: "Error",
-                });
-            }
-        })
-        .catch(() =>
-            res.json({
-                status: "Error",
-            })
-        );
+                })
+            );
+    }
 });
 
 // uploader.single("image") image is the name of the input filed.
@@ -345,7 +348,11 @@ app.post("/upload.json", uploader.single("image"), s3.upload, (req, res) => {
 });
 
 app.post("/setBioInfo.json", (req, res) => {
-    console.log("Data received Set Bio", req.body);
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Set Bio Info:`,
+        req.body
+    );
+
     upDateBio(req.session.userId, req.body.data)
         .then((bio: string) => {
             console.log("Respond from process:", bio);

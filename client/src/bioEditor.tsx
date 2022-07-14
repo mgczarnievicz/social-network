@@ -9,7 +9,7 @@ interface BioState {
 }
 
 interface BioProps {
-    bio: string;
+    bio: string[];
     upDateBio?: Function;
 }
 
@@ -63,9 +63,15 @@ class BioEditor extends Component<BioProps, BioState> {
 
     toggleBioEditor() {
         console.log("ToggleModal is running");
+        let setDraftBio = "";
+        console.log("this.props is toggle bioEditor", this.props);
+
+        if (this.props.bio) setDraftBio = this.props.bio.join("\n");
+        console.log("bio as string setDraftBio", setDraftBio);
+
         this.setState({
             showTextArea: !this.state.showTextArea,
-            draftBio: this.props.bio,
+            draftBio: setDraftBio,
         });
     }
 
@@ -82,7 +88,15 @@ class BioEditor extends Component<BioProps, BioState> {
             <div className="bio-container">
                 {this.props.bio && !this.state.showTextArea && (
                     <div className="bio-in-display">
-                        <h3>{this.props.bio}</h3>
+                        {this.props.bio &&
+                            this.props.bio.map(
+                                (bioSentence: string, i: number) => {
+                                    console.log("Bio ", bioSentence);
+                                    return <h3 key={i}>{bioSentence}</h3>;
+                                }
+                            )}
+
+                        {/* <h3>{this.props.bio}</h3> */}
                         <button onClick={this.toggleBioEditor}>Edit Bio</button>
                     </div>
                 )}

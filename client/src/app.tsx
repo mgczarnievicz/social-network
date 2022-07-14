@@ -7,12 +7,13 @@ import ProfilePhoto from "./profilePhoto";
 import Profile from "./profile";
 import Uploader from "./uploader";
 import FindPeople from "./findPeople";
+import OtherProfile from "./otherProfile"
 
 interface AppState {
     name?: string;
     surname?: string;
     photourl?: string;
-    bio?: string;
+    bio?: string[];
     email?: string;
     uploaderVisible: boolean;
 }
@@ -39,6 +40,8 @@ export default class App extends Component<AppProps, AppState> {
             .then((resp) => resp.json())
             .then((data) => {
                 console.log("data from GET / UserInfo", data);
+                data.data.bio = data.data.bio.split("\n");
+                console.log("Data after splitting", data);
                 this.setState(
                     {
                         ...this.state,
@@ -68,8 +71,10 @@ export default class App extends Component<AppProps, AppState> {
     upDateBio(newBio: string) {
         // Here we want to update the bio.
         console.log("Getting data from edit Bio", newBio);
+        const bioToSet = newBio.split("\n");
+
         this.setState({
-            bio: newBio,
+            bio: bioToSet,
         });
         console.log("logging this after bio", this);
     }
@@ -134,8 +139,8 @@ export default class App extends Component<AppProps, AppState> {
                         <Route path="/searchPeople">
                             <FindPeople />
                         </Route>
-                        <Route exact path="/logout">
-                            {/* <Registration /> */}
+                        <Route exact path="/user/:otherUserId">
+                            <OtherProfile />
                         </Route>
                     </Switch>
                 </BrowserRouter>

@@ -27,17 +27,9 @@ module.exports.registerUser = (
     email: string,
     password: string
 ): QueryResult<UserBasicInfo> => {
-    console.log(
-        "Log registerUser:\n name, surname, email, password:",
-        name,
-        surname,
-        email,
-        password
-    );
     const q = `INSERT INTO users (name, surname, email, password)
     VALUES ($1, $2, $3, $4 ) RETURNING id, name, surname`;
 
-    // RETURNING all
     const param = [name, surname, email, password];
     return db.query(q, param);
 };
@@ -101,20 +93,25 @@ exports.upDateBioByUserId = (userId: number, newBio: string): QueryResult => {
     return db.query(q, param);
 };
 
-exports.getMatchingFriends = (val: string): QueryResult => {
+exports.getMatchingFriends = (val: string, userId: number): QueryResult => {
     return db.query(
         `SELECT id, name, surname, photoUrl FROM users 
-        WHERE name ILIKE $1;`,
-        [val + "%"]
+        WHERE  id!=$2
+        AND name ILIKE $1
+        OR surname ILIKE $1
+        AND id!=$2
+       ;`,
+        [val + "%", userId]
     );
 };
-
-exports.getNewestUsers = (): QueryResult => {
+// WHERE id!=userId
+exports.getNewestUsers = (userId: number): QueryResult => {
     return db.query(
         `SELECT id, name, surname, photoUrl FROM users 
+        WHERE id!=$1
         ORDER BY id DESC
         LIMIT 15;`,
-        []
+        [userId]
     );
 };
 /* ---------------------------------------------------------------
@@ -142,7 +139,6 @@ module.exports.searchCode = (email: string): QueryResult<{ code: number }> => {
     LIMIT 1 
     `;
 
-    // RETURNING all
     const param = [email];
     return db.query(q, param);
 };

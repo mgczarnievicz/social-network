@@ -6,7 +6,7 @@ interface ProfileProps {
     name: string;
     surname: string;
     photoUrl: string;
-    bio?: string;
+    bio?: string[];
 
     toggleUploader?: Function;
     upDateBio?: Function;

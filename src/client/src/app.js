@@ -37,6 +37,7 @@ var profilePhoto_1 = __importDefault(require("./profilePhoto"));
 var profile_1 = __importDefault(require("./profile"));
 var uploader_1 = __importDefault(require("./uploader"));
 var findPeople_1 = __importDefault(require("./findPeople"));
+var otherProfile_1 = __importDefault(require("./otherProfile"));
 // <AppProps, AppState>
 var App = /** @class */ (function (_super) {
     __extends(App, _super);
@@ -59,6 +60,8 @@ var App = /** @class */ (function (_super) {
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
             console.log("data from GET / UserInfo", data);
+            data.data.bio = data.data.bio.split("\n");
+            console.log("Data after splitting", data);
             _this.setState(__assign(__assign({}, _this.state), data.data), function () { return console.log("this.state:", _this.state); });
         })
             .catch(function () { });
@@ -79,8 +82,9 @@ var App = /** @class */ (function (_super) {
     App.prototype.upDateBio = function (newBio) {
         // Here we want to update the bio.
         console.log("Getting data from edit Bio", newBio);
+        var bioToSet = newBio.split("\n");
         this.setState({
-            bio: newBio,
+            bio: bioToSet,
         });
         console.log("logging this after bio", this);
     };
@@ -98,7 +102,7 @@ var App = /** @class */ (function (_super) {
     div className="app-container"
     */
     App.prototype.render = function () {
-        return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { upDatingPhoto: this.upDatingPhoto })), (0, jsx_runtime_1.jsxs)(react_router_dom_1.BrowserRouter, { children: [(0, jsx_runtime_1.jsxs)("header", __assign({ className: "header" }, { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/" }, { children: (0, jsx_runtime_1.jsx)(logo_1.default, {}) })), (0, jsx_runtime_1.jsxs)("nav", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/searchPeople", className: "find-friend-color" }, { children: "Find Friends" })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/", className: "profile-color" }, { children: "Profile" })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/", onClick: this.logOutFunction }, { children: "Log Out" }))] }), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })), (0, jsx_runtime_1.jsxs)(react_router_dom_1.Switch, { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ exact: true, path: "/" }, { children: (0, jsx_runtime_1.jsx)(profile_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, bio: this.state.bio, toggleUploader: this.toggleUploader, upDateBio: this.upDateBio }) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ path: "/searchPeople" }, { children: (0, jsx_runtime_1.jsx)(findPeople_1.default, {}) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, { exact: true, path: "/logout" })] })] })] }));
+        return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [this.state.uploaderVisible && ((0, jsx_runtime_1.jsx)(uploader_1.default, { upDatingPhoto: this.upDatingPhoto })), (0, jsx_runtime_1.jsxs)(react_router_dom_1.BrowserRouter, { children: [(0, jsx_runtime_1.jsxs)("header", __assign({ className: "header" }, { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/" }, { children: (0, jsx_runtime_1.jsx)(logo_1.default, {}) })), (0, jsx_runtime_1.jsxs)("nav", { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/searchPeople", className: "find-friend-color" }, { children: "Find Friends" })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/", className: "profile-color" }, { children: "Profile" })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Link, __assign({ to: "/", onClick: this.logOutFunction }, { children: "Log Out" }))] }), (0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, toggleUploader: this.toggleUploader })] })), (0, jsx_runtime_1.jsxs)(react_router_dom_1.Switch, { children: [(0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ exact: true, path: "/" }, { children: (0, jsx_runtime_1.jsx)(profile_1.default, { name: this.state.name, surname: this.state.surname, photoUrl: this.state.photourl, bio: this.state.bio, toggleUploader: this.toggleUploader, upDateBio: this.upDateBio }) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ path: "/searchPeople" }, { children: (0, jsx_runtime_1.jsx)(findPeople_1.default, {}) })), (0, jsx_runtime_1.jsx)(react_router_dom_1.Route, __assign({ exact: true, path: "/user/:otherUserId" }, { children: (0, jsx_runtime_1.jsx)(otherProfile_1.default, {}) }))] })] })] }));
     };
     return App;
 }(react_1.Component));

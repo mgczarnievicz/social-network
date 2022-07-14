@@ -14,9 +14,7 @@ var db = spicedPg(process.env.DATABASE_URL ||
                     users TABLE
 ----------------------------------------------------------------*/
 module.exports.registerUser = function (name, surname, email, password) {
-    console.log("Log registerUser:\n name, surname, email, password:", name, surname, email, password);
     var q = "INSERT INTO users (name, surname, email, password)\n    VALUES ($1, $2, $3, $4 ) RETURNING id, name, surname";
-    // RETURNING all
     var param = [name, surname, email, password];
     return db.query(q, param);
 };
@@ -48,11 +46,12 @@ exports.upDateBioByUserId = function (userId, newBio) {
     var param = [userId, newBio];
     return db.query(q, param);
 };
-exports.getMatchingFriends = function (val) {
-    return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE name ILIKE $1;", [val + "%"]);
+exports.getMatchingFriends = function (val, userId) {
+    return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE  id!=$2\n        AND name ILIKE $1\n        OR surname ILIKE $1\n        AND id!=$2\n       ;", [val + "%", userId]);
 };
-exports.getNewestUsers = function () {
-    return db.query("SELECT id, name, surname, photoUrl FROM users \n        ORDER BY id DESC\n        LIMIT 15;", []);
+// WHERE id!=userId
+exports.getNewestUsers = function (userId) {
+    return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE id!=$1\n        ORDER BY id DESC\n        LIMIT 15;", [userId]);
 };
 /* ---------------------------------------------------------------
                    Reset Password TABLE
@@ -67,7 +66,6 @@ module.exports.registerCode = function (email, code) {
 module.exports.searchCode = function (email) {
     console.log("Log resetpassword:\n email:", email);
     var q = "SELECT code FROM resetpassword\n    WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' \n    AND email = $1\n    ORDER BY id DESC\n    LIMIT 1 \n    ";
-    // RETURNING all
     var param = [email];
     return db.query(q, param);
 };

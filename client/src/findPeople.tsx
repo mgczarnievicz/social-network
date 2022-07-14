@@ -71,8 +71,7 @@ export default function FindPeople() {
                                     }
                                 />
                                 <h3>
-                                    {friend.name}
-                                    {friend.surname}
+                                    {friend.name} {friend.surname}
                                 </h3>
                             </div>
                         );

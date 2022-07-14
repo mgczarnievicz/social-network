@@ -76,6 +76,7 @@ var Registration = /** @class */ (function (_super) {
             .then(function (data) {
             console.log("data from POST/ registration", data);
             if (data.status === "Success") {
+                // location.replace("/");
                 location.reload();
             }
             else {

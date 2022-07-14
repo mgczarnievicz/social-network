@@ -21,10 +21,12 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
-var cryptoRandomString = require("crypto-random-string");
-// import cryptoRandomString from 'crypto-random-string';
+var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
 var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends;
 var sendEmail = require("./ses").sendEmail;
 function capitalizeFirstLetter(string) {
@@ -84,15 +86,10 @@ Response:
 exports.registerNewUser = function (newUser) {
     // First hash the pass.
     // then write in db.
-    // newUser = cleanEmptySpaces(newUser);
     return encryption
         .hash(newUser.password)
         .then(function (hashPass) {
-        // Saved input in the db.
-        // FIXME! ERROR WITH TYPES!
-        // i don't clean the input the extra spaces!!!
         var cleanNewUser = cleanEmptySpaces(newUser);
-        //  cleanNewUser = cleanEmptySpaces(newUser);
         return registerUser(capitalizeFirstLetter(cleanNewUser.name), capitalizeFirstLetter(cleanNewUser.surname), newUser.email.toLowerCase(), hashPass)
             .then(function (dbResult) { return dbResult.rows[0]; })
             .catch(function (err) { return err; });
@@ -110,7 +107,7 @@ exports.logInVerify = function (userLogIn) {
     return getUserByEmail(userLogIn.email.toLowerCase())
         .catch(function (err) { return err; })
         .then(function (result) {
-        // See what we recived and if there is a result, then se ?if its empty or not.
+        // See what we recived and if there is a result, then se if its empty or not.
         if (result.rows.length === 0) {
             console.log("Email not register");
             return "Error";
@@ -133,7 +130,7 @@ var RESET_PASS_SUBJECT = "HorseMan Reset Password";
 var RESET_PASS_MESSAGE_GREETING = "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n\t";
 var RESET_PASS_MESSAGE = "\nThank you for using our services.\nHorseMan group.";
 function setCodeAndSendEmail(email) {
-    var secretCode = cryptoRandomString({
+    var secretCode = (0, crypto_random_string_1.default)({
         length: 10,
         type: "base64",
     });
@@ -160,7 +157,6 @@ exports.foundEmail = function (email) {
         .catch(function (err) { return false; });
 };
 exports.setNewPassword = function (userInput) {
-    console.log("userInput", userInput);
     // Search for email in dataBase in reset Password.
     // Compare code.
     // if codes are the same then hash the new password and save it in db.
@@ -168,7 +164,7 @@ exports.setNewPassword = function (userInput) {
         .then(function (result) {
         console.log("search code result", result.rows);
         if (result.rows[0].code === userInput.code) {
-            console.log("The codes are the same. I can has and save the new Pass.");
+            console.log("The codes are the same. I can hash and save the new Pass.");
             return encryptPassword(userInput.newPassword).then(function (hash) {
                 console.log("encryptPassword result:", hash);
                 return updatePassword(userInput.email, hash)
@@ -201,17 +197,23 @@ exports.getUserInfo = function (userId) {
         .catch(function (err) { return err; });
 };
 exports.upDateBio = function (userId, newBio) {
+    /*  We want to save the array of bios, each element is separate by the enter of the user   */
     return upDateBioByUserId(userId, newBio)
         .then(function (result) {
-        console.log("Query result", result.rows);
+        console.log("Query result", result.rows[0]);
+        /* FIXME! hice trampa */
+        // let bio = result.rows[0].bio.replace("{", "[");
+        // bio = bio.replace("}", "]");
+        // console.log("bio", bio);
+        console.log("typeof result.rows[0].bio", typeof result.rows[0].bio);
         return result.rows[0].bio;
     })
         .catch(function (err) { return err; });
 };
 // FriendInfo
-exports.searchForFiends = function (nameToSearch) {
+function searchForFiendsThatStartWith(nameToSearch, userId) {
     console.log("nameToSearch in searchForFriend", nameToSearch);
-    return getMatchingFriends(nameToSearch)
+    return getMatchingFriends(nameToSearch, userId)
         .then(function (result) {
         console.log("result.rows", result.rows);
         return result.rows;
@@ -219,9 +221,9 @@ exports.searchForFiends = function (nameToSearch) {
         .catch(function (err) {
         err;
     });
-};
-exports.searchNewestFiends = function () {
-    return getNewestUsers()
+}
+function searchNewestFiends(userId) {
+    return getNewestUsers(userId)
         .then(function (result) {
         console.log("result.rows", result.rows);
         return result.rows;
@@ -229,29 +231,15 @@ exports.searchNewestFiends = function () {
         .catch(function (err) {
         err;
     });
-};
-exports.searchForFiends = function (nameToSearch) {
+}
+exports.searchForFiends = function (nameToSearch, userId) {
     console.log("nameToSearch in searchForFriend", nameToSearch);
     if (nameToSearch !== "") {
         // Here search in db the value of input
-        return getMatchingFriends(nameToSearch)
-            .then(function (result) {
-            console.log("result.rows", result.rows);
-            return result.rows;
-        })
-            .catch(function (err) {
-            err;
-        });
+        return searchForFiendsThatStartWith(nameToSearch, userId);
     }
     else {
-        // Send the last 20 friends.
-        return getNewestUsers()
-            .then(function (result) {
-            console.log("result.rows", result.rows);
-            return result.rows;
-        })
-            .catch(function (err) {
-            err;
-        });
+        // Send the last 15 friends.
+        return searchNewestFiends(userId);
     }
 };

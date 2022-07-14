@@ -54,6 +54,7 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
                 console.log("data from POST/ registration", data);
 
                 if (data.status === "Success") {
+                    // location.replace("/");
                     location.reload();
                 } else {
                     this.setState({

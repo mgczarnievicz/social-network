@@ -1,6 +1,6 @@
 const encryption = require("./encryption");
-const cryptoRandomString = require("crypto-random-string");
-// import cryptoRandomString from 'crypto-random-string';
+import cryptoRandomString from "crypto-random-string";
+
 const {
     registerUser,
     getUserByEmail,
@@ -36,7 +36,8 @@ function capitalizeFirstLetter(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
-type T = NewUserRegistration | LogInUser;
+type T = NewUserRegistration | LogInUser | UserResetPassword;
+
 function cleanEmptySpaces<T>(obj: T): T {
     let result: T = { ...obj };
     Object.entries(obj).forEach(([key, value]) => {
@@ -46,42 +47,8 @@ function cleanEmptySpaces<T>(obj: T): T {
     return result;
 }
 
-// REVIEW: if function above work, delete this.
-// function cleanEmptySpaces(obj: NewUserRegistration | LogInUser) {
-//     let returnObj;
-//     for (let key in obj) {
-//         // I need to say that the key is a typeof key from the obj
-//         obj[key as keyof typeof obj] = obj[key as keyof typeof obj]
-//             .replace(/\s\s+/g, " ")
-//             .trim();
-//     }
-//     return obj;
-// }
-
-//
-/* 
-If there is an empty input, that an ERROR!
-REVIEW : HOW TO MAKE IT ACCEPT ANY OBJECT WITH STRING AS KEY PROP. 
- */
-// exports.noEmptyInputsValid = (
-//     obj: NewUserRegistration | LogInUser
-// ): boolean => {
-//     const returnObj = cleanEmptySpaces(obj);
-//     for (let key in returnObj) {
-//         if (returnObj[key as keyof typeof returnObj].length === 0) {
-//             console.log("Found empty input!:");
-//             return false;
-//         }
-//     }
-//     return true;
-// };
-
-// FIXME!
-// function cleanEmptySpaces<T>(obj: T): T {
-type M = NewUserRegistration | LogInUser | UserResetPassword;
-exports.noEmptyInputsValid = (obj: M): boolean => {
+exports.noEmptyInputsValid = (obj: T): boolean => {
     const returnObj = cleanEmptySpaces(obj);
-
     for (let key in returnObj) {
         if (returnObj[key as keyof typeof obj].length === 0) {
             console.log("Found empty input!:");
@@ -128,17 +95,12 @@ Response:
 exports.registerNewUser = (newUser: NewUserRegistration): RegisterResponse => {
     // First hash the pass.
     // then write in db.
-    // newUser = cleanEmptySpaces(newUser);
 
     return encryption
         .hash(newUser.password)
         .then((hashPass: string) => {
-            // Saved input in the db.
-            // FIXME! ERROR WITH TYPES!
-            // i don't clean the input the extra spaces!!!
             const cleanNewUser: NewUserRegistration =
                 cleanEmptySpaces<NewUserRegistration>(newUser);
-            //  cleanNewUser = cleanEmptySpaces(newUser);
 
             return registerUser(
                 capitalizeFirstLetter(cleanNewUser.name),
@@ -159,11 +121,11 @@ Response:
     - UserBasicInfo when success
 */
 exports.logInVerify = (userLogIn: LogInUser): LogInResponse => {
-    userLogIn = cleanEmptySpaces(userLogIn);
+    userLogIn = cleanEmptySpaces<LogInUser>(userLogIn);
     return getUserByEmail(userLogIn.email.toLowerCase())
         .catch((err: QueryResult) => err)
         .then((result: QueryResult) => {
-            // See what we recived and if there is a result, then se ?if its empty or not.
+            // See what we recived and if there is a result, then se if its empty or not.
             if (result.rows.length === 0) {
                 console.log("Email not register");
                 return "Error";
@@ -222,7 +184,6 @@ exports.foundEmail = (email: string): boolean => {
 };
 
 exports.setNewPassword = (userInput: UserResetPassword) => {
-    console.log("userInput", userInput);
     // Search for email in dataBase in reset Password.
     // Compare code.
     // if codes are the same then hash the new password and save it in db.
@@ -231,7 +192,7 @@ exports.setNewPassword = (userInput: UserResetPassword) => {
             console.log("search code result", result.rows);
             if (result.rows[0].code === userInput.code) {
                 console.log(
-                    "The codes are the same. I can has and save the new Pass."
+                    "The codes are the same. I can hash and save the new Pass."
                 );
                 return encryptPassword(userInput.newPassword).then(
                     (hash: string) => {
@@ -270,18 +231,28 @@ exports.getUserInfo = (userId: number) => {
 };
 
 exports.upDateBio = (userId: number, newBio: string) => {
+    /*  We want to save the array of bios, each element is separate by the enter of the user   */
+
     return upDateBioByUserId(userId, newBio)
         .then((result: QueryResult) => {
-            console.log("Query result", result.rows);
+            console.log("Query result", result.rows[0]);
+
+            /* FIXME! hice trampa */
+            // let bio = result.rows[0].bio.replace("{", "[");
+            // bio = bio.replace("}", "]");
+
+            // console.log("bio", bio);
+            console.log("typeof result.rows[0].bio", typeof result.rows[0].bio);
+
             return result.rows[0].bio;
         })
         .catch((err: QueryResult) => err);
 };
 
 // FriendInfo
-exports.searchForFiends = (nameToSearch: string) => {
+function searchForFiendsThatStartWith(nameToSearch: string, userId: number) {
     console.log("nameToSearch in searchForFriend", nameToSearch);
-    return getMatchingFriends(nameToSearch)
+    return getMatchingFriends(nameToSearch, userId)
         .then((result: QueryResult) => {
             console.log("result.rows", result.rows);
             return result.rows;
@@ -289,10 +260,10 @@ exports.searchForFiends = (nameToSearch: string) => {
         .catch((err: QueryResult) => {
             err;
         });
-};
+}
 
-exports.searchNewestFiends = () => {
-    return getNewestUsers()
+function searchNewestFiends(userId: number) {
+    return getNewestUsers(userId)
         .then((result: QueryResult) => {
             console.log("result.rows", result.rows);
             return result.rows;
@@ -300,29 +271,15 @@ exports.searchNewestFiends = () => {
         .catch((err: QueryResult) => {
             err;
         });
-};
+}
 
-exports.searchForFiends = (nameToSearch: string) => {
+exports.searchForFiends = (nameToSearch: string, userId: number) => {
     console.log("nameToSearch in searchForFriend", nameToSearch);
     if (nameToSearch !== "") {
         // Here search in db the value of input
-        return getMatchingFriends(nameToSearch)
-            .then((result: QueryResult) => {
-                console.log("result.rows", result.rows);
-                return result.rows;
-            })
-            .catch((err: QueryResult) => {
-                err;
-            });
+        return searchForFiendsThatStartWith(nameToSearch, userId);
     } else {
-        // Send the last 20 friends.
-        return getNewestUsers()
-            .then((result: QueryResult) => {
-                console.log("result.rows", result.rows);
-                return result.rows;
-            })
-            .catch((err: QueryResult) => {
-                err;
-            });
+        // Send the last 15 friends.
+        return searchNewestFiends(userId);
     }
 };

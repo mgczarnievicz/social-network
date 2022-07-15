@@ -18,18 +18,13 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var react_router_1 = require("react-router");
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
+var friendButton_1 = __importDefault(require("./friendButton"));
 function OtherProfile() {
-    var _a = (0, react_1.useState)({
-        id: "",
-        name: "",
-        surname: "",
-        photourl: "",
-        bio: [],
-    }), user = _a[0], setUser = _a[1];
+    // DON'T TOUCH IF BREAKS FRIEND BUTTON
+    var _a = (0, react_1.useState)(null), user = _a[0], setUser = _a[1];
     var idUserToSee = (0, react_router_1.useParams)().idUserToSee;
     // const { useParams } = useParams<{ useParams: string }>();
     var history = (0, react_router_1.useHistory)();
-    console.log("history", history);
     (0, react_1.useEffect)(function () {
         console.log("Other Profile just render:", idUserToSee);
         var otherUserId = Number.parseInt(idUserToSee);
@@ -42,16 +37,6 @@ function OtherProfile() {
         */
         var abort = false;
         if (!abort) {
-            // const otherUserId = params.otherUserId;
-            //Here we make the fetch in the server.
-            // only send Integer.
-            // not found we want to render something saying NOT Found.
-            // Searching myself we should go to our profile page.
-            /* if the other user is myself
-                history.push("/")
-                or
-                history.replace("/")
-            */
             if (Number.isNaN(otherUserId)) {
                 history.replace("/");
             }
@@ -69,7 +54,9 @@ function OtherProfile() {
                             break;
                         case "Success":
                             // We have a profile.
-                            data.profile.bio = data.profile.bio.split("\n");
+                            if (data.profile.bio)
+                                data.profile.bio =
+                                    data.profile.bio.split("\n");
                             console.log("Data after splitting", data);
                             setUser(data.profile);
                             break;
@@ -93,6 +80,6 @@ function OtherProfile() {
                                 user.bio.map(function (bioSentence, i) {
                                     console.log("Bio ", bioSentence);
                                     return (0, jsx_runtime_1.jsx)("h3", { children: bioSentence }, i);
-                                })] }))] })))] }));
+                                })] })), (0, jsx_runtime_1.jsx)(friendButton_1.default, { viewUser: user.id })] })))] }));
 }
 exports.default = OtherProfile;

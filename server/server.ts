@@ -19,9 +19,8 @@ const s3 = require("./s3");
 import {
     NewUserRegistration,
     LogInUser,
-    ProcessSingleRes,
-    ProcessMultiRes,
     UserBasicInfo,
+    FriendShipResponds,
 } from "./typesServer";
 import { QueryResult } from "pg"; //This bc I need the type there.
 import { read } from "fs";
@@ -38,6 +37,8 @@ const {
     upDateBio,
     searchForFiends,
     searchForProfile,
+    searchFriendshipStatus,
+    setFriendshipStatus,
 } = require("./process");
 
 // @ts-ignore
@@ -191,6 +192,26 @@ app.get("/api/profile/:id", (req, res) => {
                 })
             );
     }
+});
+
+app.get("/api/friendshipStatus/:viewUser", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Friendship Status viewUser:`,
+        req.params.viewUser
+    );
+    searchFriendshipStatus(req.session.userId, req.params.viewUser)
+        .then((data: FriendShipResponds) => {
+            console.log("data from process", data);
+            res.json({
+                status: "Success",
+                data,
+            });
+        })
+        .catch((err: QueryResult) =>
+            res.json({
+                status: "Error",
+            })
+        );
 });
 
 /* -----------------------------------------------------------------------------------------------------
@@ -389,6 +410,32 @@ app.post("/setBioInfo.json", (req, res) => {
             });
         })
         .catch(() =>
+            res.json({
+                status: "Error",
+            })
+        );
+});
+
+app.post("/api/setFriendshipStatus", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Set FriendShip Status:`,
+        req.body
+    );
+    setFriendshipStatus(req.session.userId, req.body)
+        .then((data: FriendShipResponds | string) => {
+            console.log("data from process", data);
+            if (data == "Error") {
+                res.json({
+                    status: "Error",
+                });
+            } else {
+                res.json({
+                    status: "Success",
+                    data,
+                });
+            }
+        })
+        .catch((err: QueryResult) =>
             res.json({
                 status: "Error",
             })

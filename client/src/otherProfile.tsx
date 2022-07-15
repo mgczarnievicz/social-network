@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 
 import ProfilePhoto from "./profilePhoto";
-
-// interface viewOtherUsers {
-//     useParams?: number;
-// }
+import FriendButton from "./friendButton";
 
 interface FriendInfo {
     id: number;
@@ -16,19 +13,12 @@ interface FriendInfo {
 }
 
 export default function OtherProfile() {
-    const [user, setUser] = useState({
-        id: "",
-        name: "",
-        surname: "",
-        photourl: "",
-        bio: [],
-    });
+    // DON'T TOUCH IF BREAKS FRIEND BUTTON
+    const [user, setUser] = useState<FriendInfo | null>(null);
 
     const { idUserToSee } = useParams<Record<string, string | undefined>>();
     // const { useParams } = useParams<{ useParams: string }>();
     const history = useHistory();
-
-    console.log("history", history);
 
     useEffect(() => {
         console.log("Other Profile just render:", idUserToSee);
@@ -43,16 +33,6 @@ export default function OtherProfile() {
         */
         let abort = false;
         if (!abort) {
-            // const otherUserId = params.otherUserId;
-            //Here we make the fetch in the server.
-            // only send Integer.
-            // not found we want to render something saying NOT Found.
-            // Searching myself we should go to our profile page.
-            /* if the other user is myself
-                history.push("/")
-                or
-                history.replace("/")
-            */
             if (Number.isNaN(otherUserId)) {
                 history.replace("/");
             } else {
@@ -69,7 +49,9 @@ export default function OtherProfile() {
                                 break;
                             case "Success":
                                 // We have a profile.
-                                data.profile.bio = data.profile.bio.split("\n");
+                                if (data.profile.bio)
+                                    data.profile.bio =
+                                        data.profile.bio.split("\n");
                                 console.log("Data after splitting", data);
                                 setUser(data.profile);
                                 break;
@@ -89,6 +71,7 @@ export default function OtherProfile() {
             abort = true;
         };
     }, []);
+
     return (
         <>
             {!user && (
@@ -114,6 +97,7 @@ export default function OtherProfile() {
                                 return <h3 key={i}>{bioSentence}</h3>;
                             })}
                     </div>
+                    <FriendButton viewUser={user.id} />
                 </div>
             )}
         </>

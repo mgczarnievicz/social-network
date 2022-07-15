@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus;
 // @ts-ignore
 var app = (0, express_1.default)();
 // Bc we are deploying we need to define where to get the value.
@@ -131,6 +131,22 @@ app.get("/api/profile/:id", function (req, res) {
             });
         });
     }
+});
+app.get("/api/friendshipStatus/:viewUser", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Friendship Status viewUser:", req.params.viewUser);
+    searchFriendshipStatus(req.session.userId, req.params.viewUser)
+        .then(function (data) {
+        console.log("data from process", data);
+        res.json({
+            status: "Success",
+            data: data,
+        });
+    })
+        .catch(function (err) {
+        return res.json({
+            status: "Error",
+        });
+    });
 });
 /* -----------------------------------------------------------------------------------------------------
                             POST
@@ -303,6 +319,29 @@ app.post("/setBioInfo.json", function (req, res) {
         });
     })
         .catch(function () {
+        return res.json({
+            status: "Error",
+        });
+    });
+});
+app.post("/api/setFriendshipStatus", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Set FriendShip Status:", req.body);
+    setFriendshipStatus(req.session.userId, req.body)
+        .then(function (data) {
+        console.log("data from process", data);
+        if (data == "Error") {
+            res.json({
+                status: "Error",
+            });
+        }
+        else {
+            res.json({
+                status: "Success",
+                data: data,
+            });
+        }
+    })
+        .catch(function (err) {
         return res.json({
             status: "Error",
         });

@@ -14,22 +14,24 @@ const {
     getNewestUsers,
     getMatchingFriends,
     searchProfileByUserId,
+    getFriendship,
+    updateFriendshipById,
+    deleteFriendshipById,
+    addFriendship,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
 
 import { String } from "aws-sdk/clients/apigateway";
-import { QueryResult } from "pg"; //This bc I need the type there.
+import { Query, QueryResult } from "pg"; //This bc I need the type there.
 import {
     NewUserRegistration,
     LogInUser,
-    ProcessSingleRes,
-    ProcessMultiRes,
     LogInResponse,
     RegisterResponse,
     UserResetPassword,
-    StringObject,
     UserInfo,
+    FriendShipResponds,
 } from "./typesServer";
 import { DataBrew } from "aws-sdk";
 
@@ -299,4 +301,116 @@ exports.searchForProfile = (id: number) => {
             }
         })
         .catch((err: QueryResult) => err);
+};
+
+exports.searchFriendshipStatus = (userId: number, viewId: number) => {
+    console.log(`searchFriendshipStatus: userId: ${userId}, viewId ${viewId}`);
+    return getFriendship(userId, viewId)
+        .then((result: QueryResult) => {
+            console.log("DB response getFriendship:", result.rows);
+
+            if (result.rows.length === 0) {
+                // They are not Friends!
+                return {
+                    button: "Add Friend",
+                    viewUserId: viewId,
+                };
+            } else {
+                const friendship = result.rows[0];
+
+                if (friendship.accepted) {
+                    // We are fiends!
+                    return {
+                        button: "Unfriend",
+                        viewUserId: viewId,
+                    };
+                } else {
+                    // We are in the pending state!
+                    if (friendship.sender_id == userId) {
+                        // I am the sender of the request. So I can cancel the request.
+                        return {
+                            button: "Cancel Request",
+                            viewUserId: viewId,
+                        };
+                    } else {
+                        // If I am the recipient, I can only Accept Friend.
+                        return {
+                            button: "Accept Friend",
+                            viewUserId: viewId,
+                        };
+                    }
+                }
+            }
+        })
+        .catch((err: QueryResult) => {
+            err;
+        });
+};
+
+function deleteFriendship(userId: number, viewId: number) {
+    return deleteFriendshipById(userId, viewId)
+        .then((res: QueryResult) => {
+            return {
+                button: "Add Friend",
+                viewUserId: viewId,
+            };
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error Delete Friendship", err);
+            return "Error";
+        });
+}
+
+function acceptFriendship(userId: number, viewId: number) {
+    return updateFriendshipById(userId, viewId)
+        .then((result: QueryResult) => {
+            console.log("result from updateFriendship", result.rows);
+            return { button: "Unfriend", viewUserId: viewId };
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error acceptFriendShip", err);
+            return "Error";
+        });
+}
+
+function newFriendship(userId: number, viewId: number) {
+    console.log("NewFriendshipValues");
+    console.log("userId:", userId, "viewId:", viewId);
+    return addFriendship(userId, viewId)
+        .then((result: QueryResult) => {
+            console.log("add Friendship result:", result.rows);
+            return {
+                button: "Cancel Request",
+                viewUserId: viewId,
+            };
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error newFriendship", err);
+            return "Error";
+        });
+}
+
+exports.setFriendshipStatus = (
+    userId: number,
+    actualStatus: FriendShipResponds
+) => {
+    console.log("actualStatus", actualStatus);
+    switch (actualStatus.button) {
+        case "Add Friend":
+            // Add to DB.
+            return newFriendship(userId, actualStatus.viewUserId);
+            break;
+        case "Unfriend":
+        case "Cancel Request":
+            // Delete from DB.
+            return deleteFriendship(userId, actualStatus.viewUserId);
+            break;
+        case "Accept Friend":
+            // Update DB.
+            return acceptFriendship(userId, actualStatus.viewUserId);
+            break;
+        default:
+            return "Error";
+            break;
+    }
 };

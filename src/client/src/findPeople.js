@@ -108,7 +108,6 @@ function FindPeople() {
     }
     return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-container" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-inputs" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("input", { onChange: function (e) { return setSearch(e.target.value); }, value: searchInput }), !searchInput && (0, jsx_runtime_1.jsx)("h1", { children: "See the newest Users!" })] })), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friend-container" }, { children: friends &&
                     friends.map(function (friend, i) {
-                        console.log("Friend", friend);
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friend-info", onClick: function () {
                                 seeFriendProfile(friend.id);
                             } }, { children: [(0, jsx_runtime_1.jsx)("img", { src: friend.photourl || "defaultProfile.png" }), (0, jsx_runtime_1.jsxs)("h3", { children: [friend.name, " ", friend.surname] })] }), friend.id));

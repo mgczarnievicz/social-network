@@ -54,7 +54,7 @@ exports.getNewestUsers = function (userId) {
     return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE id!=$1\n        ORDER BY id DESC\n        LIMIT 15;", [userId]);
 };
 exports.searchProfileByUserId = function (id) {
-    return db.query("SELECT name, surname, photoUrl, bio FROM users \n        WHERE id=$1;", [id]);
+    return db.query("SELECT id, name, surname, photoUrl, bio FROM users \n        WHERE id=$1;", [id]);
 };
 /* ---------------------------------------------------------------
                    Reset Password TABLE
@@ -70,5 +70,28 @@ module.exports.searchCode = function (email) {
     console.log("Log resetpassword:\n email:", email);
     var q = "SELECT code FROM resetpassword\n    WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' \n    AND email = $1\n    ORDER BY id DESC\n    LIMIT 1 \n    ";
     var param = [email];
+    return db.query(q, param);
+};
+/* ---------------------------------------------------------------
+                   Friendship TABLE
+----------------------------------------------------------------*/
+exports.getFriendship = function (userId, viewId) {
+    var q = "SELECT * FROM friendships\n    WHERE (sender_id = $1 AND recipient_id=$2) OR\n    (sender_id = $2 AND recipient_id=$1)     ";
+    var param = [userId, viewId];
+    return db.query(q, param);
+};
+exports.deleteFriendshipById = function (userId, viewId) {
+    var q = "DELETE FROM friendships\n    WHERE (sender_id = $1 AND recipient_id=$2) OR\n    (sender_id = $2 AND recipient_id=$1) ";
+    var param = [userId, viewId];
+    return db.query(q, param);
+};
+exports.updateFriendshipById = function (userId, viewId) {
+    var q = "UPDATE friendships *\n    SET accepted = true\n    WHERE (sender_id = $1 AND recipient_id=$2) OR\n    (sender_id = $2 AND recipient_id=$1)       \n    RETURNING id ";
+    var param = [userId, viewId];
+    return db.query(q, param);
+};
+exports.addFriendship = function (userId, viewId) {
+    var q = "INSERT INTO friendships (sender_id, recipient_id, accepted)\n    VALUES ($1,$2, false)   \n    RETURNING id ";
+    var param = [userId, viewId];
     return db.query(q, param);
 };

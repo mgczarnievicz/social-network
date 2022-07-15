@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship;
 var sendEmail = require("./ses").sendEmail;
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -257,4 +257,109 @@ exports.searchForProfile = function (id) {
         }
     })
         .catch(function (err) { return err; });
+};
+exports.searchFriendshipStatus = function (userId, viewId) {
+    console.log("searchFriendshipStatus: userId: ".concat(userId, ", viewId ").concat(viewId));
+    return getFriendship(userId, viewId)
+        .then(function (result) {
+        console.log("DB response getFriendship:", result.rows);
+        if (result.rows.length === 0) {
+            // They are not Friends!
+            return {
+                button: "Add Friend",
+                viewUserId: viewId,
+            };
+        }
+        else {
+            var friendship = result.rows[0];
+            if (friendship.accepted) {
+                // We are fiends!
+                return {
+                    button: "Unfriend",
+                    viewUserId: viewId,
+                };
+            }
+            else {
+                // We are in the pending state!
+                if (friendship.sender_id == userId) {
+                    // I am the sender of the request. So I can cancel the request.
+                    return {
+                        button: "Cancel Request",
+                        viewUserId: viewId,
+                    };
+                }
+                else {
+                    // If I am the recipient, I can only Accept Friend.
+                    return {
+                        button: "Accept Friend",
+                        viewUserId: viewId,
+                    };
+                }
+            }
+        }
+    })
+        .catch(function (err) {
+        err;
+    });
+};
+function deleteFriendship(userId, viewId) {
+    return deleteFriendshipById(userId, viewId)
+        .then(function (res) {
+        return {
+            button: "Add Friend",
+            viewUserId: viewId,
+        };
+    })
+        .catch(function (err) {
+        console.log("Error Delete Friendship", err);
+        return "Error";
+    });
+}
+function acceptFriendship(userId, viewId) {
+    return updateFriendshipById(userId, viewId)
+        .then(function (result) {
+        console.log("result from updateFriendship", result.rows);
+        return { button: "Unfriend", viewUserId: viewId };
+    })
+        .catch(function (err) {
+        console.log("Error acceptFriendShip", err);
+        return "Error";
+    });
+}
+function newFriendship(userId, viewId) {
+    console.log("NewFriendshipValues");
+    console.log("userId:", userId, "viewId:", viewId);
+    return addFriendship(userId, viewId)
+        .then(function (result) {
+        console.log("add Friendship result:", result.rows);
+        return {
+            button: "Cancel Request",
+            viewUserId: viewId,
+        };
+    })
+        .catch(function (err) {
+        console.log("Error newFriendship", err);
+        return "Error";
+    });
+}
+exports.setFriendshipStatus = function (userId, actualStatus) {
+    console.log("actualStatus", actualStatus);
+    switch (actualStatus.button) {
+        case "Add Friend":
+            // Add to DB.
+            return newFriendship(userId, actualStatus.viewUserId);
+            break;
+        case "Unfriend":
+        case "Cancel Request":
+            // Delete from DB.
+            return deleteFriendship(userId, actualStatus.viewUserId);
+            break;
+        case "Accept Friend":
+            // Update DB.
+            return acceptFriendship(userId, actualStatus.viewUserId);
+            break;
+        default:
+            return "Error";
+            break;
+    }
 };

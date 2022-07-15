@@ -69,7 +69,6 @@ export default function FindPeople() {
             <div className="friend-container">
                 {friends &&
                     friends.map((friend: FriendInfo, i: number) => {
-                        console.log("Friend", friend);
                         return (
                             <div
                                 key={friend.id}

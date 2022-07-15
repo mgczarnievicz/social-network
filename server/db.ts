@@ -117,7 +117,7 @@ exports.getNewestUsers = (userId: number): QueryResult => {
 
 exports.searchProfileByUserId = (id: number): QueryResult => {
     return db.query(
-        `SELECT name, surname, photoUrl, bio FROM users 
+        `SELECT id, name, surname, photoUrl, bio FROM users 
         WHERE id=$1;`,
         [id]
     );
@@ -148,5 +148,46 @@ module.exports.searchCode = (email: string): QueryResult<{ code: number }> => {
     `;
 
     const param = [email];
+    return db.query(q, param);
+};
+
+/* ---------------------------------------------------------------
+                   Friendship TABLE
+----------------------------------------------------------------*/
+
+exports.getFriendship = (userId: number, viewId: number) => {
+    const q = `SELECT * FROM friendships
+    WHERE (sender_id = $1 AND recipient_id=$2) OR
+    (sender_id = $2 AND recipient_id=$1)     `;
+
+    const param = [userId, viewId];
+    return db.query(q, param);
+};
+
+exports.deleteFriendshipById = (userId: number, viewId: number) => {
+    const q = `DELETE FROM friendships
+    WHERE (sender_id = $1 AND recipient_id=$2) OR
+    (sender_id = $2 AND recipient_id=$1) `;
+    const param = [userId, viewId];
+    return db.query(q, param);
+};
+
+exports.updateFriendshipById = (userId: number, viewId: number) => {
+    const q = `UPDATE friendships *
+    SET accepted = true
+    WHERE (sender_id = $1 AND recipient_id=$2) OR
+    (sender_id = $2 AND recipient_id=$1)       
+    RETURNING id `;
+
+    const param = [userId, viewId];
+    return db.query(q, param);
+};
+
+exports.addFriendship = (userId: number, viewId: number) => {
+    const q = `INSERT INTO friendships (sender_id, recipient_id, accepted)
+    VALUES ($1,$2, false)   
+    RETURNING id `;
+
+    const param = [userId, viewId];
     return db.query(q, param);
 };

@@ -28,6 +28,11 @@ export interface FriendInfo extends UserBasicInfo {
     photoUrl: string;
 }
 
+export interface FriendShipResponds {
+    button: string;
+    viewUserId: number;
+}
+
 export interface UserResetPassword {
     email: string;
     code: string;
@@ -42,9 +47,3 @@ export interface UserLoggingIn extends NewUserRegistration {
 
 export type LogInResponse = string | UserBasicInfo | QueryResult;
 export type RegisterResponse = UserBasicInfo | QueryResult;
-
-export type MultiResponseSuccess = string | [];
-export type SingleResponseSuccess = string | {};
-
-export type ProcessMultiRes = MultiResponseSuccess | QueryResult;
-export type ProcessSingleRes = SingleResponseSuccess | QueryResult;

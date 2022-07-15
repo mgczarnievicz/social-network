@@ -49,6 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
+var react_router_1 = require("react-router");
 function FindPeople() {
     /* useEffect allows us to have a lice cycle methods to hook into react's
     render process it, it accept two arguments:
@@ -63,6 +64,7 @@ function FindPeople() {
     var _this = this;
     var _a = (0, react_1.useState)(""), searchInput = _a[0], setSearch = _a[1];
     var _b = (0, react_1.useState)(null), friends = _b[0], setFriends = _b[1];
+    var history = (0, react_router_1.useHistory)();
     (0, react_1.useEffect)(function () {
         var abort = false;
         (function () { return __awaiter(_this, void 0, void 0, function () {
@@ -101,10 +103,15 @@ function FindPeople() {
             abort = true;
         };
     }, [searchInput]);
+    function seeFriendProfile(idUserToSee) {
+        history.push("/user/".concat(idUserToSee));
+    }
     return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-container" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-inputs" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("input", { onChange: function (e) { return setSearch(e.target.value); }, value: searchInput }), !searchInput && (0, jsx_runtime_1.jsx)("h1", { children: "See the newest Users!" })] })), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friend-container" }, { children: friends &&
                     friends.map(function (friend, i) {
                         console.log("Friend", friend);
-                        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friend-info" }, { children: [(0, jsx_runtime_1.jsx)("img", { src: friend.photourl || "defaultProfile.png" }), (0, jsx_runtime_1.jsxs)("h3", { children: [friend.name, " ", friend.surname] })] }), friend.id));
+                        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friend-info", onClick: function () {
+                                seeFriendProfile(friend.id);
+                            } }, { children: [(0, jsx_runtime_1.jsx)("img", { src: friend.photourl || "defaultProfile.png" }), (0, jsx_runtime_1.jsxs)("h3", { children: [friend.name, " ", friend.surname] })] }), friend.id));
                     }) }))] })));
 }
 exports.default = FindPeople;

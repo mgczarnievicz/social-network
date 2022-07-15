@@ -31,9 +31,9 @@ export default function OtherProfile() {
     console.log("history", history);
 
     useEffect(() => {
-        console.log("Other Profile just render.");
+        console.log("Other Profile just render:", idUserToSee);
         const otherUserId = Number.parseInt(idUserToSee);
-        console.log("otherUserId", otherUserId);
+        console.log("otherUserId after parseInt", otherUserId);
 
         /* 
         1. Figure out what is the userId we want to fetch information from.

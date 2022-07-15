@@ -113,7 +113,7 @@ class BioEditor extends Component<BioProps, BioState> {
                             rows={5}
                             cols={50}
                         ></textarea>
-                        <button onClick={this.submitBio}>Save Changes</button>
+                        <button onClick={this.submitBio}>Save</button>
                     </div>
                 )}
             </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 
 interface FriendInfo {
     id: number;
@@ -21,6 +22,8 @@ export default function FindPeople() {
 
     const [searchInput, setSearch] = useState("");
     const [friends, setFriends] = useState(null);
+    const history = useHistory();
+
     useEffect(() => {
         let abort = false;
         (async () => {
@@ -48,6 +51,10 @@ export default function FindPeople() {
         };
     }, [searchInput]);
 
+    function seeFriendProfile(idUserToSee: number) {
+        history.push(`/user/${idUserToSee}`);
+    }
+
     return (
         <div className="search-container">
             <div className="search-inputs">
@@ -64,7 +71,13 @@ export default function FindPeople() {
                     friends.map((friend: FriendInfo, i: number) => {
                         console.log("Friend", friend);
                         return (
-                            <div key={friend.id} className="friend-info">
+                            <div
+                                key={friend.id}
+                                className="friend-info"
+                                onClick={() => {
+                                    seeFriendProfile(friend.id);
+                                }}
+                            >
                                 <img
                                     src={
                                         friend.photourl || "defaultProfile.png"

@@ -31,9 +31,9 @@ function OtherProfile() {
     var history = (0, react_router_1.useHistory)();
     console.log("history", history);
     (0, react_1.useEffect)(function () {
-        console.log("Other Profile just render.");
+        console.log("Other Profile just render:", idUserToSee);
         var otherUserId = Number.parseInt(idUserToSee);
-        console.log("otherUserId", otherUserId);
+        console.log("otherUserId after parseInt", otherUserId);
         /*
         1. Figure out what is the userId we want to fetch information from.
         2. Make a fetch to server to get data (name, surname, photo, bio.)

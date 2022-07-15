@@ -88,7 +88,6 @@ export default class App extends Component<AppProps, AppState> {
             });
     }
 
-
     render() {
         return (
             <>
@@ -139,7 +138,7 @@ export default class App extends Component<AppProps, AppState> {
                         <Route path="/searchPeople">
                             <FindPeople />
                         </Route>
-                        <Route exact path="/user/:idUserToSee">
+                        <Route path="/user/:idUserToSee">
                             <OtherProfile />
                         </Route>
                     </Switch>

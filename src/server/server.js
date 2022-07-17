@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost;
 // @ts-ignore
 var app = (0, express_1.default)();
 // Bc we are deploying we need to define where to get the value.
@@ -80,7 +80,7 @@ app.get("/user/id.json", function (req, res) {
         userId: req.session && req.session.userId,
     });
 });
-app.get("/logout", function (req, res) {
+app.get("/logout.json", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Log out");
     req.session = null;
     res.json({
@@ -182,7 +182,7 @@ app.post("/registration.json", function (req, res) {
         });
     }
 });
-app.post("/login", function (req, res) {
+app.post("/login.json", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Log In:", req.body);
     if (!noEmptyInputsValid(req.body)) {
         console.log("/login found empty string!");
@@ -345,6 +345,19 @@ app.post("/api/setFriendshipStatus", function (req, res) {
         return res.json({
             status: "Error",
         });
+    });
+});
+app.post("/wallPost.json", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Set FriendShip Status:", req.body);
+    /* Req.body:
+        - wallUserId
+        - post
+    */
+    addWallPost(req.session.userId, req.body)
+        .then(function (result) { })
+        .catch(function (err) { });
+    res.json({
+        status: "Error",
     });
 });
 /* ---------------------------------------------------------------------------------------

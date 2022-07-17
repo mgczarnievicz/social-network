@@ -95,3 +95,11 @@ exports.addFriendship = function (userId, viewId) {
     var param = [userId, viewId];
     return db.query(q, param);
 };
+/* ---------------------------------------------------------------
+                  WALL POST TABLE
+----------------------------------------------------------------*/
+exports.addWallPost = function (walluser_id, writer_id, post) {
+    var q = "INSERT INTO wall_posts (walluser_id, writer_id, post, likes)\n    VALUES ($1,$2, $3, 0)   \n    RETURNING * ";
+    var param = [walluser_id, writer_id, post];
+    return db.query(q, param);
+};

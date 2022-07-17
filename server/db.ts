@@ -155,7 +155,7 @@ module.exports.searchCode = (email: string): QueryResult<{ code: number }> => {
                    Friendship TABLE
 ----------------------------------------------------------------*/
 
-exports.getFriendship = (userId: number, viewId: number) => {
+exports.getFriendship = (userId: number, viewId: number): QueryResult => {
     const q = `SELECT * FROM friendships
     WHERE (sender_id = $1 AND recipient_id=$2) OR
     (sender_id = $2 AND recipient_id=$1)     `;
@@ -164,7 +164,10 @@ exports.getFriendship = (userId: number, viewId: number) => {
     return db.query(q, param);
 };
 
-exports.deleteFriendshipById = (userId: number, viewId: number) => {
+exports.deleteFriendshipById = (
+    userId: number,
+    viewId: number
+): QueryResult => {
     const q = `DELETE FROM friendships
     WHERE (sender_id = $1 AND recipient_id=$2) OR
     (sender_id = $2 AND recipient_id=$1) `;
@@ -172,7 +175,10 @@ exports.deleteFriendshipById = (userId: number, viewId: number) => {
     return db.query(q, param);
 };
 
-exports.updateFriendshipById = (userId: number, viewId: number) => {
+exports.updateFriendshipById = (
+    userId: number,
+    viewId: number
+): QueryResult => {
     const q = `UPDATE friendships *
     SET accepted = true
     WHERE (sender_id = $1 AND recipient_id=$2) OR
@@ -183,11 +189,27 @@ exports.updateFriendshipById = (userId: number, viewId: number) => {
     return db.query(q, param);
 };
 
-exports.addFriendship = (userId: number, viewId: number) => {
+exports.addFriendship = (userId: number, viewId: number): QueryResult => {
     const q = `INSERT INTO friendships (sender_id, recipient_id, accepted)
     VALUES ($1,$2, false)   
     RETURNING id `;
 
     const param = [userId, viewId];
+    return db.query(q, param);
+};
+
+/* ---------------------------------------------------------------
+                  WALL POST TABLE
+----------------------------------------------------------------*/
+exports.addWallPost = (
+    walluser_id: number,
+    writer_id: number,
+    post: string
+): QueryResult => {
+    const q = `INSERT INTO wall_posts (walluser_id, writer_id, post, likes)
+    VALUES ($1,$2, $3, 0)   
+    RETURNING * `;
+
+    const param = [walluser_id, writer_id, post];
     return db.query(q, param);
 };

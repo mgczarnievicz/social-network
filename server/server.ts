@@ -39,6 +39,7 @@ const {
     searchForProfile,
     searchFriendshipStatus,
     setFriendshipStatus,
+    addWallPost,
 } = require("./process");
 
 // @ts-ignore
@@ -127,7 +128,7 @@ app.get("/user/id.json", function (req, res) {
     });
 });
 
-app.get("/logout", (req, res) => {
+app.get("/logout.json", (req, res) => {
     console.log(
         `-----------------------------------------------------------------------------\n\t Log out`
     );
@@ -250,7 +251,7 @@ app.post("/registration.json", (req, res) => {
     }
 });
 
-app.post("/login", (req, res) => {
+app.post("/login.json", (req, res) => {
     console.log(
         `-----------------------------------------------------------------------------\n\t Log In:`,
         req.body
@@ -440,6 +441,24 @@ app.post("/api/setFriendshipStatus", (req, res) => {
                 status: "Error",
             })
         );
+});
+
+app.post("/wallPost.json", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Set FriendShip Status:`,
+        req.body
+    );
+    /* Req.body:
+        - wallUserId
+        - post
+    */
+
+    addWallPost(req.session.userId, req.body)
+        .then((result: QueryResult) => {})
+        .catch((err: QueryResult) => {});
+    res.json({
+        status: "Error",
+    });
 });
 
 /* ---------------------------------------------------------------------------------------

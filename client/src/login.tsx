@@ -37,7 +37,7 @@ class LogIn extends Component<LogInProps, LogInState> {
         console.log("Clicked submit!");
         const { error, ...newUser } = this.state;
         console.log("newUser", newUser);
-        fetch("/login", {
+        fetch("/login.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

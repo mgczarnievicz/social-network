@@ -63,7 +63,7 @@ var LogIn = /** @class */ (function (_super) {
         console.log("Clicked submit!");
         var _a = this.state, error = _a.error, newUser = __rest(_a, ["error"]);
         console.log("newUser", newUser);
-        fetch("/login", {
+        fetch("/login.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

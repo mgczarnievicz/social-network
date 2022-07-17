@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addWallPost = _a.addWallPost;
 var sendEmail = require("./ses").sendEmail;
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -362,4 +362,14 @@ exports.setFriendshipStatus = function (userId, actualStatus) {
             return "Error";
             break;
     }
+};
+exports.addWallPost = function (userId, postInfo) {
+    //save in DB the post.
+    // counts 0
+    //
+    addWallPost(postInfo.wallUserId, userId, postInfo.post)
+        .then(function (result) {
+        console.log("Result from addWallPost:", result.rows);
+    })
+        .catch(function (err) { });
 };

@@ -81,24 +81,31 @@ export default function OtherProfile() {
                 </div>
             )}
             {user && (
-                <div className="profile-component">
-                    <ProfilePhoto
-                        name={user.name}
-                        surname={user.surname}
-                        photoUrl={user.photourl}
-                    />
-                    <div className="profile-info">
-                        <h1>
-                            {user.name} {user.surname}
-                        </h1>
-                        {user.bio &&
-                            user.bio.map((bioSentence: string, i: number) => {
-                                console.log("Bio ", bioSentence);
-                                return <h3 key={i}>{bioSentence}</h3>;
-                            })}
+                <>
+                    <div className="profile-component">
+                        <div className="photo-friendButton">
+                            <ProfilePhoto
+                                name={user.name}
+                                surname={user.surname}
+                                photoUrl={user.photourl}
+                            />
+                            <FriendButton viewUser={user.id} />
+                        </div>
+
+                        <div className="profile-info">
+                            <h1>
+                                {user.name} {user.surname}
+                            </h1>
+                            {user.bio &&
+                                user.bio.map(
+                                    (bioSentence: string, i: number) => {
+                                        console.log("Bio ", bioSentence);
+                                        return <h3 key={i}>{bioSentence}</h3>;
+                                    }
+                                )}
+                        </div>
                     </div>
-                    <FriendButton viewUser={user.id} />
-                </div>
+                </>
             )}
         </>
     );

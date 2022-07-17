@@ -76,10 +76,10 @@ function OtherProfile() {
             abort = true;
         };
     }, []);
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [!user && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("h1", { children: " User Not Found!" })] })), user && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: user.name, surname: user.surname, photoUrl: user.photourl }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: [user.name, " ", user.surname] }), user.bio &&
-                                user.bio.map(function (bioSentence, i) {
-                                    console.log("Bio ", bioSentence);
-                                    return (0, jsx_runtime_1.jsx)("h3", { children: bioSentence }, i);
-                                })] })), (0, jsx_runtime_1.jsx)(friendButton_1.default, { viewUser: user.id })] })))] }));
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [!user && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("h1", { children: " User Not Found!" })] })), user && ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "photo-friendButton" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: user.name, surname: user.surname, photoUrl: user.photourl }), (0, jsx_runtime_1.jsx)(friendButton_1.default, { viewUser: user.id })] })), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: [user.name, " ", user.surname] }), user.bio &&
+                                    user.bio.map(function (bioSentence, i) {
+                                        console.log("Bio ", bioSentence);
+                                        return (0, jsx_runtime_1.jsx)("h3", { children: bioSentence }, i);
+                                    })] }))] })) }))] }));
 }
 exports.default = OtherProfile;

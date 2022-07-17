@@ -14,13 +14,31 @@ CREATE TABLE users (
     bio VARCHAR
 );
 
+CREATE TABLE friendships(
+    id SERIAL PRIMARY KEY,
+    sender_id INT REFERENCES users(id) NOT NULL,
+    recipient_id INT REFERENCES users(id) NOT NULL,
+    accepted BOOLEAN DEFAULT false
+    -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-  CREATE TABLE friendships(
-      id SERIAL PRIMARY KEY,
-      sender_id INT REFERENCES users(id) NOT NULL,
-      recipient_id INT REFERENCES users(id) NOT NULL,
-      accepted BOOLEAN DEFAULT false
-  );
+CREATE TABLE wall_posts(
+    id SERIAL PRIMARY KEY,
+    walluser_id INT REFERENCES users(id) NOT NULL,
+    writer_id INT REFERENCES users(id) NOT NULL,
+    post TEXT,
+    likes INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE wall_coments(
+    id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES wall_posts(id) NOT NULL,
+    writer_id INT REFERENCES users(id) NOT NULL,
+    post TEXT,
+    likes INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE resetpassword (
     id SERIAL PRIMARY KEY,
@@ -28,3 +46,11 @@ CREATE TABLE resetpassword (
     code VARCHAR NOT NULL CHECK (code != ''),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+/* 
+For Delet table:
+- wall Commments -> wall post & users -> users
+- reset Password -> users
+- friendship -> users
+
+ */

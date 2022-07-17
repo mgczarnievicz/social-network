@@ -8,8 +8,10 @@ import Profile from "./profile";
 import Uploader from "./uploader";
 import FindPeople from "./findPeople";
 import OtherProfile from "./otherProfile";
+import Wall from "./wall";
 
 interface AppState {
+    id?: number;
     name?: string;
     surname?: string;
     photourl?: string;
@@ -25,6 +27,7 @@ export default class App extends Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
         this.state = {
+            id: null,
             name: "",
             surname: "",
             photourl: "",
@@ -47,7 +50,11 @@ export default class App extends Component<AppProps, AppState> {
                         ...this.state,
                         ...data.data,
                     },
-                    () => console.log("this.state:", this.state)
+                    () =>
+                        console.log(
+                            "this.state after /getUserInfo.json:",
+                            this.state
+                        )
                 );
             })
             .catch(() => {});
@@ -79,7 +86,7 @@ export default class App extends Component<AppProps, AppState> {
         console.log("logging this after bio", this);
     }
     logOutFunction() {
-        fetch("/logout")
+        fetch("/logout.json")
             .then((resp) => resp.json())
             .then((data) => {
                 if (data.status === "Success") {
@@ -140,6 +147,9 @@ export default class App extends Component<AppProps, AppState> {
                         </Route>
                         <Route path="/user/:idUserToSee">
                             <OtherProfile />
+                        </Route>
+                        <Route path="/news">
+                            <Wall wallUserId={this.state.id} />
                         </Route>
                     </Switch>
                 </BrowserRouter>

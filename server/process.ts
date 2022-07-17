@@ -18,6 +18,7 @@ const {
     updateFriendshipById,
     deleteFriendshipById,
     addFriendship,
+    addWallPost,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -413,4 +414,18 @@ exports.setFriendshipStatus = (
             return "Error";
             break;
     }
+};
+
+exports.addWallPost = (
+    userId: number,
+    postInfo: { wallUserId: number; post: string }
+) => {
+    //save in DB the post.
+    // counts 0
+    //
+    addWallPost(postInfo.wallUserId, userId, postInfo.post)
+        .then((result: QueryResult) => {
+            console.log("Result from addWallPost:", result.rows);
+        })
+        .catch((err: QueryResult) => {});
 };

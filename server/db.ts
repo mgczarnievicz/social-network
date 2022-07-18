@@ -201,13 +201,13 @@ exports.addFriendship = (userId: number, viewId: number): QueryResult => {
 /* ---------------------------------------------------------------
                   WALL POST TABLE
 ----------------------------------------------------------------*/
-exports.addWallPost = (
+exports.addPost = (
     walluser_id: number,
     writer_id: number,
     post: string
 ): QueryResult => {
-    const q = `INSERT INTO wall_posts (walluser_id, writer_id, post, likes)
-    VALUES ($1,$2, $3, 0)   
+    const q = `INSERT INTO wall_posts (walluser_id, writer_id, post)
+    VALUES ($1,$2, $3)   
     RETURNING * `;
 
     const param = [walluser_id, writer_id, post];

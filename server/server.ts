@@ -445,7 +445,7 @@ app.post("/api/setFriendshipStatus", (req, res) => {
 
 app.post("/wallPost.json", (req, res) => {
     console.log(
-        `-----------------------------------------------------------------------------\n\t Set FriendShip Status:`,
+        `-----------------------------------------------------------------------------\n\t Wall Post Status:`,
         req.body
     );
     /* Req.body:
@@ -454,11 +454,17 @@ app.post("/wallPost.json", (req, res) => {
     */
 
     addWallPost(req.session.userId, req.body)
-        .then((result: QueryResult) => {})
-        .catch((err: QueryResult) => {});
-    res.json({
-        status: "Error",
-    });
+        .then((result: QueryResult) => {
+            console.log("result in wallPost.json", result);
+            res.json({
+                status: "Success",
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
 });
 
 /* ---------------------------------------------------------------------------------------

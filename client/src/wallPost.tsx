@@ -17,6 +17,10 @@ interface WallProps {
 export default function Wall(props: WallProps) {
     const [post, setPost] = useState([]);
 
+    function clickLick() {
+        // send the like to the server.
+    }
+
     useEffect(() => {
         let abort = false;
         (async () => {
@@ -46,8 +50,12 @@ export default function Wall(props: WallProps) {
                 post.map((each: string) => {
                     <div>
                         <h1>each</h1>
-                        <FontAwesomeIcon icon="heart" />
-                        <FontAwesomeIcon icon="comments" />
+                        <FontAwesomeIcon icon="heart" size="2x" color="grey" />
+                        <FontAwesomeIcon
+                            icon="comments"
+                            size="2x"
+                            color="green"
+                        />
                     </div>;
                 })}
             <div>

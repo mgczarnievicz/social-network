@@ -1,8 +1,15 @@
-  DROP TABLE IF EXISTS resetpassword;
-  DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS resetpassword;
+DROP TABLE IF EXISTS friendships;
 
---   DROP TABLE IF EXISTS signatures;
---   DROP TABLE IF EXISTS user_profiles;
+DROP TABLE IF EXISTS wall_posts_likes;
+DROP TABLE IF EXISTS wall_posts;
+
+DROP TABLE IF EXISTS wall_comments_likes;
+DROP TABLE IF EXISTS wall_comments;
+
+
+DROP TABLE IF EXISTS users;
+
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -14,12 +21,18 @@ CREATE TABLE users (
     bio VARCHAR
 );
 
+CREATE TABLE resetpassword (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR NOT NULL CHECK (email != '') REFERENCES users(email),
+    code VARCHAR NOT NULL CHECK (code != ''),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE friendships(
     id SERIAL PRIMARY KEY,
     sender_id INT REFERENCES users(id) NOT NULL,
     recipient_id INT REFERENCES users(id) NOT NULL,
     accepted BOOLEAN DEFAULT false
-    -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE wall_posts(
@@ -27,25 +40,30 @@ CREATE TABLE wall_posts(
     walluser_id INT REFERENCES users(id) NOT NULL,
     writer_id INT REFERENCES users(id) NOT NULL,
     post TEXT,
-    likes INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE wall_coments(
+CREATE TABLE wall_posts_likes(
+    id SERIAL PRIMARY KEY,
+    wallpost_id INT REFERENCES wall_posts(id) NOT NULL,
+    users_id INT REFERENCES users(id) NOT NULL
+);
+
+CREATE TABLE wall_comments(
     id SERIAL PRIMARY KEY,
     post_id INT REFERENCES wall_posts(id) NOT NULL,
     writer_id INT REFERENCES users(id) NOT NULL,
     post TEXT,
-    likes INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE resetpassword (
+CREATE TABLE wall_comments_likes(
     id SERIAL PRIMARY KEY,
-    email VARCHAR NOT NULL CHECK (email != '') REFERENCES users(email),
-    code VARCHAR NOT NULL CHECK (code != ''),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    wallcomments_id INT REFERENCES wall_comments(id) NOT NULL,
+    users_id INT REFERENCES users(id) NOT NULL
 );
+
+
 
 /* 
 For Delet table:

@@ -23,6 +23,8 @@ export default function Wall(props: WriteWallProps) {
             });
             const data = await responds.json();
             console.log("Data received from POST wall post", data);
+            // now clean the campus.
+            setPost("");
         } catch (err) {
             console.log("Error in post wall:", err);
         }
@@ -31,7 +33,7 @@ export default function Wall(props: WriteWallProps) {
     return (
         <>
             <textarea
-                // value={}
+                value={post}
                 onChange={(e) => {
                     setPost(e.target.value);
                 }}

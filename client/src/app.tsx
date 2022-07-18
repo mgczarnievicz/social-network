@@ -111,15 +111,9 @@ export default class App extends Component<AppProps, AppState> {
                             <Logo />
                         </Link>
                         <nav>
-                            <Link
-                                to="/searchPeople"
-                                className="find-friend-color"
-                            >
-                                Find Friends
-                            </Link>
-                            <Link to="/" className="profile-color">
-                                Profile
-                            </Link>
+                            <Link to="/news">News</Link>
+                            <Link to="/searchPeople">Find Friends</Link>
+                            <Link to="/">Profile</Link>
                             <Link to="/" onClick={this.logOutFunction}>
                                 Log Out
                             </Link>

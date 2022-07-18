@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForPost = _a.searchForPost;
 // @ts-ignore
 var app = (0, express_1.default)();
 // Bc we are deploying we need to define where to get the value.
@@ -144,6 +144,21 @@ app.get("/api/friendshipStatus/:viewUser", function (req, res) {
     })
         .catch(function (err) {
         return res.json({
+            status: "Error",
+        });
+    });
+});
+app.get("/getPost/", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Get Post:", req.query);
+    searchForPost(req.query.search, req.session.userId)
+        .then(function (posts) {
+        res.json({
+            status: "Success",
+            posts: posts,
+        });
+    })
+        .catch(function (err) {
+        res.json({
             status: "Error",
         });
     });
@@ -348,16 +363,22 @@ app.post("/api/setFriendshipStatus", function (req, res) {
     });
 });
 app.post("/wallPost.json", function (req, res) {
-    console.log("-----------------------------------------------------------------------------\n\t Set FriendShip Status:", req.body);
+    console.log("-----------------------------------------------------------------------------\n\t Wall Post Status:", req.body);
     /* Req.body:
         - wallUserId
         - post
     */
     addWallPost(req.session.userId, req.body)
-        .then(function (result) { })
-        .catch(function (err) { });
-    res.json({
-        status: "Error",
+        .then(function (result) {
+        console.log("result in wallPost.json", result);
+        res.json({
+            status: "Success",
+        });
+    })
+        .catch(function (err) {
+        res.json({
+            status: "Error",
+        });
     });
 });
 /* ---------------------------------------------------------------------------------------

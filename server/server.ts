@@ -40,6 +40,7 @@ const {
     searchFriendshipStatus,
     setFriendshipStatus,
     addWallPost,
+    searchForPost,
 } = require("./process");
 
 // @ts-ignore
@@ -213,6 +214,26 @@ app.get("/api/friendshipStatus/:viewUser", (req, res) => {
                 status: "Error",
             })
         );
+});
+
+app.get("/getPost/", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get Post:`,
+        req.query
+    );
+
+    searchForPost(req.query.search, req.session.userId)
+        .then((posts: []) => {
+            res.json({
+                status: "Success",
+                posts,
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
 });
 
 /* -----------------------------------------------------------------------------------------------------

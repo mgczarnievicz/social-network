@@ -33,7 +33,7 @@ export default function Wall(props: WriteWallProps) {
     return (
         <>
             <textarea
-                value={post}
+                // value={post}
                 onChange={(e) => {
                     setPost(e.target.value);
                 }}

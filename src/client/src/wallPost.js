@@ -46,6 +46,9 @@ fontawesome_svg_core_1.library.add(free_solid_svg_icons_1.faHeart, free_solid_sv
 function Wall(props) {
     var _this = this;
     var _a = (0, react_1.useState)([]), post = _a[0], setPost = _a[1];
+    function clickLick() {
+        // send the like to the server.
+    }
     (0, react_1.useEffect)(function () {
         var abort = false;
         (function () { return __awaiter(_this, void 0, void 0, function () {
@@ -82,7 +85,7 @@ function Wall(props) {
     });
     return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "This are post!" }), post &&
                 post.map(function (each) {
-                    (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "each" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments" })] });
+                    (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "each" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "2x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "2x", color: "green" })] });
                 }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "3x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "2x", color: "green" })] })] }));
 }
 exports.default = Wall;

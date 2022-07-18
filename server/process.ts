@@ -420,9 +420,6 @@ exports.addWallPost = (
     userId: number,
     postInfo: { wallUserId: number; post: string }
 ) => {
-    //save in DB the post.
-    // counts 0
-    //
     console.log("In addWallPost, in process", userId, postInfo);
     addPost(postInfo.wallUserId, userId, postInfo.post)
         .then((result: QueryResult) => {
@@ -433,3 +430,5 @@ exports.addWallPost = (
             err;
         });
 };
+
+exports.searchForPost = (wallUserId: number) => {};

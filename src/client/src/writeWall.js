@@ -72,6 +72,8 @@ function Wall(props) {
                     case 3:
                         data = _a.sent();
                         console.log("Data received from POST wall post", data);
+                        // now clean the campus.
+                        setPost("");
                         return [3 /*break*/, 5];
                     case 4:
                         err_1 = _a.sent();
@@ -83,7 +85,7 @@ function Wall(props) {
         });
     }
     return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("textarea", { 
-                // value={}
+                // value={post}
                 onChange: function (e) {
                     setPost(e.target.value);
                 }, rows: 3, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: submitPost }, { children: "Save" }))] }));

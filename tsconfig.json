@@ -10,5 +10,7 @@
         "noEmitOnError": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true
-    }
+    },
+    "include": ["./client/**/*", "./server/**/*"],
+    "exclude": ["./tests/**"]
 }

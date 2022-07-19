@@ -1,16 +1,22 @@
 import React from "react";
 import ProfilePhoto from "./profilePhoto";
 import BioEditor from "./bioEditor";
+import { ProfileInfoWBio } from "./typesClient";
 
-interface ProfileProps {
-    name: string;
-    surname: string;
-    photoUrl: string;
-    bio?: string[];
-
+interface ProfileProps extends ProfileInfoWBio {
     toggleUploader?: Function;
     upDateBio?: Function;
 }
+
+// interface ProfileProps {
+//     name: string;
+//     surname: string;
+//     photoUrl: string;
+//     bio?: string[];
+
+//     toggleUploader?: Function;
+//     upDateBio?: Function;
+// }
 
 export default function Profile(props: ProfileProps) {
     console.log("log the props in Profile");
@@ -20,7 +26,7 @@ export default function Profile(props: ProfileProps) {
             <ProfilePhoto
                 name={props.name}
                 surname={props.surname}
-                photoUrl={props.photoUrl}
+                photoUrl={props.photourl}
                 toggleUploader={props.toggleUploader}
             />
             <div className="profile-info">

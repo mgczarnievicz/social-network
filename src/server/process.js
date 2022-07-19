@@ -27,8 +27,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId;
 var sendEmail = require("./ses").sendEmail;
+/* -----------------------------------------------------------------------
+                               GENERAL USE
+-------------------------------------------------------------------------*/
 function capitalizeFirstLetter(string) {
     string = string.replace(/\s\s+/g, " ").trim();
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -71,6 +74,9 @@ Verifying if there is something, it could have empty inputs
 //     }
 //     return true;
 // };
+/* -----------------------------------------------------------------------
+                       REGISTRATION & LOG IN SECTION
+-------------------------------------------------------------------------*/
 function encryptPassword(password) {
     return encryption
         .hash(password)
@@ -126,6 +132,9 @@ exports.logInVerify = function (userLogIn) {
         });
     });
 };
+/* -----------------------------------------------------------------------
+                        RESET PASSWORD SECTION
+-------------------------------------------------------------------------*/
 var RESET_PASS_SUBJECT = "HorseMan Reset Password";
 var RESET_PASS_MESSAGE_GREETING = "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n\t";
 var RESET_PASS_MESSAGE = "\nThank you for using our services.\nHorseMan group.";
@@ -176,6 +185,9 @@ exports.setNewPassword = function (userInput) {
     })
         .catch(function (err) { return false; });
 };
+/* -----------------------------------------------------------------------
+                     PROFILE EDIT & UPDATE SECTION
+-------------------------------------------------------------------------*/
 exports.saveProfileImage = function (userId, url) {
     return updateProfileImage(userId, url)
         .then(function (result) {
@@ -210,7 +222,9 @@ exports.upDateBio = function (userId, newBio) {
     })
         .catch(function (err) { return err; });
 };
-// FriendInfo
+/* -----------------------------------------------------------------------
+                                FRIEND SECTION
+-------------------------------------------------------------------------*/
 function searchForFiendsThatStartWith(nameToSearch, userId) {
     console.log("nameToSearch in searchForFriend", nameToSearch);
     return getMatchingFriends(nameToSearch, userId)
@@ -363,6 +377,17 @@ exports.setFriendshipStatus = function (userId, actualStatus) {
             break;
     }
 };
+exports.getFriends = function (userId) {
+    return searchFriendshipByUserId(userId)
+        .then(function (result) {
+        console.log("SearchFriendshipBy Id result", result.rows);
+        return result.rows;
+    })
+        .catch(function (err) { return err; });
+};
+/* -----------------------------------------------------------------------
+                                WALL SECTION
+-------------------------------------------------------------------------*/
 exports.addWallPost = function (userId, postInfo) {
     console.log("In addWallPost, in process", userId, postInfo);
     addPost(postInfo.wallUserId, userId, postInfo.post)

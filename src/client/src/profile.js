@@ -17,8 +17,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
 var bioEditor_1 = __importDefault(require("./bioEditor"));
+// interface ProfileProps {
+//     name: string;
+//     surname: string;
+//     photoUrl: string;
+//     bio?: string[];
+//     toggleUploader?: Function;
+//     upDateBio?: Function;
+// }
 function Profile(props) {
     console.log("log the props in Profile");
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: props.name, surname: props.surname, photoUrl: props.photoUrl, toggleUploader: props.toggleUploader }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: ["Welcome ", props.name, " ", props.surname] }), (0, jsx_runtime_1.jsx)(bioEditor_1.default, { bio: props.bio, upDateBio: props.upDateBio })] }))] })));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: props.name, surname: props.surname, photoUrl: props.photourl, toggleUploader: props.toggleUploader }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: ["Welcome ", props.name, " ", props.surname] }), (0, jsx_runtime_1.jsx)(bioEditor_1.default, { bio: props.bio, upDateBio: props.upDateBio })] }))] })));
 }
 exports.default = Profile;

@@ -9,22 +9,29 @@ import Uploader from "./uploader";
 import FindPeople from "./findPeople";
 import OtherProfile from "./otherProfile";
 import Wall from "./wall";
+import FriendsAndWannabees from "./friendsAndWannaBees";
+import { ProfileInfoWBio, EmptyProps } from "./typesClient";
 
-interface AppState {
-    id?: number;
-    name?: string;
-    surname?: string;
-    photourl?: string;
-    bio?: string[];
+// interface AppState {
+//     id?: number;
+//     name?: string;
+//     surname?: string;
+//     photourl?: string;
+//     bio?: string[];
+//     email?: string;
+//     uploaderVisible: boolean;
+// }
+
+// interface AppProps {}
+
+interface AppState extends ProfileInfoWBio {
     email?: string;
     uploaderVisible: boolean;
 }
 
-interface AppProps {}
-
 // <AppProps, AppState>
-export default class App extends Component<AppProps, AppState> {
-    constructor(props: AppProps) {
+export default class App extends Component<EmptyProps, AppState> {
+    constructor(props: EmptyProps) {
         super(props);
         this.state = {
             id: null,
@@ -112,6 +119,7 @@ export default class App extends Component<AppProps, AppState> {
                         </Link>
                         <nav>
                             <Link to="/news">News</Link>
+                            <Link to="/friends">Friends</Link>
                             <Link to="/searchPeople">Find Friends</Link>
                             <Link to="/">Profile</Link>
                             <Link to="/" onClick={this.logOutFunction}>
@@ -128,9 +136,10 @@ export default class App extends Component<AppProps, AppState> {
                     <Switch>
                         <Route exact path="/">
                             <Profile
+                                id={this.state.id}
                                 name={this.state.name}
                                 surname={this.state.surname}
-                                photoUrl={this.state.photourl}
+                                photourl={this.state.photourl}
                                 bio={this.state.bio}
                                 toggleUploader={this.toggleUploader}
                                 upDateBio={this.upDateBio}
@@ -144,6 +153,9 @@ export default class App extends Component<AppProps, AppState> {
                         </Route>
                         <Route path="/news">
                             <Wall wallUserId={this.state.id} />
+                        </Route>
+                        <Route path="/friends">
+                            <FriendsAndWannabees />
                         </Route>
                     </Switch>
                 </BrowserRouter>

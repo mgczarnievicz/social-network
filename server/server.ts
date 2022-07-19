@@ -41,6 +41,7 @@ const {
     setFriendshipStatus,
     addWallPost,
     searchForPost,
+    getFriends,
 } = require("./process");
 
 // @ts-ignore
@@ -144,6 +145,18 @@ app.get("/getUserInfo.json", (req, res) => {
         `-----------------------------------------------------------------------------\n\t Get User Info`
     );
     getUserInfo(req.session.userId).then((data: {}) => {
+        res.json({
+            status: "Success",
+            data: data,
+        });
+    });
+});
+
+app.get("/getFriends.json", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get Friends`
+    );
+    getFriends(req.session.userId).then((data: []) => {
         res.json({
             status: "Success",
             data: data,

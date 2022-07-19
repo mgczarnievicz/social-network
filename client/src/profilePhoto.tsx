@@ -1,5 +1,6 @@
 import React from "react";
 
+// REVIEW. when changing to global state, this should go. I am passing only the things that I need
 interface ProfilePhotoProps {
     name: string;
     surname: string;

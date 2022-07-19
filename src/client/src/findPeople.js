@@ -50,6 +50,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var react_router_1 = require("react-router");
+// interface FriendInfo {
+//     id: number;
+//     name: string;
+//     surname: string;
+//     photourl: string;
+// }
 function FindPeople() {
     /* useEffect allows us to have a lice cycle methods to hook into react's
     render process it, it accept two arguments:

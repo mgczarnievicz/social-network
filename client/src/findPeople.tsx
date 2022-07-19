@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { ProfileInfo } from "./typesClient";
 
-interface FriendInfo {
-    id: number;
-    name: string;
-    surname: string;
-    photourl: string;
-}
+// interface FriendInfo {
+//     id: number;
+//     name: string;
+//     surname: string;
+//     photourl: string;
+// }
 
 export default function FindPeople() {
     /* useEffect allows us to have a lice cycle methods to hook into react's 
@@ -68,7 +69,7 @@ export default function FindPeople() {
             </div>
             <div className="friend-container">
                 {friends &&
-                    friends.map((friend: FriendInfo, i: number) => {
+                    friends.map((friend: ProfileInfo, i: number) => {
                         return (
                             <div
                                 key={friend.id}

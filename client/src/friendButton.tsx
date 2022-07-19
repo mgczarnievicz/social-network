@@ -5,7 +5,7 @@ interface FriendButtonProps {
     viewUser: number;
 }
 
-export interface FriendShipStatus {
+interface FriendShipStatus {
     button: string;
     viewUserId: number;
 }

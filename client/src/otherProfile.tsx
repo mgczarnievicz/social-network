@@ -3,18 +3,19 @@ import { useHistory, useParams } from "react-router";
 
 import ProfilePhoto from "./profilePhoto";
 import FriendButton from "./friendButton";
+import { ProfileInfoWBio } from "./typesClient";
 
-interface FriendInfo {
-    id: number;
-    name: string;
-    surname: string;
-    photourl: string;
-    bio?: [];
-}
+// interface FriendInfo {
+//     id: number;
+//     name: string;
+//     surname: string;
+//     photourl: string;
+//     bio?: [];
+// }
 
 export default function OtherProfile() {
     // DON'T TOUCH IF BREAKS FRIEND BUTTON
-    const [user, setUser] = useState<FriendInfo | null>(null);
+    const [user, setUser] = useState<ProfileInfoWBio | null>(null);
 
     const { idUserToSee } = useParams<Record<string, string | undefined>>();
     // const { useParams } = useParams<{ useParams: string }>();

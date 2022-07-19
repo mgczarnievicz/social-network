@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForPost = _a.searchForPost;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForPost = _a.searchForPost, getFriends = _a.getFriends;
 // @ts-ignore
 var app = (0, express_1.default)();
 // Bc we are deploying we need to define where to get the value.
@@ -90,6 +90,15 @@ app.get("/logout.json", function (req, res) {
 app.get("/getUserInfo.json", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Get User Info");
     getUserInfo(req.session.userId).then(function (data) {
+        res.json({
+            status: "Success",
+            data: data,
+        });
+    });
+});
+app.get("/getFriends.json", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Get Friends");
+    getFriends(req.session.userId).then(function (data) {
         res.json({
             status: "Success",
             data: data,

@@ -199,6 +199,22 @@ exports.addFriendship = (userId: number, viewId: number): QueryResult => {
 };
 
 /* ---------------------------------------------------------------
+                  JOIN  USER & FRIENDSHIP TABLE
+----------------------------------------------------------------*/
+
+exports.searchFriendshipByUserId = (userId: number): QueryResult => {
+    const q = `SELECT users.id, name, surname, photourl, accepted
+            FROM friendships
+            JOIN users
+            ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+            OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+            OR (accepted = true AND sender_id = $1 AND recipient_id = users.id) `;
+
+    const param = [userId];
+    return db.query(q, param);
+};
+
+/* ---------------------------------------------------------------
                   WALL POST TABLE
 ----------------------------------------------------------------*/
 exports.addPost = (

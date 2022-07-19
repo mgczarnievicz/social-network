@@ -19,6 +19,7 @@ const {
     deleteFriendshipById,
     addFriendship,
     addPost,
+    searchFriendshipByUserId,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -35,6 +36,10 @@ import {
     FriendShipResponds,
 } from "./typesServer";
 import { DataBrew } from "aws-sdk";
+
+/* -----------------------------------------------------------------------
+                               GENERAL USE
+-------------------------------------------------------------------------*/
 
 function capitalizeFirstLetter(string: string): string {
     string = string.replace(/\s\s+/g, " ").trim();
@@ -83,6 +88,10 @@ Verifying if there is something, it could have empty inputs
 //     }
 //     return true;
 // };
+
+/* -----------------------------------------------------------------------
+                       REGISTRATION & LOG IN SECTION
+-------------------------------------------------------------------------*/
 
 function encryptPassword(password: string) {
     return encryption
@@ -149,6 +158,9 @@ exports.logInVerify = (userLogIn: LogInUser): LogInResponse => {
         });
 };
 
+/* -----------------------------------------------------------------------
+                        RESET PASSWORD SECTION
+-------------------------------------------------------------------------*/
 const RESET_PASS_SUBJECT = "HorseMan Reset Password";
 const RESET_PASS_MESSAGE_GREETING =
     "Dear Costumer, \nWe send you the code, to be able to reset your password. Remember this is only valid for the next 8 minutes. After this you will need to require a new one.\n\t";
@@ -213,6 +225,9 @@ exports.setNewPassword = (userInput: UserResetPassword) => {
         .catch((err: QueryResult) => false);
 };
 
+/* -----------------------------------------------------------------------
+                     PROFILE EDIT & UPDATE SECTION
+-------------------------------------------------------------------------*/
 exports.saveProfileImage = (userId: number, url: string) => {
     return updateProfileImage(userId, url)
         .then((result: QueryResult) => {
@@ -254,7 +269,9 @@ exports.upDateBio = (userId: number, newBio: string) => {
         .catch((err: QueryResult) => err);
 };
 
-// FriendInfo
+/* -----------------------------------------------------------------------
+                                FRIEND SECTION
+-------------------------------------------------------------------------*/
 function searchForFiendsThatStartWith(nameToSearch: string, userId: number) {
     console.log("nameToSearch in searchForFriend", nameToSearch);
     return getMatchingFriends(nameToSearch, userId)
@@ -416,6 +433,18 @@ exports.setFriendshipStatus = (
     }
 };
 
+exports.getFriends = (userId: number) => {
+    return searchFriendshipByUserId(userId)
+        .then((result: QueryResult) => {
+            console.log("SearchFriendshipBy Id result", result.rows);
+            return result.rows;
+        })
+        .catch((err: QueryResult) => err);
+};
+
+/* -----------------------------------------------------------------------
+                                WALL SECTION
+-------------------------------------------------------------------------*/
 exports.addWallPost = (
     userId: number,
     postInfo: { wallUserId: number; post: string }

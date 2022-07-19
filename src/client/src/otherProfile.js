@@ -19,6 +19,13 @@ var react_1 = require("react");
 var react_router_1 = require("react-router");
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
 var friendButton_1 = __importDefault(require("./friendButton"));
+// interface FriendInfo {
+//     id: number;
+//     name: string;
+//     surname: string;
+//     photourl: string;
+//     bio?: [];
+// }
 function OtherProfile() {
     // DON'T TOUCH IF BREAKS FRIEND BUTTON
     var _a = (0, react_1.useState)(null), user = _a[0], setUser = _a[1];

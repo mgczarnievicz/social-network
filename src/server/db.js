@@ -96,6 +96,14 @@ exports.addFriendship = function (userId, viewId) {
     return db.query(q, param);
 };
 /* ---------------------------------------------------------------
+                  JOIN  USER & FRIENDSHIP TABLE
+----------------------------------------------------------------*/
+exports.searchFriendshipByUserId = function (userId) {
+    var q = "SELECT users.id, name, surname, photourl, accepted\n            FROM friendships\n            JOIN users\n            ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)\n            OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)\n            OR (accepted = true AND sender_id = $1 AND recipient_id = users.id) ";
+    var param = [userId];
+    return db.query(q, param);
+};
+/* ---------------------------------------------------------------
                   WALL POST TABLE
 ----------------------------------------------------------------*/
 exports.addPost = function (walluser_id, writer_id, post) {

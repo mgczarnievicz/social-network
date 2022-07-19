@@ -10,6 +10,15 @@ interface FriendShipStatus {
     viewUserId: number;
 }
 
+/* 
+FriendButton values:
+   - Add Friend
+   - Unfriend
+   - Cancel Request
+   - Accept Friend
+   - Delete Request
+*/
+
 export default function FriendButton(props: FriendButtonProps) {
     const [friendshipStatus, setFriendshipStatus] =
         useState<FriendShipStatus | null>({} as FriendShipStatus);

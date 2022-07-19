@@ -364,6 +364,7 @@ exports.setFriendshipStatus = function (userId, actualStatus) {
             return newFriendship(userId, actualStatus.viewUserId);
             break;
         case "Unfriend":
+        case "Delete Request":
         case "Cancel Request":
             // Delete from DB.
             return deleteFriendship(userId, actualStatus.viewUserId);

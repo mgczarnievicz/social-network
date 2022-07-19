@@ -159,7 +159,7 @@ app.get("/getFriends.json", (req, res) => {
     getFriends(req.session.userId).then((data: []) => {
         res.json({
             status: "Success",
-            data: data,
+            payload: data,
         });
     });
 });

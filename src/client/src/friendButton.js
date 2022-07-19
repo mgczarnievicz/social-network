@@ -13,6 +13,14 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
+/*
+FriendButton values:
+   - Add Friend
+   - Unfriend
+   - Cancel Request
+   - Accept Friend
+   - Delete Request
+*/
 function FriendButton(props) {
     var _a = (0, react_1.useState)({}), friendshipStatus = _a[0], setFriendshipStatus = _a[1];
     (0, react_1.useEffect)(function () {

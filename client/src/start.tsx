@@ -30,5 +30,3 @@ fetch("/user/id.json")
             );
         }
     });
-
-// <img src="/HorseMan.png" alt="logo" />

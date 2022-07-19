@@ -9,7 +9,7 @@ import Uploader from "./uploader";
 import FindPeople from "./findPeople";
 import OtherProfile from "./otherProfile";
 import Wall from "./wall";
-import FriendsAndWannabees from "./friendsAndWannaBees";
+import FriendsAndWannabees from "./friendsWannabees";
 import { ProfileInfoWBio, EmptyProps } from "./typesClient";
 
 // interface AppState {

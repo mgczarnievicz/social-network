@@ -4,6 +4,7 @@
     --color-board: #ffae00;
     --color-green: #d9ebc5;
     --color-lighter: #fbd5c0ac;
+    --color-dark-green: #94b49f;
 }
 
 * {
@@ -326,3 +327,57 @@ label {
     object-fit: cover;
     border-radius: 12px;
 }
+
+/* --------------------------------------------------------------------
+                        FRIENDS & WANNABEE SECTION
+-----------------------------------------------------------------------*/
+
+.friends-wannabees {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.friends-wannabees-profile {
+    border: 3px solid var(--color-dark-green);
+    border-radius: 12px;
+    padding: 10px 20px;
+    margin: 10px 20px;
+    width: 260px;
+    height: 330px;
+}
+.friends-wannabees-profile img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    /* border-radius: 12px 12px 0px 0px; */
+    border-radius: 12px;
+}
+
+.friends-wannabees-profile h2 {
+    width: 100%;
+    text-align: center;
+}
+.friends-wannabees-profile button {
+    width: 100%;
+}
+
+.wannabees-profile {
+    height: 380px;
+}
+
+.wannabees-profile .delete-request {
+    font-size: 15px;
+    background-color: var(--color-light);
+    border: 2px solid var(--color-light);
+    color: var(--color-dark);
+    margin-top: 20px;
+}
+
+/* margin-top: 10px;
+    color: whitesmoke;
+    font-size: 20px;
+    background-color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+    border-radius: 12px;
+    padding: 2px;
+    align-self: center; */

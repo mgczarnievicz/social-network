@@ -101,7 +101,7 @@ app.get("/getFriends.json", function (req, res) {
     getFriends(req.session.userId).then(function (data) {
         res.json({
             status: "Success",
-            data: data,
+            payload: data,
         });
     });
 });

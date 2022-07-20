@@ -1,5 +1,4 @@
 // src/ redux/friends/slice.js
-
 // a mini / sub-reducer that handles changes to the global state - but only specific to the friends.
 
 /* 
@@ -9,6 +8,7 @@ action: is a string describe the action to take
 import { Action, ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { ProfileInfo } from "./../../typesClient";
+import { RootState } from "./../reducer";
 
 export interface FriendProfile extends ProfileInfo {
     accepted: boolean;
@@ -22,10 +22,9 @@ export const DictionaryButtonAction = {
     "Delete Request": "delete",
 };
 
+// to be able to accept any key name as string but the value as now, can only be a number
 interface ActionType {
     type: string;
-    // to be able to accept any key name as string but the value as now, can only be a number
-    // payload: { [key: string]: number | Array<FriendProfile> };
     payload: { id?: number; friends?: Array<FriendProfile> };
 }
 
@@ -70,18 +69,6 @@ export default function friendsAndWannabeesReducer(
 }
 
 /* 
-
-
-1. spread Operator, works in Object and Arrays
-
-2. MAP work ONLY in ARRAYS!
-
-3. FILTER - an array method
-great for removing thing from array
-
-*/
-
-/* 
 FriendButton values:
    - Add Friend
    - Unfriend
@@ -104,43 +91,9 @@ export function receiveFriendStatus(friends: Array<FriendProfile>) {
     };
 }
 
-// ------------------------------------------------------------------------------------------------------
-// src/ redux/friends/slice.js
-
-// a mini / sub-reducer that handles changes to the global state - but only specific to the friends.
-
-/* 
-friends []: is a property inside global state. We are using default parameter here.
-action: is a string describe the action to take
-*/
-
-export interface FriendProfile extends ProfileInfo {
-    accepted: boolean;
-}
-
-interface ActionType {
-    type: string;
-    // to be able to accept any key name as string but the value as now, can only be a number
-    // payload: { [key: string]: number | Array<FriendProfile> };
-    payload: { id?: number; friends?: Array<FriendProfile> };
-}
-
-/* 
-FriendButton values:
-   - Add Friend
-   - Unfriend
-   - Cancel Request
-   - Accept Friend
-   - Delete Request
-*/
-
-// export function receiveFriendStatus(friends: Array<FriendProfile>) {
-//     return {
-//         type: `/friends-wannabees/receive`,
-//         payload: { friends },
-//     };
-// }
-import { RootState } from "./../reducer";
+/* -------------------------------------------------------------------------------------------
+                                    ASYNC: ThunkAction
+----------------------------------------------------------------------------------------------*/
 
 type FriendThunk = ThunkAction<void, RootState, null, Action<ActionType>>;
 
@@ -192,7 +145,6 @@ export const asyncChangeFriendStatus =
     async (dispatch: Dispatch) => {
         console.log("I am in asyncChangeFriendStatus");
         try {
-            // handle fetch success
             const resp = await fetch("/api/setFriendshipStatus", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

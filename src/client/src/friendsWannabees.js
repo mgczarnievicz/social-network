@@ -15,24 +15,13 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var react_redux_1 = require("react-redux");
 var slice_1 = require("./redux/friends/slice");
-// export interface FriendProfile extends ProfileInfo {
-//     accepted: boolean;
-// }
-// export const DictionaryButtonAction = {
+// DictionaryButtonAction for FriendButton values: {
 //     "Add Friend": "wannabee",
 //     Unfriend: "delete",
 //     "Cancel Request": "delete",
 //     "Accept Friend": "accept",
 //     "Delete Request": "delete",
 // };
-/*
-FriendButton values:
-   - Add Friend
-   - Unfriend
-   - Cancel Request
-   - Accept Friend
-   - Delete Request
-*/
 function FriendsAndWannabees() {
     var dispatch = (0, react_redux_1.useDispatch)();
     var wannabees = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return !friend.accepted; }); });
@@ -45,22 +34,6 @@ function FriendsAndWannabees() {
         */
         var abort = false;
         dispatch((0, slice_1.asyncReceiveFriendStatus)(abort));
-        // (async () => {
-        //     try {
-        //         const respBody = await fetch("/getFriends.json");
-        //         const data = await respBody.json();
-        //         console.log("Data from /getFriends.json", data);
-        //         //
-        //         if (!abort) {
-        //             // We want to despatch the data
-        //             dispatch(receiveFriendStatus(data.payload));
-        //         } else {
-        //             console.log("ignore don't run a a state update");
-        //         }
-        //     } catch (err) {
-        //         console.log("Error", err);
-        //     }
-        // })(); // this closes the async iife
         return function () {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
@@ -70,8 +43,7 @@ function FriendsAndWannabees() {
     }, []);
     var buttonHandler = function (buttonAction, friendId) {
         //When we press the button we want to do a post request to my server!
-        console.log("Clicked in button friendship");
-        console.log("Clicked, button action", buttonAction);
+        console.log("Clicked in button friendship, button action", buttonAction);
         dispatch((0, slice_1.asyncChangeFriendStatus)(buttonAction, friendId));
     };
     console.log("actualFriends", actualFriends);

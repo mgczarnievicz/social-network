@@ -6,32 +6,17 @@ import { ProfileInfo } from "./typesClient";
 import {
     FriendProfile,
     DictionaryButtonAction,
-    changeFriendStatus,
-    receiveFriendStatus,
     asyncChangeFriendStatus,
     asyncReceiveFriendStatus,
 } from "./redux/friends/slice";
 
-// export interface FriendProfile extends ProfileInfo {
-//     accepted: boolean;
-// }
-
-// export const DictionaryButtonAction = {
+// DictionaryButtonAction for FriendButton values: {
 //     "Add Friend": "wannabee",
 //     Unfriend: "delete",
 //     "Cancel Request": "delete",
 //     "Accept Friend": "accept",
 //     "Delete Request": "delete",
 // };
-
-/* 
-FriendButton values:
-   - Add Friend
-   - Unfriend
-   - Cancel Request
-   - Accept Friend
-   - Delete Request
-*/
 
 export default function FriendsAndWannabees() {
     const dispatch = useDispatch();
@@ -51,22 +36,7 @@ export default function FriendsAndWannabees() {
         */
         let abort = false;
         dispatch(asyncReceiveFriendStatus(abort));
-        // (async () => {
-        //     try {
-        //         const respBody = await fetch("/getFriends.json");
-        //         const data = await respBody.json();
-        //         console.log("Data from /getFriends.json", data);
-        //         //
-        //         if (!abort) {
-        //             // We want to despatch the data
-        //             dispatch(receiveFriendStatus(data.payload));
-        //         } else {
-        //             console.log("ignore don't run a a state update");
-        //         }
-        //     } catch (err) {
-        //         console.log("Error", err);
-        //     }
-        // })(); // this closes the async iife
+
         return () => {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
@@ -80,12 +50,12 @@ export default function FriendsAndWannabees() {
         friendId: number
     ) => {
         //When we press the button we want to do a post request to my server!
-        console.log("Clicked in button friendship");
-        console.log("Clicked, button action", buttonAction);
-
+        console.log(
+            "Clicked in button friendship, button action",
+            buttonAction
+        );
         dispatch(asyncChangeFriendStatus(buttonAction, friendId));
     };
-
     console.log("actualFriends", actualFriends);
     console.log("wannabees", wannabees);
 

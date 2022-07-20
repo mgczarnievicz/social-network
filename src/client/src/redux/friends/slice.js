@@ -1,5 +1,6 @@
 "use strict";
 // src/ redux/friends/slice.js
+// a mini / sub-reducer that handles changes to the global state - but only specific to the friends.
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -96,17 +97,6 @@ function friendsAndWannabeesReducer(friends, action) {
     return friends;
 }
 exports.default = friendsAndWannabeesReducer;
-/*
-
-
-1. spread Operator, works in Object and Arrays
-
-2. MAP work ONLY in ARRAYS!
-
-3. FILTER - an array method
-great for removing thing from array
-
-*/
 /*
 FriendButton values:
    - Add Friend

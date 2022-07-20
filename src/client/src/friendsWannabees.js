@@ -122,24 +122,30 @@ function FriendsAndWannabees() {
             abort = true;
         };
     }, []);
-    function buttonHandler(buttonAction, friendId) {
+    var buttonHandler = function (buttonAction, friendId) {
         //When we press the button we want to do a post request to my server!
         console.log("Clicked in button friendship");
         console.log("Clicked, button action", buttonAction);
-        fetch("/api/setFriendshipStatus", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                button: buttonAction,
-                viewUserId: friendId,
-            }),
-        })
-            .then(function (resp) { return resp.json(); })
-            .then(function (data) {
-            console.log("Data from post setFriendshipStatus", data);
-            dispatch((0, slice_1.changeFriendStatus)(slice_1.DictionaryButtonAction[buttonAction], data.data.viewUserId));
-        });
-    }
+        dispatch((0, slice_1.asyncChangeFriendStatus)(buttonAction, friendId));
+        // fetch("/api/setFriendshipStatus", {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({
+        //         button: buttonAction,
+        //         viewUserId: friendId,
+        //     }),
+        // })
+        //     .then((resp) => resp.json())
+        //     .then((data) => {
+        //         console.log("Data from post setFriendshipStatus", data);
+        //         dispatch(
+        //             changeFriendStatus(
+        //                 DictionaryButtonAction[buttonAction],
+        //                 data.data.viewUserId
+        //             )
+        //         );
+        //     });
+    };
     console.log("actualFriends", actualFriends);
     console.log("wannabees", wannabees);
     return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends-wannabees" }, { children: actualFriends &&

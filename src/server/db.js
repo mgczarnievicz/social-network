@@ -111,3 +111,8 @@ exports.addPost = function (walluser_id, writer_id, post) {
     var param = [walluser_id, writer_id, post];
     return db.query(q, param);
 };
+exports.searchPostByUserId = function (userId) {
+    var q = "SELECT * FROM wall_posts \n        WHERE walluser_id = $1 OR\n        writer_id = $1\n        LIMIT 15 ";
+    var param = [userId];
+    return db.query(q, param);
+};

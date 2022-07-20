@@ -156,12 +156,19 @@ app.get("/getFriends.json", (req, res) => {
     console.log(
         `-----------------------------------------------------------------------------\n\t Get Friends`
     );
-    getFriends(req.session.userId).then((data: []) => {
-        res.json({
-            status: "Success",
-            payload: data,
+    getFriends(req.session.userId)
+        .then((data: []) => {
+            res.json({
+                status: "Success",
+                payload: data,
+            });
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error in /getFriends.json:", err);
+            res.json({
+                status: "Error",
+            });
         });
-    });
 });
 
 app.get("/searchFriend/", (req, res) => {

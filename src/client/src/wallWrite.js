@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,55 +49,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
-var react_fontawesome_1 = require("@fortawesome/react-fontawesome");
-var fontawesome_svg_core_1 = require("@fortawesome/fontawesome-svg-core");
-// import { fab } from "@fortawesome/free-brands-svg-icons";
-var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
-fontawesome_svg_core_1.library.add(free_solid_svg_icons_1.faHeart, free_solid_svg_icons_1.faComments);
-function WallPost(props) {
-    var _this = this;
-    var _a = (0, react_1.useState)([]), post = _a[0], setPost = _a[1];
-    function clickLick() {
-        // send the like to the server.
-    }
-    (0, react_1.useEffect)(function () {
-        var abort = false;
-        console.log("Props in Wall Post:", props);
-        (function () { return __awaiter(_this, void 0, void 0, function () {
-            var respBody, data, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+function WallWrite(props) {
+    var _a = (0, react_1.useState)(null), post = _a[0], setPost = _a[1];
+    function submitPost() {
+        return __awaiter(this, void 0, void 0, function () {
+            var responds, data, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, fetch("/getPost/?from=".concat(props.wallUserId))];
+                        console.log("post value", post);
+                        _a.label = 1;
                     case 1:
-                        respBody = _b.sent();
-                        return [4 /*yield*/, respBody.json()];
+                        _a.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, fetch("/wallPost.json", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ wallUserId: props.wallUserId, post: post }),
+                            })];
                     case 2:
-                        data = _b.sent();
-                        console.log("Data from /getPost", data);
-                        if (!abort) {
-                            // We have new data!
-                        }
-                        else {
-                            // just ignore data.
-                        }
-                        return [3 /*break*/, 4];
+                        responds = _a.sent();
+                        return [4 /*yield*/, responds.json()];
                     case 3:
-                        _a = _b.sent();
-                        console.log("Error in getting data from /getPost");
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        data = _a.sent();
+                        console.log("Data received from POST wall post", data);
+                        // now clean the campus.
+                        setPost("");
+                        return [3 /*break*/, 5];
+                    case 4:
+                        err_1 = _a.sent();
+                        console.log("Error in post wall:", err_1);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
-        }); })();
-        return function () {
-            abort = true;
-        };
-    });
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "This are post!" }), post &&
-                post.map(function (each) {
-                    (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h1", { children: "each" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "2x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "2x", color: "green" })] });
-                }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "3x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "2x", color: "green" })] })] }));
+        });
+    }
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("textarea", { 
+                // value={post}
+                onChange: function (e) {
+                    setPost(e.target.value);
+                }, rows: 3, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: submitPost }, { children: "Save" }))] }));
 }
-exports.default = WallPost;
+exports.default = WallWrite;

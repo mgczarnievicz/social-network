@@ -6,7 +6,8 @@
 friends []: is a property inside global state. We are using default parameter here.
 action: is a string describe the action to take
 */
-
+import { Action, ActionCreator, Dispatch } from "redux";
+import { ThunkAction } from "redux-thunk";
 import { ProfileInfo } from "./../../typesClient";
 
 export interface FriendProfile extends ProfileInfo {
@@ -102,3 +103,93 @@ export function receiveFriendStatus(friends: Array<FriendProfile>) {
         payload: { friends },
     };
 }
+
+// ------------------------------------------------------------------------------------------------------
+// src/ redux/friends/slice.js
+
+// a mini / sub-reducer that handles changes to the global state - but only specific to the friends.
+
+/* 
+friends []: is a property inside global state. We are using default parameter here.
+action: is a string describe the action to take
+*/
+
+export interface FriendProfile extends ProfileInfo {
+    accepted: boolean;
+}
+
+interface ActionType {
+    type: string;
+    // to be able to accept any key name as string but the value as now, can only be a number
+    // payload: { [key: string]: number | Array<FriendProfile> };
+    payload: { id?: number; friends?: Array<FriendProfile> };
+}
+
+/* 
+FriendButton values:
+   - Add Friend
+   - Unfriend
+   - Cancel Request
+   - Accept Friend
+   - Delete Request
+*/
+
+// export function changeFriendStatus(action: string, id: number) {
+//     return {
+//         type: `/friends-wannabees/${action}`,
+//         payload: { id },
+//     };
+// }
+
+// export function receiveFriendStatus(friends: Array<FriendProfile>) {
+//     return {
+//         type: `/friends-wannabees/receive`,
+//         payload: { friends },
+//     };
+// }
+import { RootState } from "./../reducer";
+
+type FriendThunk = ThunkAction<void, RootState, null, Action<ActionType>>;
+
+/* 
+    type ThunkAction<R, S, E, A extends Action>
+
+  S = is the type of root state
+    = is the return type of the getState() method.
+  
+  E = is the type of the extra arguments passed to the ThunkAction
+  
+  A = is the action type defined in your application.
+    = it should be able to extend from Action.
+      (this means that it should be an object 
+      that must have a `type` field.) Action type is defined in the redux typings.
+  */
+
+export const asyncChangeFriendStatus =
+    (
+        buttonAction: keyof typeof DictionaryButtonAction,
+        friendId: number
+    ): FriendThunk =>
+    async (dispatch: Dispatch) => {
+        console.log("I am in asyncChangeFriendStatus");
+        try {
+            // handle fetch success
+            const resp = await fetch("/api/setFriendshipStatus", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    button: buttonAction,
+                    viewUserId: friendId,
+                }),
+            });
+            const data = await resp.json();
+            console.log("Data from post setFriendshipStatus", data);
+
+            return dispatch({
+                type: `/friends-wannabees/${DictionaryButtonAction[buttonAction]}`,
+                payload: { id: data.data.viewUserId },
+            });
+        } catch (err) {
+            // handle fetch failure
+        }
+    };

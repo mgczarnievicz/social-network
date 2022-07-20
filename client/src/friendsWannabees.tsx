@@ -8,6 +8,7 @@ import {
     DictionaryButtonAction,
     changeFriendStatus,
     receiveFriendStatus,
+    asyncChangeFriendStatus,
 } from "./redux/friends/slice";
 
 // export interface FriendProfile extends ProfileInfo {
@@ -76,34 +77,36 @@ export default function FriendsAndWannabees() {
         };
     }, []);
 
-    function buttonHandler(
+    const buttonHandler = (
         buttonAction: keyof typeof DictionaryButtonAction,
         friendId: number
-    ) {
+    ) => {
         //When we press the button we want to do a post request to my server!
         console.log("Clicked in button friendship");
         console.log("Clicked, button action", buttonAction);
 
-        fetch("/api/setFriendshipStatus", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                button: buttonAction,
-                viewUserId: friendId,
-            }),
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.log("Data from post setFriendshipStatus", data);
+        dispatch(asyncChangeFriendStatus(buttonAction, friendId));
 
-                dispatch(
-                    changeFriendStatus(
-                        DictionaryButtonAction[buttonAction],
-                        data.data.viewUserId
-                    )
-                );
-            });
-    }
+        // fetch("/api/setFriendshipStatus", {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({
+        //         button: buttonAction,
+        //         viewUserId: friendId,
+        //     }),
+        // })
+        //     .then((resp) => resp.json())
+        //     .then((data) => {
+        //         console.log("Data from post setFriendshipStatus", data);
+
+        //         dispatch(
+        //             changeFriendStatus(
+        //                 DictionaryButtonAction[buttonAction],
+        //                 data.data.viewUserId
+        //             )
+        //         );
+        //     });
+    };
 
     console.log("actualFriends", actualFriends);
     console.log("wannabees", wannabees);

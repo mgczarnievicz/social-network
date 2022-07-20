@@ -98,10 +98,17 @@ app.get("/getUserInfo.json", function (req, res) {
 });
 app.get("/getFriends.json", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Get Friends");
-    getFriends(req.session.userId).then(function (data) {
+    getFriends(req.session.userId)
+        .then(function (data) {
         res.json({
             status: "Success",
             payload: data,
+        });
+    })
+        .catch(function (err) {
+        console.log("Error in /getFriends.json:", err);
+        res.json({
+            status: "Error",
         });
     });
 });

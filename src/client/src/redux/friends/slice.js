@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.asyncChangeFriendStatus = exports.receiveFriendStatus = exports.changeFriendStatus = exports.DictionaryButtonAction = void 0;
+exports.asyncChangeFriendStatus = exports.asyncReceiveFriendStatus = exports.receiveFriendStatus = exports.changeFriendStatus = exports.DictionaryButtonAction = void 0;
 exports.DictionaryButtonAction = {
     "Add Friend": "wannabee",
     Unfriend: "delete",
@@ -142,9 +142,50 @@ exports.receiveFriendStatus = receiveFriendStatus;
       (this means that it should be an object
       that must have a `type` field.) Action type is defined in the redux typings.
   */
+var asyncReceiveFriendStatus = function (abort) {
+    return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+        var respBody, data, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log("I am in asyncReceiveFriendStatus");
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, fetch("/getFriends.json")];
+                case 2:
+                    respBody = _a.sent();
+                    return [4 /*yield*/, respBody.json()];
+                case 3:
+                    data = _a.sent();
+                    console.log("Data from /getFriends.json", data);
+                    //
+                    if (!abort) {
+                        // We want to despatch the data
+                        //  dispatch(receiveFriendStatus(data.payload));
+                        return [2 /*return*/, dispatch({
+                                type: "/friends-wannabees/receive",
+                                payload: { friends: data.payload },
+                            })];
+                    }
+                    else {
+                        console.log("ignore don't run a a state update");
+                    }
+                    return [3 /*break*/, 5];
+                case 4:
+                    err_1 = _a.sent();
+                    // handle fetch failure
+                    console.log("Error", err_1);
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
+            }
+        });
+    }); };
+};
+exports.asyncReceiveFriendStatus = asyncReceiveFriendStatus;
 var asyncChangeFriendStatus = function (buttonAction, friendId) {
     return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-        var resp, data, err_1;
+        var resp, data, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -171,7 +212,7 @@ var asyncChangeFriendStatus = function (buttonAction, friendId) {
                             payload: { id: data.data.viewUserId },
                         })];
                 case 4:
-                    err_1 = _a.sent();
+                    err_2 = _a.sent();
                     return [3 /*break*/, 5];
                 case 5: return [2 /*return*/];
             }

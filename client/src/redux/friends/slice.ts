@@ -134,13 +134,6 @@ FriendButton values:
    - Delete Request
 */
 
-// export function changeFriendStatus(action: string, id: number) {
-//     return {
-//         type: `/friends-wannabees/${action}`,
-//         payload: { id },
-//     };
-// }
-
 // export function receiveFriendStatus(friends: Array<FriendProfile>) {
 //     return {
 //         type: `/friends-wannabees/receive`,
@@ -164,6 +157,32 @@ type FriendThunk = ThunkAction<void, RootState, null, Action<ActionType>>;
       (this means that it should be an object 
       that must have a `type` field.) Action type is defined in the redux typings.
   */
+
+export const asyncReceiveFriendStatus =
+    (abort: boolean): FriendThunk =>
+    async (dispatch: Dispatch) => {
+        console.log("I am in asyncReceiveFriendStatus");
+        try {
+            // handle fetch success
+            const respBody = await fetch("/getFriends.json");
+            const data = await respBody.json();
+            console.log("Data from /getFriends.json", data);
+            //
+            if (!abort) {
+                // We want to despatch the data
+                //  dispatch(receiveFriendStatus(data.payload));
+                return dispatch({
+                    type: `/friends-wannabees/receive`,
+                    payload: { friends: data.payload },
+                });
+            } else {
+                console.log("ignore don't run a a state update");
+            }
+        } catch (err) {
+            // handle fetch failure
+            console.log("Error", err);
+        }
+    };
 
 export const asyncChangeFriendStatus =
     (

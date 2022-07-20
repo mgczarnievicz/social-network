@@ -9,6 +9,7 @@ import {
     changeFriendStatus,
     receiveFriendStatus,
     asyncChangeFriendStatus,
+    asyncReceiveFriendStatus,
 } from "./redux/friends/slice";
 
 // export interface FriendProfile extends ProfileInfo {
@@ -43,32 +44,29 @@ export default function FriendsAndWannabees() {
 
     console.log("I am in Friends & Wannabees");
 
-    // Just so we can copile
-    // const actualFriends: Array<FriendProfile | null> = [];
-    // const wannabees: Array<FriendProfile | null> = [];
-    // get all the friends
     useEffect(() => {
         /* 
         1. Make a fetch request to gets my friends and wannabees.
         2. dispatch an action creator and pass the data recived.
         */
         let abort = false;
-        (async () => {
-            try {
-                const respBody = await fetch("/getFriends.json");
-                const data = await respBody.json();
-                console.log("Data from /getFriends.json", data);
-                //
-                if (!abort) {
-                    // We want to despatch the data
-                    dispatch(receiveFriendStatus(data.payload));
-                } else {
-                    console.log("ignore don't run a a state update");
-                }
-            } catch (err) {
-                console.log("Error", err);
-            }
-        })(); // this closes the async iife
+        dispatch(asyncReceiveFriendStatus(abort));
+        // (async () => {
+        //     try {
+        //         const respBody = await fetch("/getFriends.json");
+        //         const data = await respBody.json();
+        //         console.log("Data from /getFriends.json", data);
+        //         //
+        //         if (!abort) {
+        //             // We want to despatch the data
+        //             dispatch(receiveFriendStatus(data.payload));
+        //         } else {
+        //             console.log("ignore don't run a a state update");
+        //         }
+        //     } catch (err) {
+        //         console.log("Error", err);
+        //     }
+        // })(); // this closes the async iife
         return () => {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
@@ -86,26 +84,6 @@ export default function FriendsAndWannabees() {
         console.log("Clicked, button action", buttonAction);
 
         dispatch(asyncChangeFriendStatus(buttonAction, friendId));
-
-        // fetch("/api/setFriendshipStatus", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //         button: buttonAction,
-        //         viewUserId: friendId,
-        //     }),
-        // })
-        //     .then((resp) => resp.json())
-        //     .then((data) => {
-        //         console.log("Data from post setFriendshipStatus", data);
-
-        //         dispatch(
-        //             changeFriendStatus(
-        //                 DictionaryButtonAction[buttonAction],
-        //                 data.data.viewUserId
-        //             )
-        //         );
-        //     });
     };
 
     console.log("actualFriends", actualFriends);

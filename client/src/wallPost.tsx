@@ -14,7 +14,7 @@ interface WallProps {
     wallUserId: number;
 }
 
-export default function Wall(props: WallProps) {
+export default function WallPost(props: WallProps) {
     const [post, setPost] = useState([]);
 
     function clickLick() {
@@ -23,10 +23,12 @@ export default function Wall(props: WallProps) {
 
     useEffect(() => {
         let abort = false;
+        console.log("Props in Wall Post:", props);
+
         (async () => {
             try {
                 const respBody = await fetch(
-                    `/getPost?from=${props.wallUserId}`
+                    `/getPost/?from=${props.wallUserId}`
                 );
                 const data = await respBody.json();
                 console.log("Data from /getPost", data);

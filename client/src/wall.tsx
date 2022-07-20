@@ -1,6 +1,6 @@
 import React from "react";
 import { ProgressPlugin } from "webpack";
-import WriteWall from "./writeWall";
+import WallWrite from "./wallWrite";
 import WallPost from "./wallPost";
 
 interface WallProps {
@@ -8,9 +8,11 @@ interface WallProps {
 }
 
 export default function Wall(props: WallProps) {
+    console.log("Props in function Wall:", props);
+
     return (
         <>
-            <WriteWall wallUserId={props.wallUserId} />
+            <WallWrite wallUserId={props.wallUserId} />
             <WallPost wallUserId={props.wallUserId} />
         </>
     );

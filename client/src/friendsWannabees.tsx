@@ -49,7 +49,6 @@ export default function FriendsAndWannabees() {
     useEffect(() => {
         /* 
         1. Make a fetch request to gets my friends and wannabees.
-    
         2. dispatch an action creator and pass the data recived.
         */
         let abort = false;

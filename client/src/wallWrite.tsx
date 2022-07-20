@@ -10,7 +10,7 @@ interface postIfo {
     post: string;
 }
 
-export default function Wall(props: WriteWallProps) {
+export default function WallWrite(props: WriteWallProps) {
     const [post, setPost] = useState<string | null>(null);
 
     async function submitPost() {

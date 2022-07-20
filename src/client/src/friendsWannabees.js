@@ -82,7 +82,6 @@ function FriendsAndWannabees() {
     (0, react_1.useEffect)(function () {
         /*
         1. Make a fetch request to gets my friends and wannabees.
-    
         2. dispatch an action creator and pass the data recived.
         */
         var abort = false;

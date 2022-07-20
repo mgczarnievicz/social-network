@@ -20,6 +20,7 @@ const {
     addFriendship,
     addPost,
     searchFriendshipByUserId,
+    searchPostByUserId,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -461,4 +462,12 @@ exports.addWallPost = (
         });
 };
 
-exports.searchForPost = (wallUserId: number) => {};
+exports.searchForPost = (wallUserId: number) => {
+    // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
+    searchPostByUserId(wallUserId)
+        .then((result: QueryResult) => {
+            console.log("result from searchPostByUser Id", result.rows);
+            // Here I have to map to put nice the date.
+        })
+        .catch((err: QueryResult) => err);
+};

@@ -229,3 +229,13 @@ exports.addPost = (
     const param = [walluser_id, writer_id, post];
     return db.query(q, param);
 };
+
+exports.searchPostByUserId = (userId: number): QueryResult => {
+    const q = `SELECT * FROM wall_posts 
+        WHERE walluser_id = $1 OR
+        writer_id = $1
+        LIMIT 15 `;
+
+    const param = [userId];
+    return db.query(q, param);
+};

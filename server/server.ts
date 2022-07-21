@@ -447,7 +447,7 @@ app.post("/setBioInfo.json", (req, res) => {
     );
 
     upDateBio(req.session.userId, req.body.data)
-        .then((bio: string) => {
+        .then((bio: Array<string>) => {
             console.log("Respond from process:", bio);
 
             res.json({

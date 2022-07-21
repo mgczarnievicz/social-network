@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 interface WriteWallProps {
-    wallUserId: number;
+    wallUserId?: number;
 }
 
 interface postIfo {

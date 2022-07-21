@@ -12,16 +12,19 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
+var react_redux_1 = require("react-redux");
 function ProfilePhoto(props) {
-    // const userInfo: ProfileInfoWBio = useSelector(
-    //     (state: RootState): ProfileInfoWBio => state?.user
-    // );
-    var userInfo = {
-        name: "maria",
-        surname: "Inciarte",
-        photourl: "",
-    };
-    var altName = "".concat(userInfo.name, " ").concat(userInfo.surname);
-    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "profilePhoto" }, { children: (0, jsx_runtime_1.jsx)("img", { src: userInfo.photourl || "/defaultProfile.png", alt: altName, onClick: props.toggleUploader ? function () { return props.toggleUploader(); } : null }) })));
+    var altName;
+    var url;
+    if (props.name) {
+        altName = "".concat(props.name, " ").concat(props.surname);
+        url = props.photourl;
+    }
+    else {
+        var userInfo = (0, react_redux_1.useSelector)(function (state) { return state === null || state === void 0 ? void 0 : state.user; });
+        altName = "".concat(userInfo.name, " ").concat(userInfo.surname);
+        url = userInfo.photourl;
+    }
+    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "profilePhoto" }, { children: (0, jsx_runtime_1.jsx)("img", { src: url || "/defaultProfile.png", alt: altName, onClick: props.toggleUploader ? function () { return props.toggleUploader(); } : null }) })));
 }
 exports.default = ProfilePhoto;

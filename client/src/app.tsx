@@ -28,12 +28,9 @@ export default function App(props: EmptyProps) {
     const dispatch = useDispatch();
     const [uploaderVisible, setUploaderVisible] = useState(false);
     const userInfo = useSelector((state: RootState) => state.user);
-    console.log("In App", userInfo);
 
     useEffect(() => {
         let abort = false;
-        console.log("I am in the useEffect in App");
-
         dispatch(asyncReceiveUser(abort));
         return () => {
             console.log("cleanup running");
@@ -52,13 +49,6 @@ export default function App(props: EmptyProps) {
         dispatch(userUpdatePhotoUrl(url));
     }
 
-    function upDateBio(newBio: string) {
-        // Here we want to update the bio. This will be done in BIO!
-        console.log("Getting data from edit Bio", newBio);
-        const bioToSet = newBio.split("\n");
-        dispatch(userUpdateBio(bioToSet));
-        // console.log("logging this after bio", this);
-    }
     function logOutFunction() {
         fetch("/logout.json")
             .then((resp) => resp.json())
@@ -92,14 +82,11 @@ export default function App(props: EmptyProps) {
                             Log Out
                         </Link>
                     </nav>
-                    {/* <ProfilePhoto toggleUploader={toggleUploader} /> */}
+                    <ProfilePhoto toggleUploader={toggleUploader} />
                 </header>
                 <Switch>
                     <Route exact path="/">
-                        <Profile
-                            toggleUploader={toggleUploader}
-                            upDateBio={upDateBio}
-                        />
+                        <Profile toggleUploader={toggleUploader} />
                     </Route>
                     <Route path="/chat">
                         <Chat />
@@ -110,7 +97,7 @@ export default function App(props: EmptyProps) {
                     <Route path="/user/:idUserToSee">
                         <OtherProfile />
                     </Route>
-                    <Route path="/news">{/* <Wall /> */}</Route>
+                    <Route path="/news"><Wall /></Route>
                     <Route path="/friends">
                         <FriendsAndWannabees />
                     </Route>

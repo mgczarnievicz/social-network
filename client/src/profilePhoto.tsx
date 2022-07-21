@@ -3,26 +3,32 @@ import { RootState } from "./redux/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { ProfileInfoWBio } from "./typesClient";
 
-// REVIEW. when changing to global state, this should go. I am passing only the things that I need
 interface ProfilePhotoProps {
+    name?: string;
+    surname?: string;
+    photourl?: string;
     toggleUploader?: Function;
 }
 
 export default function ProfilePhoto(props: ProfilePhotoProps) {
-    // const userInfo: ProfileInfoWBio = useSelector(
-    //     (state: RootState): ProfileInfoWBio => state?.user
-    // );
+    let altName;
+    let url;
+    if (props.name) {
+        altName = `${props.name} ${props.surname}`;
+        url = props.photourl;
+    } else {
+        const userInfo: ProfileInfoWBio = useSelector(
+            (state: RootState): ProfileInfoWBio => state?.user
+        );
 
-    const userInfo = {
-        name: "maria",
-        surname: "Inciarte",
-        photourl: "",
-    };
-    const altName = `${userInfo.name} ${userInfo.surname}`;
+        altName = `${userInfo.name} ${userInfo.surname}`;
+        url = userInfo.photourl;
+    }
+
     return (
         <div className="profilePhoto">
             <img
-                src={userInfo.photourl || "/defaultProfile.png"}
+                src={url || "/defaultProfile.png"}
                 alt={altName}
                 onClick={
                     props.toggleUploader ? () => props.toggleUploader() : null

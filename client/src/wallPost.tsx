@@ -11,7 +11,7 @@ library.add(faHeart, faComments);
 //<FontAwesomeIcon icon="fa-solid fa-heart" />
 
 interface WallProps {
-    wallUserId: number;
+    wallUserId?: number;
 }
 
 export default function WallPost(props: WallProps) {

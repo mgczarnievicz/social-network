@@ -259,11 +259,10 @@ exports.upDateBio = (userId: number, newBio: string) => {
         .then((result: QueryResult) => {
             console.log("Query result", result.rows[0]);
 
-            /* FIXME! hice trampa */
-            //  userInfo.bio = userInfo.bio.split("\n");
-            console.log("typeof result.rows[0].bio", typeof result.rows[0].bio);
+            const bioArray = result.rows[0].bio.split("\n");
+            console.log("bioArray", bioArray);
 
-            return result.rows[0].bio;
+            return bioArray;
         })
         .catch((err: QueryResult) => err);
 };

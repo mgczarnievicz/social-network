@@ -8,21 +8,13 @@ import { ProfileInfoWBio } from "./typesClient";
 
 interface ProfileProps {
     toggleUploader?: Function;
-    upDateBio?: Function;
 }
 
 export default function Profile(props: ProfileProps) {
     console.log("log the props in Profile");
-    // const userInfo: ProfileInfoWBio = useSelector(
-    //     (state: RootState) => state.user
-    // );
-
-    const userInfo = {
-        name: "maria",
-        surname: "Inciarte",
-        photourl: "",
-        bio: "",
-    };
+    const userInfo: ProfileInfoWBio = useSelector(
+        (state: RootState) => state.user
+    );
 
     return (
         <div className="profile-component">
@@ -31,7 +23,7 @@ export default function Profile(props: ProfileProps) {
                 <h1>
                     Welcome {userInfo.name} {userInfo.surname}
                 </h1>
-                {/* <BioEditor upDateBio={props.upDateBio} /> */}
+                <BioEditor />
             </div>
         </div>
     );

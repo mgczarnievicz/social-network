@@ -74,7 +74,11 @@ export default function OtherProfile() {
                 <>
                     <div className="profile-component">
                         <div className="photo-friendButton">
-                            <ProfilePhoto />
+                            <ProfilePhoto
+                                name={user.name}
+                                surname={user.surname}
+                                photourl={user.photourl}
+                            />
                             <FriendButton viewUser={user.id} />
                         </div>
 

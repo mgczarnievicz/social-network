@@ -8,6 +8,6 @@ var wallWrite_1 = __importDefault(require("./wallWrite"));
 var wallPost_1 = __importDefault(require("./wallPost"));
 function Wall(props) {
     console.log("Props in function Wall:", props);
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(wallWrite_1.default, { wallUserId: props.wallUserId }), (0, jsx_runtime_1.jsx)(wallPost_1.default, { wallUserId: props.wallUserId })] }));
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(wallWrite_1.default, {}), (0, jsx_runtime_1.jsx)(wallPost_1.default, {})] }));
 }
 exports.default = Wall;

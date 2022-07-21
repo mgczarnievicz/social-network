@@ -205,7 +205,6 @@ exports.getUserInfo = function (userId) {
         .then(function (result) {
         var _a = result.rows[0], password = _a.password, email = _a.email, userInfo = __rest(_a, ["password", "email"]);
         userInfo.bio = userInfo.bio.split("\n");
-        console.log("Data to send in getUserInfo", userInfo);
         return userInfo;
     })
         .catch(function (err) { return err; });
@@ -215,10 +214,9 @@ exports.upDateBio = function (userId, newBio) {
     return upDateBioByUserId(userId, newBio)
         .then(function (result) {
         console.log("Query result", result.rows[0]);
-        /* FIXME! hice trampa */
-        //  userInfo.bio = userInfo.bio.split("\n");
-        console.log("typeof result.rows[0].bio", typeof result.rows[0].bio);
-        return result.rows[0].bio;
+        var bioArray = result.rows[0].bio.split("\n");
+        console.log("bioArray", bioArray);
+        return bioArray;
     })
         .catch(function (err) { return err; });
 };

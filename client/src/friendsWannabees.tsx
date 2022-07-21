@@ -58,7 +58,7 @@ export default function FriendsAndWannabees() {
     console.log("wannabees", wannabees);
 
     return (
-        <>
+        <div className="friends-wannabees-container">
             <h1>Friends</h1>
             <div className="friends-wannabees">
                 {actualFriends &&
@@ -68,15 +68,18 @@ export default function FriendsAndWannabees() {
                                 key={friend.id}
                                 className="friends-wannabees-profile"
                             >
-                                <img
-                                    src={
-                                        friend.photourl || "/defaultProfile.png"
-                                    }
-                                    alt={`${friend.name} ${friend.surname}`}
-                                />
-                                <h2>
-                                    {friend.name} {friend.surname}
-                                </h2>
+                                <div>
+                                    <img
+                                        src={
+                                            friend.photourl ||
+                                            "/defaultProfile.png"
+                                        }
+                                        alt={`${friend.name} ${friend.surname}`}
+                                    />
+                                    <h3>
+                                        {friend.name} {friend.surname}
+                                    </h3>
+                                </div>
                                 <button
                                     onClick={() =>
                                         buttonHandler("Unfriend", friend.id)
@@ -97,41 +100,45 @@ export default function FriendsAndWannabees() {
                                 key={wannabee.id}
                                 className="friends-wannabees-profile  wannabees-profile"
                             >
-                                <img
-                                    src={
-                                        wannabee.photourl ||
-                                        "/defaultProfile.png"
-                                    }
-                                    alt={`${wannabee.name} ${wannabee.surname}`}
-                                />
-                                <h2>
-                                    {wannabee.name} {wannabee.surname}
-                                </h2>
-                                <button
-                                    onClick={() =>
-                                        buttonHandler(
-                                            "Accept Friend",
-                                            wannabee.id
-                                        )
-                                    }
-                                >
-                                    Accept Friend
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        buttonHandler(
-                                            "Delete Request",
-                                            wannabee.id
-                                        )
-                                    }
-                                    className="delete-request"
-                                >
-                                    Delete Request
-                                </button>
+                                <div>
+                                    <img
+                                        src={
+                                            wannabee.photourl ||
+                                            "/defaultProfile.png"
+                                        }
+                                        alt={`${wannabee.name} ${wannabee.surname}`}
+                                    />
+                                    <h3>
+                                        {wannabee.name} {wannabee.surname}
+                                    </h3>
+                                </div>
+                                <div>
+                                    <button
+                                        onClick={() =>
+                                            buttonHandler(
+                                                "Accept Friend",
+                                                wannabee.id
+                                            )
+                                        }
+                                    >
+                                        Accept Friend
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            buttonHandler(
+                                                "Delete Request",
+                                                wannabee.id
+                                            )
+                                        }
+                                        className="delete-request"
+                                    >
+                                        Delete Request
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}
             </div>
-        </>
+        </div>
     );
 }

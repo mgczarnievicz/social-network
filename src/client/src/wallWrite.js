@@ -49,8 +49,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
+var react_redux_1 = require("react-redux");
 function WallWrite(props) {
     var _a = (0, react_1.useState)(null), post = _a[0], setPost = _a[1];
+    var userInfo = (0, react_redux_1.useSelector)(function (state) { return state.user; });
+    var wallId = props.wallUserId || userInfo.id;
     function submitPost() {
         return __awaiter(this, void 0, void 0, function () {
             var responds, data, err_1;
@@ -64,7 +67,7 @@ function WallWrite(props) {
                         return [4 /*yield*/, fetch("/wallPost.json", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ wallUserId: props.wallUserId, post: post }),
+                                body: JSON.stringify({ wallUserId: wallId, post: post }),
                             })];
                     case 2:
                         responds = _a.sent();

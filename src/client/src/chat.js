@@ -26,6 +26,6 @@ function Chat() {
             event.target.value = "";
         }
     };
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome to chat" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "chat-container" }, { children: (0, jsx_runtime_1.jsx)("p", { children: "Chat Messages" }) })), (0, jsx_runtime_1.jsx)("textarea", { placeholder: "Write a new Message", onKeyDown: keyCheck })] }));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "container-main-width" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome to chat" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "chat-container" }, { children: (0, jsx_runtime_1.jsx)("p", { children: "Chat Messages" }) })), (0, jsx_runtime_1.jsx)("textarea", { placeholder: "Write a new Message", onKeyDown: keyCheck })] })));
 }
 exports.default = Chat;

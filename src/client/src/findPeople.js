@@ -112,7 +112,7 @@ function FindPeople() {
     function seeFriendProfile(idUserToSee) {
         history.push("/user/".concat(idUserToSee));
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-container" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-inputs" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("input", { onChange: function (e) { return setSearch(e.target.value); }, value: searchInput }), !searchInput && (0, jsx_runtime_1.jsx)("h1", { children: "See the newest Users!" })] })), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friend-container" }, { children: friends &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-container container-main-width" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-inputs" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("input", { onChange: function (e) { return setSearch(e.target.value); }, value: searchInput }), !searchInput && (0, jsx_runtime_1.jsx)("h1", { children: "See the newest Users!" })] })), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friend-container" }, { children: friends &&
                     friends.map(function (friend, i) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friend-info", onClick: function () {
                                 seeFriendProfile(friend.id);

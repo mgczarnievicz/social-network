@@ -57,7 +57,7 @@ export default function FindPeople() {
     }
 
     return (
-        <div className="search-container">
+        <div className="search-container container-main-width">
             <div className="search-inputs">
                 <h1>Friends</h1>
 

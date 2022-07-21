@@ -222,8 +222,20 @@ module.exports.newGeneralMsg = (
     senderId: number,
     message: string
 ): QueryResult<UserBasicInfo> => {
-    const q = `INSERT INTO users (name, surname, email, password)
-    VALUES ($1, $2, $3, $4 ) RETURNING id, name, surname`;
+    const q = `INSERT INTO message_general (sender, message)
+    VALUES ($1, $2 ) RETURNING * `;
+
+    const param = [senderId, message];
+    return db.query(q, param);
+};
+
+module.exports.getLastMsgGeneralMsg = (
+    senderId: number,
+    message: string
+): QueryResult<UserBasicInfo> => {
+    const q = `SELECT * FROM message_general
+    ORDER DEC BY  send_at
+    LIMIT 5`;
 
     const param = [senderId, message];
     return db.query(q, param);
@@ -245,12 +257,40 @@ exports.addPost = (
     return db.query(q, param);
 };
 
+// exports.searchPostByUserId = (userId: number): QueryResult => {
+//     const q = `SELECT * FROM wall_posts
+//         WHERE walluser_id = $1 OR
+//         writer_id = $1
+//         LIMIT 10 `;
+
+//     const param = [userId];
+//     return db.query(q, param);
+// };
+
 exports.searchPostByUserId = (userId: number): QueryResult => {
-    const q = `SELECT * FROM wall_posts 
-        WHERE walluser_id = $1 OR
-        writer_id = $1
-        LIMIT 15 `;
+    const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at 
+                FROM wall_posts
+                INNER JOIN users AS walluser 
+                ON walluser_id=walluser.id 
+                INNER JOIN users AS wallwriter 
+                ON wall_posts.writer_id=wallwriter.id 
+                WHERE writer_id = $1
+                ORDER BY wall_posts.created_at DESC
+                LIMIT 5`;
 
     const param = [userId];
     return db.query(q, param);
 };
+
+/* 
+SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at 
+FROM wall_posts
+INNER JOIN users AS walluser 
+ON walluser_id=walluser.id 
+INNER JOIN users AS wallwriter 
+ON wall_posts.writer_id=wallwriter.id 
+WHERE writer_id = 1
+ORDER BY wall_posts.created_at DESC
+LIMIT 5
+
+*/

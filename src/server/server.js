@@ -7,6 +7,11 @@ var express_1 = __importDefault(require("express"));
 var compression_1 = __importDefault(require("compression"));
 var cookie_session_1 = __importDefault(require("cookie-session"));
 var path_1 = __importDefault(require("path"));
+// import {
+//     CookieSessionRequest,
+//     CookieSessionObject,
+// } from "@types/cookie-session";
+// import http from "http";
 // This is a hack to make Multer available in the Express namespace
 var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
@@ -18,14 +23,30 @@ var app = (0, express_1.default)();
 // REVIEW: this! I can only have import!
 // const server = http.Server(app);
 // const io = require ("socket.io")(server, {allowRequest:(req, callback)=>callback(null, req.header.refer.startsWith("http://localhost:300"))})
+var server = require("http").Server(app);
+var io = require("socket.io")(server, {
+    allowRequest: function (req, callback) {
+        return callback(null, req.headers.referer.startsWith("http://localhost:3000"));
+    },
+});
+// import { Request } from "aws-sdk";
+// const httpServer = createServer();
+// const io = new Server(httpServer, {
+//  allowRequest: (req, callback) =>
+//     callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+// });
 // Bc we are deploying we need to define where to get the value.
 var COOKIE_SECRET = process.env.COOKIE_SECRET || require("./secrets").COOKIE_SECRET;
 app.use((0, compression_1.default)());
-app.use((0, cookie_session_1.default)({
+var cookieSessionMiddleware = (0, cookie_session_1.default)({
     secret: COOKIE_SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 15,
     sameSite: true,
-}));
+});
+// io.use((socket: Socket, next: NextFunction) => {
+//     cookieSessionMiddleware(socket.request, socket.request.res, next);
+// });
+app.use(cookieSessionMiddleware);
 var storage = multer_1.default.diskStorage({
     destination: function (req, file, callback) {
         callback(null, path_1.default.join(__dirname, "uploads"));
@@ -170,8 +191,9 @@ app.get("/api/friendshipStatus/:viewUser", function (req, res) {
 });
 app.get("/getPost/", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Get Post:", req.query);
-    searchForPost(req.query.search, req.session.userId)
+    searchForPost(req.query.from, req.session.userId)
         .then(function (posts) {
+        console.log("In server what I am going to send to client", posts);
         res.json({
             status: "Success",
             posts: posts,
@@ -407,32 +429,47 @@ app.post("/wallPost.json", function (req, res) {
 app.get("*", function (req, res) {
     res.sendFile(path_1.default.join(__dirname, "..", "client", "index.html"));
 });
-// bc socket can't use an express server we need to have the listening to be done
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
+// bc socket can't use an express server we need to have the listening to be done
+// server.listen(process.env.PORT || 3001, function () {
+//     console.log("I'm listening.");
+// });
 /* -------------------------------------------------------------------------------
                                     SOCKET
 ---------------------------------------------------------------------------------*/
-// io.on("connection", function (socket) {
-//     if (!socket.request.session.userId) {
-//         return socket.disconnect(true);
-//     }
-//     const userId = socket.request.session.userId;
-//     console.log(
-//         `User with the id: ${userId} and socket id ${socket.id} just connected.`
-//     );
-//     socket.emit("last-10-messages", {
-//         messages: ["some stuff", "Locket"],
-//     });
-//     socket.on("new-message", (newMsg: string) => {
-//         console.log("New Message", newMsg);
-//         /*
-//         1. we want to know who send the message
-//         2. we need to add this msg to the chats table.
-//         3. we want to retrieved user information about the author.
-//         4. compose a message object that contains user info and message
-//         5. send back to all connect socket, that there is a new message
-//         */
-//     });
-// });
+io.on("connection", function (socket) {
+    var cookieString = socket.request.headers.cookie;
+    // type SessionType = CookieSessionObject | null | undefined;
+    var req = {
+        connection: { encrypted: false },
+        headers: { cookie: cookieString },
+        session: {},
+    };
+    var res = { getHeader: function () { }, setHeader: function () { } };
+    //
+    // cookieSessionMiddleware(req, res, () => {
+    //     console.log(req.session);
+    // });
+    // if (!socket.request.session.userId) {
+    //     return socket.disconnect(true);
+    // }
+    // const userId = socket.request.session.userId;
+    // console.log(
+    //     `User with the id: ${userId} and socket id ${socket.id} just connected.`
+    // );
+    socket.emit("last-10-messages", {
+        messages: ["some stuff", "Locket"],
+    });
+    socket.on("new-message", function (newMsg) {
+        console.log("New Message", newMsg);
+        /*
+        1. we want to know who send the message
+        2. we need to add this msg to the chats table.
+        3. we want to retrieved user information about the author.
+        4. compose a message object that contains user info and message
+        5. send back to all connect socket, that there is a new message
+        */
+    });
+});

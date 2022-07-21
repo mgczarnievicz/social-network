@@ -104,6 +104,19 @@ exports.searchFriendshipByUserId = function (userId) {
     return db.query(q, param);
 };
 /* ---------------------------------------------------------------
+                    message TABLE
+----------------------------------------------------------------*/
+module.exports.newGeneralMsg = function (senderId, message) {
+    var q = "INSERT INTO message_general (sender, message)\n    VALUES ($1, $2 ) RETURNING * ";
+    var param = [senderId, message];
+    return db.query(q, param);
+};
+module.exports.getLastMsgGeneralMsg = function (senderId, message) {
+    var q = "SELECT * FROM message_general\n    ORDER DEC BY  send_at\n    LIMIT 5";
+    var param = [senderId, message];
+    return db.query(q, param);
+};
+/* ---------------------------------------------------------------
                   WALL POST TABLE
 ----------------------------------------------------------------*/
 exports.addPost = function (walluser_id, writer_id, post) {
@@ -111,8 +124,28 @@ exports.addPost = function (walluser_id, writer_id, post) {
     var param = [walluser_id, writer_id, post];
     return db.query(q, param);
 };
+// exports.searchPostByUserId = (userId: number): QueryResult => {
+//     const q = `SELECT * FROM wall_posts
+//         WHERE walluser_id = $1 OR
+//         writer_id = $1
+//         LIMIT 10 `;
+//     const param = [userId];
+//     return db.query(q, param);
+// };
 exports.searchPostByUserId = function (userId) {
-    var q = "SELECT * FROM wall_posts \n        WHERE walluser_id = $1 OR\n        writer_id = $1\n        LIMIT 15 ";
+    var q = "SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at \n                FROM wall_posts\n                INNER JOIN users AS walluser \n                ON walluser_id=walluser.id \n                INNER JOIN users AS wallwriter \n                ON wall_posts.writer_id=wallwriter.id \n                WHERE writer_id = $1\n                ORDER BY wall_posts.created_at DESC\n                LIMIT 5";
     var param = [userId];
     return db.query(q, param);
 };
+/*
+SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at
+FROM wall_posts
+INNER JOIN users AS walluser
+ON walluser_id=walluser.id
+INNER JOIN users AS wallwriter
+ON wall_posts.writer_id=wallwriter.id
+WHERE writer_id = 1
+ORDER BY wall_posts.created_at DESC
+LIMIT 5
+
+*/

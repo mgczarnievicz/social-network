@@ -18,7 +18,7 @@ export default function Chat() {
         }
     };
     return (
-        <>
+        <div className="container-main-width">
             <h1>Welcome to chat</h1>
             <div className="chat-container">
                 <p>Chat Messages</p>
@@ -27,6 +27,6 @@ export default function Chat() {
                 placeholder="Write a new Message"
                 onKeyDown={keyCheck}
             ></textarea>
-        </>
+        </div>
     );
 }

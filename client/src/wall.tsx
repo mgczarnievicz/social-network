@@ -9,9 +9,9 @@ export default function Wall(props: WallProps) {
     console.log("Props in function Wall:", props);
 
     return (
-        <>
+        <div className="container-main-width">
             <WallWrite />
             <WallPost />
-        </>
+        </div>
     );
 }

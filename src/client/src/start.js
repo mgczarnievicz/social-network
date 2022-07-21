@@ -15,14 +15,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
-var react_dom_1 = __importDefault(require("react-dom"));
-var welcome_1 = __importDefault(require("./welcome"));
-var app_1 = __importDefault(require("./app"));
 // To be able to use Global State
 var redux_1 = require("redux");
 var react_redux_1 = require("react-redux");
 var redux_thunk_1 = __importDefault(require("redux-thunk"));
 var reducer_1 = __importDefault(require("./redux/reducer"));
+var react_dom_1 = __importDefault(require("react-dom"));
+var welcome_1 = __importDefault(require("./welcome"));
+var app_1 = __importDefault(require("./app"));
 // import { init } from "./socket";
 var store = (0, redux_1.createStore)(reducer_1.default, (0, redux_1.applyMiddleware)(redux_thunk_1.default));
 // composeWithDevTools(applyMiddleware(immutableState.default()));

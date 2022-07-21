@@ -2,10 +2,10 @@ import express, { Express, Request, NextFunction } from "express";
 import compression from "compression";
 import cookieSession from "cookie-session";
 import path from "path";
-import {
-    CookieSessionRequest,
-    CookieSessionObject,
-} from "@types/cookie-session";
+// import {
+//     CookieSessionRequest,
+//     CookieSessionObject,
+// } from "@types/cookie-session";
 // import http from "http";
 
 // This is a hack to make Multer available in the Express namespace
@@ -58,7 +58,7 @@ const io = require("socket.io")(server, {
 // REVIEW. Merle like this suggest doc
 // import { createServer } from "http";
 import { Server, Socket } from "socket.io";
-import { Request } from "aws-sdk";
+// import { Request } from "aws-sdk";
 
 // const httpServer = createServer();
 // const io = new Server(httpServer, {
@@ -268,8 +268,9 @@ app.get("/getPost/", (req, res) => {
         req.query
     );
 
-    searchForPost(req.query.search, req.session.userId)
+    searchForPost(req.query.from, req.session.userId)
         .then((posts: []) => {
+            console.log("In server what I am going to send to client", posts);
             res.json({
                 status: "Success",
                 posts,
@@ -542,10 +543,13 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-// bc socket can't use an express server we need to have the listening to be done
-server.listen(process.env.PORT || 3001, function () {
+app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
+// bc socket can't use an express server we need to have the listening to be done
+// server.listen(process.env.PORT || 3001, function () {
+//     console.log("I'm listening.");
+// });
 
 /* -------------------------------------------------------------------------------
                                     SOCKET 
@@ -554,7 +558,7 @@ server.listen(process.env.PORT || 3001, function () {
 io.on("connection", function (socket: Socket) {
     let cookieString = socket.request.headers.cookie;
 
-    type SessionType = CookieSessionObject | null | undefined;
+    // type SessionType = CookieSessionObject | null | undefined;
     let req = {
         connection: { encrypted: false },
         headers: { cookie: cookieString },
@@ -562,9 +566,9 @@ io.on("connection", function (socket: Socket) {
     };
     let res = { getHeader: () => {}, setHeader: () => {} };
     //
-    cookieSessionMiddleware(req, res, () => {
-        console.log(req.session);
-    });
+    // cookieSessionMiddleware(req, res, () => {
+    //     console.log(req.session);
+    // });
 
     // if (!socket.request.session.userId) {
     //     return socket.disconnect(true);

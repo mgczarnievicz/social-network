@@ -17,7 +17,7 @@ export default function Profile(props: ProfileProps) {
     );
 
     return (
-        <div className="profile-component">
+        <div className="profile-component container-main-width">
             <ProfilePhoto toggleUploader={props.toggleUploader} />
             <div className="profile-info">
                 <h1>

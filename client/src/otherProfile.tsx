@@ -72,7 +72,7 @@ export default function OtherProfile() {
             )}
             {user && (
                 <>
-                    <div className="profile-component">
+                    <div className="profile-component container-main-width">
                         <div className="photo-friendButton">
                             <ProfilePhoto
                                 name={user.name}

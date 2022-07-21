@@ -459,11 +459,19 @@ exports.addWallPost = (
         });
 };
 
-exports.searchForPost = (wallUserId: number) => {
+exports.searchForPost = (wallUserId: number, myUserId: number) => {
     // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
-    searchPostByUserId(wallUserId)
+    console.log("The Wall I am going to search:", wallUserId);
+    console.log("I am myUserId:", myUserId);
+
+    return searchPostByUserId(wallUserId)
         .then((result: QueryResult) => {
             console.log("result from searchPostByUser Id", result.rows);
+            result.rows.map(
+                (each) =>
+                    (each.created_at = each.created_at.toLocaleString("en-GB"))
+            );
+            return result.rows;
             // Here I have to map to put nice the date.
         })
         .catch((err: QueryResult) => err);

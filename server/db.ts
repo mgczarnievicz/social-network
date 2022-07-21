@@ -215,6 +215,21 @@ exports.searchFriendshipByUserId = (userId: number): QueryResult => {
 };
 
 /* ---------------------------------------------------------------
+                    message TABLE
+----------------------------------------------------------------*/
+
+module.exports.newGeneralMsg = (
+    senderId: number,
+    message: string
+): QueryResult<UserBasicInfo> => {
+    const q = `INSERT INTO users (name, surname, email, password)
+    VALUES ($1, $2, $3, $4 ) RETURNING id, name, surname`;
+
+    const param = [senderId, message];
+    return db.query(q, param);
+};
+
+/* ---------------------------------------------------------------
                   WALL POST TABLE
 ----------------------------------------------------------------*/
 exports.addPost = (

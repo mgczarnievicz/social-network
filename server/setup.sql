@@ -64,6 +64,22 @@ CREATE TABLE wall_comments_likes(
 );
 
 
+CREATE TABLE message_general(
+    id SERIAL PRIMARY KEY,
+    sender INT REFERENCES users(id) NOT NULL,
+    message TEXT
+    send_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE message_individual(
+    id SERIAL PRIMARY KEY,
+    sender INT REFERENCES users(id) NOT NULL,
+    reciever INT REFERENCES users(id) NOT NULL
+    message TEXT
+    send_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 
 /* 
 For Delet table:

@@ -1,19 +1,22 @@
-import express, { Express } from "express";
+import express, { Express, Request, NextFunction } from "express";
 import compression from "compression";
 import cookieSession from "cookie-session";
 import path from "path";
-import http from "http";
+import {
+    CookieSessionRequest,
+    CookieSessionObject,
+} from "@types/cookie-session";
+// import http from "http";
+
 // This is a hack to make Multer available in the Express namespace
 import multer, { FileFilterCallback, Multer } from "multer";
 
-type DestinationCallback = (error: Error | null, destination: string) => void;
-type FileNameCallback = (error: Error | null, filename: string) => void;
+import { QueryResult } from "pg"; //This bc I need the type there.
+import { read } from "fs";
 
 // import uidSafe from "uid-safe";
 const uidSafe = require("uid-safe");
 const s3 = require("./s3");
-
-// import bodyParser from "body-parser";
 
 // Importing the Type of data
 import {
@@ -22,8 +25,6 @@ import {
     UserBasicInfo,
     FriendShipResponds,
 } from "./typesServer";
-import { QueryResult } from "pg"; //This bc I need the type there.
-import { read } from "fs";
 
 const {
     verifyingEmptyInputs,
@@ -49,6 +50,21 @@ const app = express();
 // REVIEW: this! I can only have import!
 // const server = http.Server(app);
 // const io = require ("socket.io")(server, {allowRequest:(req, callback)=>callback(null, req.header.refer.startsWith("http://localhost:300"))})
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req: Request, callback: Function) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+// REVIEW. Merle like this suggest doc
+// import { createServer } from "http";
+import { Server, Socket } from "socket.io";
+import { Request } from "aws-sdk";
+
+// const httpServer = createServer();
+// const io = new Server(httpServer, {
+//  allowRequest: (req, callback) =>
+//     callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+// });
 
 // Bc we are deploying we need to define where to get the value.
 const COOKIE_SECRET =
@@ -56,14 +72,20 @@ const COOKIE_SECRET =
 
 app.use(compression());
 
-app.use(
-    cookieSession({
-        secret: COOKIE_SECRET,
-        maxAge: 1000 * 60 * 60 * 24 * 15,
-        sameSite: true,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: COOKIE_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 15,
+    sameSite: true,
+});
 
+// io.use((socket: Socket, next: NextFunction) => {
+//     cookieSessionMiddleware(socket.request, socket.request.res, next);
+// });
+
+app.use(cookieSessionMiddleware);
+
+type DestinationCallback = (error: Error | null, destination: string) => void;
+type FileNameCallback = (error: Error | null, filename: string) => void;
 const storage = multer.diskStorage({
     destination(req, file: Express.Multer.File, callback: DestinationCallback) {
         callback(null, path.join(__dirname, "uploads"));
@@ -521,7 +543,7 @@ app.get("*", function (req, res) {
 });
 
 // bc socket can't use an express server we need to have the listening to be done
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
 
@@ -529,26 +551,40 @@ app.listen(process.env.PORT || 3001, function () {
                                     SOCKET 
 ---------------------------------------------------------------------------------*/
 
-// io.on("connection", function (socket) {
-//     if (!socket.request.session.userId) {
-//         return socket.disconnect(true);
-//     }
-//     const userId = socket.request.session.userId;
-//     console.log(
-//         `User with the id: ${userId} and socket id ${socket.id} just connected.`
-//     );
+io.on("connection", function (socket: Socket) {
+    let cookieString = socket.request.headers.cookie;
 
-//     socket.emit("last-10-messages", {
-//         messages: ["some stuff", "Locket"],
-//     });
-//     socket.on("new-message", (newMsg: string) => {
-//         console.log("New Message", newMsg);
-//         /*
-//         1. we want to know who send the message
-//         2. we need to add this msg to the chats table.
-//         3. we want to retrieved user information about the author.
-//         4. compose a message object that contains user info and message
-//         5. send back to all connect socket, that there is a new message
-//         */
-//     });
-// });
+    type SessionType = CookieSessionObject | null | undefined;
+    let req = {
+        connection: { encrypted: false },
+        headers: { cookie: cookieString },
+        session: {},
+    };
+    let res = { getHeader: () => {}, setHeader: () => {} };
+    //
+    cookieSessionMiddleware(req, res, () => {
+        console.log(req.session);
+    });
+
+    // if (!socket.request.session.userId) {
+    //     return socket.disconnect(true);
+    // }
+    // const userId = socket.request.session.userId;
+    // console.log(
+    //     `User with the id: ${userId} and socket id ${socket.id} just connected.`
+    // );
+
+    socket.emit("last-10-messages", {
+        messages: ["some stuff", "Locket"],
+    });
+    socket.on("new-message", (newMsg: string) => {
+        console.log("New Message", newMsg);
+        /*
+        1. we want to know who send the message
+        2. we need to add this msg to the chats table.
+        3. we want to retrieved user information about the author.
+        4. compose a message object that contains user info and message
+        5. send back to all connect socket, that there is a new message
+        */
+    });
+});

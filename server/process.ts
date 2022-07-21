@@ -245,7 +245,8 @@ exports.getUserInfo = (userId: number) => {
     console.log("Process GetUser Info id", userId);
     return getUserDataById(userId)
         .then((result: QueryResult) => {
-            const { password, ...userInfo } = result.rows[0];
+            const { password, email, ...userInfo } = result.rows[0];
+            userInfo.bio = userInfo.bio.split("\n");
             return userInfo;
         })
         .catch((err: QueryResult) => err);
@@ -259,10 +260,7 @@ exports.upDateBio = (userId: number, newBio: string) => {
             console.log("Query result", result.rows[0]);
 
             /* FIXME! hice trampa */
-            // let bio = result.rows[0].bio.replace("{", "[");
-            // bio = bio.replace("}", "]");
-
-            // console.log("bio", bio);
+            //  userInfo.bio = userInfo.bio.split("\n");
             console.log("typeof result.rows[0].bio", typeof result.rows[0].bio);
 
             return result.rows[0].bio;

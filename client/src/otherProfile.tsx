@@ -5,20 +5,10 @@ import ProfilePhoto from "./profilePhoto";
 import FriendButton from "./friendButton";
 import { ProfileInfoWBio } from "./typesClient";
 
-// interface FriendInfo {
-//     id: number;
-//     name: string;
-//     surname: string;
-//     photourl: string;
-//     bio?: [];
-// }
-
 export default function OtherProfile() {
     // DON'T TOUCH IF BREAKS FRIEND BUTTON
     const [user, setUser] = useState<ProfileInfoWBio | null>(null);
-
     const { idUserToSee } = useParams<Record<string, string | undefined>>();
-    // const { useParams } = useParams<{ useParams: string }>();
     const history = useHistory();
 
     useEffect(() => {
@@ -29,7 +19,6 @@ export default function OtherProfile() {
         /* 
         1. Figure out what is the userId we want to fetch information from.
         2. Make a fetch to server to get data (name, surname, photo, bio.)
-
         Browser browser to se the rout. -> we have a hook called use Params
         */
         let abort = false;
@@ -85,11 +74,7 @@ export default function OtherProfile() {
                 <>
                     <div className="profile-component">
                         <div className="photo-friendButton">
-                            <ProfilePhoto
-                                name={user.name}
-                                surname={user.surname}
-                                photoUrl={user.photourl}
-                            />
+                            <ProfilePhoto />
                             <FriendButton viewUser={user.id} />
                         </div>
 

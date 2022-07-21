@@ -128,6 +128,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                             required
                             ref="emailRef"
                             onChange={this.handleChange}
+                            key="email"
                         ></input>
                         <button onClick={this.handleSendEmail}>Submit</button>
                     </div>
@@ -147,6 +148,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                             required
                             ref="codeRef"
                             onChange={this.handleChange}
+                            key="code"
                         ></input>
                         <input
                             type="password"
@@ -155,6 +157,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                             required
                             ref="passwordRef"
                             onChange={this.handleChange}
+                            key="password"
                         ></input>
                         <button onClick={this.handleSetNewPassword}>
                             Submit

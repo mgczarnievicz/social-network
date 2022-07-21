@@ -13,7 +13,15 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 function ProfilePhoto(props) {
-    var altName = "".concat(props.name, " ").concat(props.surname);
-    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "profilePhoto" }, { children: (0, jsx_runtime_1.jsx)("img", { src: props.photoUrl || "/defaultProfile.png", alt: altName, onClick: props.toggleUploader ? function () { return props.toggleUploader(); } : null }) })));
+    // const userInfo: ProfileInfoWBio = useSelector(
+    //     (state: RootState): ProfileInfoWBio => state?.user
+    // );
+    var userInfo = {
+        name: "maria",
+        surname: "Inciarte",
+        photourl: "",
+    };
+    var altName = "".concat(userInfo.name, " ").concat(userInfo.surname);
+    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "profilePhoto" }, { children: (0, jsx_runtime_1.jsx)("img", { src: userInfo.photourl || "/defaultProfile.png", alt: altName, onClick: props.toggleUploader ? function () { return props.toggleUploader(); } : null }) })));
 }
 exports.default = ProfilePhoto;

@@ -19,18 +19,10 @@ var react_1 = require("react");
 var react_router_1 = require("react-router");
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
 var friendButton_1 = __importDefault(require("./friendButton"));
-// interface FriendInfo {
-//     id: number;
-//     name: string;
-//     surname: string;
-//     photourl: string;
-//     bio?: [];
-// }
 function OtherProfile() {
     // DON'T TOUCH IF BREAKS FRIEND BUTTON
     var _a = (0, react_1.useState)(null), user = _a[0], setUser = _a[1];
     var idUserToSee = (0, react_router_1.useParams)().idUserToSee;
-    // const { useParams } = useParams<{ useParams: string }>();
     var history = (0, react_router_1.useHistory)();
     (0, react_1.useEffect)(function () {
         console.log("Other Profile just render:", idUserToSee);
@@ -39,7 +31,6 @@ function OtherProfile() {
         /*
         1. Figure out what is the userId we want to fetch information from.
         2. Make a fetch to server to get data (name, surname, photo, bio.)
-
         Browser browser to se the rout. -> we have a hook called use Params
         */
         var abort = false;
@@ -83,7 +74,7 @@ function OtherProfile() {
             abort = true;
         };
     }, []);
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [!user && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("h1", { children: " User Not Found!" })] })), user && ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "photo-friendButton" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: user.name, surname: user.surname, photoUrl: user.photourl }), (0, jsx_runtime_1.jsx)(friendButton_1.default, { viewUser: user.id })] })), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: [user.name, " ", user.surname] }), user.bio &&
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [!user && ((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("h1", { children: " User Not Found!" })] })), user && ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "photo-friendButton" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, {}), (0, jsx_runtime_1.jsx)(friendButton_1.default, { viewUser: user.id })] })), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: [user.name, " ", user.surname] }), user.bio &&
                                     user.bio.map(function (bioSentence, i) {
                                         console.log("Bio ", bioSentence);
                                         return (0, jsx_runtime_1.jsx)("h3", { children: bioSentence }, i);

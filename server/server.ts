@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import compression from "compression";
 import cookieSession from "cookie-session";
 import path from "path";
-
+import http from "http";
 // This is a hack to make Multer available in the Express namespace
 import multer, { FileFilterCallback, Multer } from "multer";
 
@@ -46,6 +46,9 @@ const {
 
 // @ts-ignore
 const app = express();
+// REVIEW: this! I can only have import!
+// const server = http.Server(app);
+// const io = require ("socket.io")(server, {allowRequest:(req, callback)=>callback(null, req.header.refer.startsWith("http://localhost:300"))})
 
 // Bc we are deploying we need to define where to get the value.
 const COOKIE_SECRET =
@@ -145,9 +148,10 @@ app.get("/getUserInfo.json", (req, res) => {
         `-----------------------------------------------------------------------------\n\t Get User Info`
     );
     getUserInfo(req.session.userId).then((data: {}) => {
+        console.log("Data from getUserInfo", data);
         res.json({
             status: "Success",
-            data: data,
+            payload: data,
         });
     });
 });
@@ -516,6 +520,35 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
+// bc socket can't use an express server we need to have the listening to be done
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
+
+/* -------------------------------------------------------------------------------
+                                    SOCKET 
+---------------------------------------------------------------------------------*/
+
+// io.on("connection", function (socket) {
+//     if (!socket.request.session.userId) {
+//         return socket.disconnect(true);
+//     }
+//     const userId = socket.request.session.userId;
+//     console.log(
+//         `User with the id: ${userId} and socket id ${socket.id} just connected.`
+//     );
+
+//     socket.emit("last-10-messages", {
+//         messages: ["some stuff", "Locket"],
+//     });
+//     socket.on("new-message", (newMsg: string) => {
+//         console.log("New Message", newMsg);
+//         /*
+//         1. we want to know who send the message
+//         2. we need to add this msg to the chats table.
+//         3. we want to retrieved user information about the author.
+//         4. compose a message object that contains user info and message
+//         5. send back to all connect socket, that there is a new message
+//         */
+//     });
+// });

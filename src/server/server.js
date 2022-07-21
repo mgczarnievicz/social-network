@@ -15,6 +15,9 @@ var s3 = require("./s3");
 var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForPost = _a.searchForPost, getFriends = _a.getFriends;
 // @ts-ignore
 var app = (0, express_1.default)();
+// REVIEW: this! I can only have import!
+// const server = http.Server(app);
+// const io = require ("socket.io")(server, {allowRequest:(req, callback)=>callback(null, req.header.refer.startsWith("http://localhost:300"))})
 // Bc we are deploying we need to define where to get the value.
 var COOKIE_SECRET = process.env.COOKIE_SECRET || require("./secrets").COOKIE_SECRET;
 app.use((0, compression_1.default)());
@@ -90,9 +93,10 @@ app.get("/logout.json", function (req, res) {
 app.get("/getUserInfo.json", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Get User Info");
     getUserInfo(req.session.userId).then(function (data) {
+        console.log("Data from getUserInfo", data);
         res.json({
             status: "Success",
-            data: data,
+            payload: data,
         });
     });
 });
@@ -403,6 +407,32 @@ app.post("/wallPost.json", function (req, res) {
 app.get("*", function (req, res) {
     res.sendFile(path_1.default.join(__dirname, "..", "client", "index.html"));
 });
+// bc socket can't use an express server we need to have the listening to be done
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
+/* -------------------------------------------------------------------------------
+                                    SOCKET
+---------------------------------------------------------------------------------*/
+// io.on("connection", function (socket) {
+//     if (!socket.request.session.userId) {
+//         return socket.disconnect(true);
+//     }
+//     const userId = socket.request.session.userId;
+//     console.log(
+//         `User with the id: ${userId} and socket id ${socket.id} just connected.`
+//     );
+//     socket.emit("last-10-messages", {
+//         messages: ["some stuff", "Locket"],
+//     });
+//     socket.on("new-message", (newMsg: string) => {
+//         console.log("New Message", newMsg);
+//         /*
+//         1. we want to know who send the message
+//         2. we need to add this msg to the chats table.
+//         3. we want to retrieved user information about the author.
+//         4. compose a message object that contains user info and message
+//         5. send back to all connect socket, that there is a new message
+//         */
+//     });
+// });

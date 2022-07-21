@@ -381,3 +381,13 @@ label {
     border-radius: 12px;
     padding: 2px;
     align-self: center; */
+
+.chat-container {
+    width: 57vw;
+    height: 300px;
+    /* overflow-y: scroll; */
+    overflow: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column-reverse;
+}

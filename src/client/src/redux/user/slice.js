@@ -47,76 +47,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.asyncChangeFriendStatus = exports.asyncReceiveFriendStatus = exports.receiveFriendStatus = exports.changeFriendStatus = exports.DictionaryButtonAction = void 0;
-exports.DictionaryButtonAction = {
-    "Add Friend": "wannabee",
-    Unfriend: "delete",
-    "Cancel Request": "delete",
-    "Accept Friend": "accept",
-    "Delete Request": "delete",
+exports.asyncReceiveUser = exports.userUpdateBio = exports.userUpdatePhotoUrl = void 0;
+var initUser = {
+    id: null,
+    name: "",
+    surname: "",
+    photourl: "",
+    bio: [],
 };
-function friendsAndWannabeesReducer(friends, action) {
-    if (friends === void 0) { friends = []; }
+// typeof ProfileInfoWBio
+function userReducer(user, action) {
+    if (user === void 0) { user = initUser; }
     switch (action.type) {
-        case "/friends-wannabees/receive":
-            friends = action.payload.friends;
+        case "/userInfo/receive":
+            console.log("action.payload", action.payload);
+            user = __assign(__assign({}, user), action.payload);
+            // user = action.payload as ProfileInfoWBio;
+            action.payload
+                ? (user = action.payload)
+                : (user = initUser);
             break;
-        case "/friends-wannabees/wannabee":
-            friends = friends.map(function (friend) {
-                if (friend.id == action.payload.id) {
-                    return __assign(__assign({}, friend), { accepted: false });
-                }
-                else {
-                    return friend;
-                }
-            });
+        case "/userInfo/updatePhotoUrl":
+            user = __assign(__assign({}, user), { photourl: action.payload.photourl });
             break;
-        case "/friends-wannabees/delete":
-            friends = friends.filter(function (friend) {
-                if (friend.id != action.payload.id) {
-                    // I need to take it out of the new array
-                    return friend;
-                }
-            });
-            break;
-        case "/friends-wannabees/accept":
-            friends = friends.map(function (friend) {
-                if (friend.id == action.payload.id) {
-                    return __assign(__assign({}, friend), { accepted: true });
-                }
-                else {
-                    return friend;
-                }
-            });
+        case "/userInfo/updateBio":
+            user = __assign(__assign({}, user), { bio: action.payload.bio });
             break;
         default:
             break;
     }
-    return friends;
+    return user;
 }
-exports.default = friendsAndWannabeesReducer;
-/*
-FriendButton values:
-   - Add Friend
-   - Unfriend
-   - Cancel Request
-   - Accept Friend
-   - Delete Request
-*/
-function changeFriendStatus(action, id) {
+exports.default = userReducer;
+/* -------------------------------------------------------------------------------------------
+                                    ACTION
+----------------------------------------------------------------------------------------------*/
+function userUpdatePhotoUrl(photourl) {
     return {
-        type: "/friends-wannabees/".concat(action),
-        payload: { id: id },
+        type: "/userInfo/updatePhotoUrl",
+        payload: { photourl: photourl },
     };
 }
-exports.changeFriendStatus = changeFriendStatus;
-function receiveFriendStatus(friends) {
+exports.userUpdatePhotoUrl = userUpdatePhotoUrl;
+function userUpdateBio(bio) {
     return {
-        type: "/friends-wannabees/receive",
-        payload: { friends: friends },
+        type: "/userInfo/updateBio",
+        payload: { bio: bio },
     };
 }
-exports.receiveFriendStatus = receiveFriendStatus;
+exports.userUpdateBio = userUpdateBio;
 /*
     type ThunkAction<R, S, E, A extends Action>
 
@@ -130,30 +109,27 @@ exports.receiveFriendStatus = receiveFriendStatus;
       (this means that it should be an object
       that must have a `type` field.) Action type is defined in the redux typings.
   */
-var asyncReceiveFriendStatus = function (abort) {
+var asyncReceiveUser = function (abort) {
     return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
         var respBody, data, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log("I am in asyncReceiveFriendStatus");
+                    console.log("I am in asyncReceiveUser");
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("/getFriends.json")];
+                    return [4 /*yield*/, fetch("/getUserInfo.json")];
                 case 2:
                     respBody = _a.sent();
                     return [4 /*yield*/, respBody.json()];
                 case 3:
                     data = _a.sent();
-                    console.log("Data from /getFriends.json", data);
-                    //
+                    console.log("Data from /getUserInfo.json", data);
                     if (!abort) {
-                        // We want to despatch the data
-                        //  dispatch(receiveFriendStatus(data.payload));
                         return [2 /*return*/, dispatch({
-                                type: "/friends-wannabees/receive",
-                                payload: { friends: data.payload },
+                                type: "/userInfo/receive",
+                                payload: __assign({}, data.payload),
                             })];
                     }
                     else {
@@ -170,41 +146,4 @@ var asyncReceiveFriendStatus = function (abort) {
         });
     }); };
 };
-exports.asyncReceiveFriendStatus = asyncReceiveFriendStatus;
-var asyncChangeFriendStatus = function (buttonAction, friendId) {
-    return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-        var resp, data, err_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    console.log("I am in asyncChangeFriendStatus");
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("/api/setFriendshipStatus", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                button: buttonAction,
-                                viewUserId: friendId,
-                            }),
-                        })];
-                case 2:
-                    resp = _a.sent();
-                    return [4 /*yield*/, resp.json()];
-                case 3:
-                    data = _a.sent();
-                    console.log("Data from post setFriendshipStatus", data);
-                    return [2 /*return*/, dispatch({
-                            type: "/friends-wannabees/".concat(exports.DictionaryButtonAction[buttonAction]),
-                            payload: { id: data.data.viewUserId },
-                        })];
-                case 4:
-                    err_2 = _a.sent();
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
-            }
-        });
-    }); };
-};
-exports.asyncChangeFriendStatus = asyncChangeFriendStatus;
+exports.asyncReceiveUser = asyncReceiveUser;

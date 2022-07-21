@@ -9,6 +9,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer from "./redux/reducer";
+import { inherits } from "util";
+
+// import { init } from "./socket";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 // composeWithDevTools(applyMiddleware(immutableState.default()));
@@ -20,6 +23,8 @@ fetch("/user/id.json")
         if (!data.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
+            // I want to initialize Websocket connection ans pass the store to it
+            // init(store);
             ReactDOM.render(
                 <Provider store={store}>
                     <App />

@@ -30,10 +30,8 @@ export default function FriendsAndWannabees() {
     console.log("I am in Friends & Wannabees");
 
     useEffect(() => {
-        /* 
-        1. Make a fetch request to gets my friends and wannabees.
-        2. dispatch an action creator and pass the data recived.
-        */
+        /*      1. Make a fetch request to gets my friends and wannabees.
+        2. dispatch an action creator and pass the data recived.         */
         let abort = false;
         dispatch(asyncReceiveFriendStatus(abort));
 

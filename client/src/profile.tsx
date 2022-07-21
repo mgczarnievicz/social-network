@@ -1,39 +1,37 @@
 import React from "react";
+import { RootState } from "./redux/reducer";
+import { useDispatch, useSelector } from "react-redux";
+
 import ProfilePhoto from "./profilePhoto";
 import BioEditor from "./bioEditor";
 import { ProfileInfoWBio } from "./typesClient";
 
-interface ProfileProps extends ProfileInfoWBio {
+interface ProfileProps {
     toggleUploader?: Function;
     upDateBio?: Function;
 }
 
-// interface ProfileProps {
-//     name: string;
-//     surname: string;
-//     photoUrl: string;
-//     bio?: string[];
-
-//     toggleUploader?: Function;
-//     upDateBio?: Function;
-// }
-
 export default function Profile(props: ProfileProps) {
     console.log("log the props in Profile");
+    // const userInfo: ProfileInfoWBio = useSelector(
+    //     (state: RootState) => state.user
+    // );
+
+    const userInfo = {
+        name: "maria",
+        surname: "Inciarte",
+        photourl: "",
+        bio: "",
+    };
 
     return (
         <div className="profile-component">
-            <ProfilePhoto
-                name={props.name}
-                surname={props.surname}
-                photoUrl={props.photourl}
-                toggleUploader={props.toggleUploader}
-            />
+            <ProfilePhoto toggleUploader={props.toggleUploader} />
             <div className="profile-info">
                 <h1>
-                    Welcome {props.name} {props.surname}
+                    Welcome {userInfo.name} {userInfo.surname}
                 </h1>
-                <BioEditor bio={props.bio} upDateBio={props.upDateBio} />
+                {/* <BioEditor upDateBio={props.upDateBio} /> */}
             </div>
         </div>
     );

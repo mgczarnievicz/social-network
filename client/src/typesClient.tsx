@@ -10,3 +10,12 @@ export interface ProfileInfoWBio extends ProfileInfo {
 }
 
 export interface EmptyProps {}
+
+export interface ChatInfo {
+    id: number;
+    name: string;
+    surname: string;
+    message: string;
+    send_at: string;
+    photourl?: string;
+}

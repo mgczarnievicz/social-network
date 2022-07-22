@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId, getLastMsgGeneralMsg = _a.getLastMsgGeneralMsg, newGeneralMsg = _a.newGeneralMsg, getMessageGeneralMsgById = _a.getMessageGeneralMsgById;
 var sendEmail = require("./ses").sendEmail;
 /* -----------------------------------------------------------------------
                                GENERAL USE
@@ -424,4 +424,29 @@ exports.searchForTheNewestPosts = function (wallUserId, myUserId) {
         // Here I have to map to put nice the date.
     })
         .catch(function (err) { return err; });
+};
+/* -----------------------------------------------------------------------------
+                        SOCKET SECTION
+-------------------------------------------------------------------------------*/
+exports.getNewestChatMsg = function () {
+    return getLastMsgGeneralMsg()
+        .then(function (result) {
+        console.log("getLastMsgGeneralMsg result", result.rows);
+        result.rows.map(function (each) { return (each.send_at = each.send_at.toLocaleString("en-GB")); });
+        return result.rows;
+    })
+        .catch(function (err) { return false; });
+};
+exports.addNewMessageGeneralChat = function (senderId, message) {
+    return newGeneralMsg(senderId, message)
+        .then(function (result) {
+        console.log("newGeneralMsg row:", result.rows);
+        return getMessageGeneralMsgById(result.rows[0].id).then(function (resp) {
+            console.log("getLastMsgGeneralMsg result", resp.rows[0]);
+            resp.rows[0].send_at =
+                resp.rows[0].send_at.toLocaleString("en-GB");
+            return resp.rows[0];
+        });
+    })
+        .catch(function (err) { return false; });
 };

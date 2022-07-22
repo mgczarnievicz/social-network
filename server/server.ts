@@ -39,6 +39,8 @@ const {
     searchForTheNewestPosts,
     getPostInfo,
     getFriends,
+    getNewestChatMsg,
+    addNewMessageGeneralChat,
 } = require("./process");
 
 import { createServer } from "http";
@@ -581,20 +583,59 @@ interface SocketWithSession extends Socket {
     request: Request;
 }
 
+/* For maintain a list of online Users */
+interface UserSockets {
+    [key: number]: Array<string>;
+}
+
+const userSocket: UserSockets = {};
+const onlineUsers = Object.keys(userSocket);
+
 io.on("connection", function (socket: SocketWithSession) {
     if (!socket.request.session.userId) {
+        // Here I have to go through my userSocket and delete the connection.
+        // userSocket[];
         return socket.disconnect(true);
     }
+
     const userId = socket.request.session.userId;
+    // if (userSocket[userId]) {
+    //     // Fist Time connecting.
+    //     userSocket[userId] = ["socket.id"];
+    // } else {
+    //     // There is already the key.
+    //     userSocket[userId].push(socket.id);
+    // }
+
     console.log(
         `User with the id: ${userId} and socket id ${socket.id} just connected.`
     );
+    console.log("Mi list of connection", userSocket);
 
-    socket.emit("last-10-messages", {
-        messages: ["some stuff", "Locket"],
+    /* ----------------------------------------------------
+                    General Chat
+    -------------------------------------------------------*/
+
+    socket.on("newest-generalMsg-chat", (mes: string) => {
+        getNewestChatMsg().then((result: Array<{}> | boolean) => {
+            console.log("IN newest-generalMsg-chat", result);
+            if (result != false) {
+                io.emit("newest-generalMsg-chat", result);
+            }
+        });
     });
-    socket.on("new-message", (newMsg: string) => {
+
+    socket.on("generalMsg-new-message", (newMsg: string) => {
         console.log("New Message", newMsg);
+        addNewMessageGeneralChat(userId, newMsg).then(
+            (result: {} | boolean) => {
+                console.log("IN generalMsg-new-message", result);
+                if (result != false) {
+                    io.emit("generalMsg-new-message", result);
+                }
+            }
+        );
+
         /*
         1. we want to know who send the message
         2. we need to add this msg to the chats table.

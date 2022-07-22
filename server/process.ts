@@ -22,6 +22,9 @@ const {
     searchFriendshipByUserId,
     searchPostByUserId,
     getPostByPostId,
+    getLastMsgGeneralMsg,
+    newGeneralMsg,
+    getMessageGeneralMsgById,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -490,4 +493,36 @@ exports.searchForTheNewestPosts = (wallUserId: number, myUserId: number) => {
             // Here I have to map to put nice the date.
         })
         .catch((err: QueryResult) => err);
+};
+
+/* -----------------------------------------------------------------------------
+                        SOCKET SECTION
+-------------------------------------------------------------------------------*/
+exports.getNewestChatMsg = () => {
+    return getLastMsgGeneralMsg()
+        .then((result: QueryResult) => {
+            console.log("getLastMsgGeneralMsg result", result.rows);
+            result.rows.map(
+                (each) => (each.send_at = each.send_at.toLocaleString("en-GB"))
+            );
+            return result.rows;
+        })
+        .catch((err: QueryResult) => false);
+};
+
+exports.addNewMessageGeneralChat = (senderId: number, message: string) => {
+    return newGeneralMsg(senderId, message)
+        .then((result: QueryResult) => {
+            console.log("newGeneralMsg row:", result.rows);
+            return getMessageGeneralMsgById(result.rows[0].id).then(
+                (resp: QueryResult) => {
+                    console.log("getLastMsgGeneralMsg result", resp.rows[0]);
+                    resp.rows[0].send_at =
+                        resp.rows[0].send_at.toLocaleString("en-GB");
+
+                    return resp.rows[0];
+                }
+            );
+        })
+        .catch((err: QueryResult) => false);
 };

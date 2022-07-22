@@ -76,6 +76,8 @@ export default function App(props: EmptyProps) {
                     <nav>
                         <Link to="/news">News</Link>
                         <Link to="/friends">Friends</Link>
+                        <Link to="/chat">Chat</Link>
+
                         <Link to="/searchPeople">Find Friends</Link>
                         <Link to="/">Profile</Link>
                         <Link to="/" onClick={logOutFunction}>
@@ -97,7 +99,9 @@ export default function App(props: EmptyProps) {
                     <Route path="/user/:idUserToSee">
                         <OtherProfile />
                     </Route>
-                    <Route path="/news"><Wall /></Route>
+                    <Route path="/news">
+                        <Wall />
+                    </Route>
                     <Route path="/friends">
                         <FriendsAndWannabees />
                     </Route>

@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends, getNewestChatMsg = _a.getNewestChatMsg, addNewMessageGeneralChat = _a.addNewMessageGeneralChat;
 // @ts-ignore
 var app = (0, express_1.default)();
 var server = require("http").Server(app);
@@ -444,17 +444,43 @@ app.get("*", function (req, res) {
 server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
+var userSocket = {};
+var onlineUsers = Object.keys(userSocket);
 io.on("connection", function (socket) {
     if (!socket.request.session.userId) {
+        // Here I have to go through my userSocket and delete the connection.
+        // userSocket[];
         return socket.disconnect(true);
     }
     var userId = socket.request.session.userId;
+    // if (userSocket[userId]) {
+    //     // Fist Time connecting.
+    //     userSocket[userId] = ["socket.id"];
+    // } else {
+    //     // There is already the key.
+    //     userSocket[userId].push(socket.id);
+    // }
     console.log("User with the id: ".concat(userId, " and socket id ").concat(socket.id, " just connected."));
-    socket.emit("last-10-messages", {
-        messages: ["some stuff", "Locket"],
+    console.log("Mi list of connection", userSocket);
+    /* ----------------------------------------------------
+                    General Chat
+    -------------------------------------------------------*/
+    socket.on("newest-generalMsg-chat", function (mes) {
+        getNewestChatMsg().then(function (result) {
+            console.log("IN newest-generalMsg-chat", result);
+            if (result != false) {
+                io.emit("newest-generalMsg-chat", result);
+            }
+        });
     });
-    socket.on("new-message", function (newMsg) {
+    socket.on("generalMsg-new-message", function (newMsg) {
         console.log("New Message", newMsg);
+        addNewMessageGeneralChat(userId, newMsg).then(function (result) {
+            console.log("IN generalMsg-new-message", result);
+            if (result != false) {
+                io.emit("generalMsg-new-message", result);
+            }
+        });
         /*
         1. we want to know who send the message
         2. we need to add this msg to the chats table.

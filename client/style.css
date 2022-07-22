@@ -384,6 +384,10 @@ label {
     margin-top: 10px;
 }
 
+/* ----------------------------------------------------------------------
+                                   CHAT SECTION 
+------------------------------------------------------------------------*/
+
 .chat-container {
     width: 57vw;
     height: 300px;
@@ -392,6 +396,24 @@ label {
     border-radius: 5px;
     display: flex;
     flex-direction: column-reverse;
+}
+
+.chat-container .message {
+    border: 1px solid var(--color-dark);
+    background-color: antiquewhite;
+
+    border-radius: 12px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.chat-container .message p,
+h3 {
+    text-align: left;
+}
+
+.chat-container .message h6 {
+    text-align: right;
 }
 
 /* ----------------------------------------------------------------------

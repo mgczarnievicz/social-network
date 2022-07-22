@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS wall_posts;
 DROP TABLE IF EXISTS wall_comments_likes;
 DROP TABLE IF EXISTS wall_comments;
 
+DROP TABLE IF EXISTS message_general;
+
 
 DROP TABLE IF EXISTS users;
 
@@ -66,8 +68,8 @@ CREATE TABLE wall_comments_likes(
 
 CREATE TABLE message_general(
     id SERIAL PRIMARY KEY,
-    sender INT REFERENCES users(id) NOT NULL,
-    message TEXT
+    sender_id INT REFERENCES users(id) NOT NULL,
+    message TEXT,
     send_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

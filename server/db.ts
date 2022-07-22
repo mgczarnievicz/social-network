@@ -222,23 +222,34 @@ module.exports.newGeneralMsg = (
     senderId: number,
     message: string
 ): QueryResult<UserBasicInfo> => {
-    const q = `INSERT INTO message_general (sender, message)
-    VALUES ($1, $2 ) RETURNING * `;
+    const q = `INSERT INTO message_general (sender_id, message)
+    VALUES ($1, $2 ) RETURNING id `;
 
     const param = [senderId, message];
     return db.query(q, param);
 };
 
-module.exports.getLastMsgGeneralMsg = (
-    senderId: number,
-    message: string
-): QueryResult<UserBasicInfo> => {
-    const q = `SELECT * FROM message_general
-    ORDER DEC BY  send_at
-    LIMIT 5`;
+module.exports.getLastMsgGeneralMsg = (): QueryResult<UserBasicInfo> => {
+    const q = `SELECT users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at
+                FROM message_general
+                INNER JOIN users  
+                ON users.id=message_general.sender_id
+                ORDER BY message_general.send_at DESC
+                LIMIT 5`;
 
-    const param = [senderId, message];
-    return db.query(q, param);
+    return db.query(q, []);
+};
+
+module.exports.getMessageGeneralMsgById = (
+    msgId: number
+): QueryResult<UserBasicInfo> => {
+    const q = `SELECT users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at
+                FROM message_general
+                INNER JOIN users  
+                ON users.id=message_general.sender_id
+                WHERE message_general.id=$1`;
+
+    return db.query(q, [msgId]);
 };
 
 /* ---------------------------------------------------------------
@@ -312,6 +323,17 @@ exports.addComment = (
     const param = [post_id, writer_id, comment];
     return db.query(q, param);
 };
+
+/* 
+SELECT users.name, users.surname, wall_comments.comment, wall_comments.created_at 
+                FROM wall_comments
+                INNER JOIN users  
+                ON users_id=writer_id
+               WHERE wall_posts.id = $1
+                ORDER BY wall_posts.created_at DESC
+                LIMIT 5`
+
+*/
 
 // exports.searchPostByPostId = (userId: number): QueryResult => {
 //     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at

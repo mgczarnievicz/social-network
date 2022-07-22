@@ -257,26 +257,41 @@ exports.addPost = (
     return db.query(q, param);
 };
 
-// exports.searchPostByUserId = (userId: number): QueryResult => {
-//     const q = `SELECT * FROM wall_posts
-//         WHERE walluser_id = $1 OR
-//         writer_id = $1
-//         LIMIT 10 `;
+exports.searchPostByUserId = (userId: number): QueryResult => {
+    const q = `SELECT id FROM wall_posts
+        WHERE walluser_id = $1 OR
+        writer_id = $1
+        ORDER BY wall_posts.created_at DESC
+        LIMIT 5 `;
+
+    const param = [userId];
+    return db.query(q, param);
+};
+
+// exports.searchPostByPostId = (userId: number): QueryResult => {
+//     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at
+//                 FROM wall_posts
+//                 INNER JOIN users AS walluser
+//                 ON walluser_id=walluser.id
+//                 INNER JOIN users AS wallwriter
+//                 ON wall_posts.writer_id=wallwriter.id
+//                 WHERE wall_posts.id = $1
+//                 ORDER BY wall_posts.created_at DESC
+//                 LIMIT 5`;
 
 //     const param = [userId];
 //     return db.query(q, param);
 // };
 
-exports.searchPostByUserId = (userId: number): QueryResult => {
+exports.getPostByPostId = (userId: number): QueryResult => {
     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at 
                 FROM wall_posts
                 INNER JOIN users AS walluser 
                 ON walluser_id=walluser.id 
                 INNER JOIN users AS wallwriter 
                 ON wall_posts.writer_id=wallwriter.id 
-                WHERE writer_id = $1
-                ORDER BY wall_posts.created_at DESC
-                LIMIT 5`;
+                WHERE wall_posts.id = $1
+                `;
 
     const param = [userId];
     return db.query(q, param);
@@ -294,3 +309,14 @@ ORDER BY wall_posts.created_at DESC
 LIMIT 5
 
 */
+/* For maintain a list of online Users
+interface UserSockets {
+    [key: number]: Array<string>;
+}
+
+const userSocket: UserSockets;
+const onlineUsers = Object.keys(users);
+
+Query:
+SELECT * FROM WHERE id=ANY($1)
+$1 being an array of ids */

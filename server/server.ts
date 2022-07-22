@@ -41,7 +41,8 @@ const {
     searchFriendshipStatus,
     setFriendshipStatus,
     addWallPost,
-    searchForPost,
+    searchForTheNewestPosts,
+    getPostInfo,
     getFriends,
 } = require("./process");
 
@@ -262,18 +263,43 @@ app.get("/api/friendshipStatus/:viewUser", (req, res) => {
         );
 });
 
+app.get("/getWallPost/", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get WALL Post:`,
+        req.query
+    );
+
+    // I Just need the post Id
+    searchForTheNewestPosts(req.query.from, req.session.userId)
+        .then((posts: []) => {
+            console.log(
+                "searchForTheNewestPosts: In server what I am going to send to client:",
+                posts
+            );
+            res.json({
+                status: "Success",
+                posts,
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
+});
+
 app.get("/getPost/", (req, res) => {
     console.log(
         `-----------------------------------------------------------------------------\n\t Get Post:`,
         req.query
     );
-
-    searchForPost(req.query.from, req.session.userId)
-        .then((posts: []) => {
-            console.log("In server what I am going to send to client", posts);
+    // I need all the post Info, the likes, comments all.
+    getPostInfo(req.query.postId, req.session.userId)
+        .then((post: {}) => {
+            console.log("In server what I am going to send to client", post);
             res.json({
                 status: "Success",
-                posts,
+                post,
             });
         })
         .catch((err: QueryResult) => {

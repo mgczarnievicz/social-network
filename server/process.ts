@@ -21,6 +21,7 @@ const {
     addPost,
     searchFriendshipByUserId,
     searchPostByUserId,
+    getPostByPostId,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -459,18 +460,32 @@ exports.addWallPost = (
         });
 };
 
-exports.searchForPost = (wallUserId: number, myUserId: number) => {
+exports.getPostInfo = (portId: number, myUserId: number) => {
+    // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
+    console.log("The Wall I am going to search:", portId);
+    console.log("I am myUserId:", myUserId);
+
+    return getPostByPostId(portId)
+        .then((result: QueryResult) => {
+            console.log("getPostByPostId:result", result.rows[0]);
+            result.rows.map(
+                (each) =>
+                    (each.created_at = each.created_at.toLocaleString("en-GB"))
+            );
+            return result.rows[0];
+            // Here I have to map to put nice the date.
+        })
+        .catch((err: QueryResult) => err);
+};
+
+exports.searchForTheNewestPosts = (wallUserId: number, myUserId: number) => {
     // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
     console.log("The Wall I am going to search:", wallUserId);
     console.log("I am myUserId:", myUserId);
 
     return searchPostByUserId(wallUserId)
         .then((result: QueryResult) => {
-            console.log("result from searchPostByUser Id", result.rows);
-            result.rows.map(
-                (each) =>
-                    (each.created_at = each.created_at.toLocaleString("en-GB"))
-            );
+            console.log("searchPostByUser: result: ", result.rows);
             return result.rows;
             // Here I have to map to put nice the date.
         })

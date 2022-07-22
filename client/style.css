@@ -405,7 +405,7 @@ label {
 }
 
 .post {
-    width: 50%;
+    width: 90%;
     margin: 10px 20px;
     padding: 10px;
     border: 2px solid var(--color-dark-green);
@@ -421,8 +421,13 @@ label {
 .post .user-post {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .post .post-to {
-    margin: 0px 20px;
+    margin: 0px 15px;
+}
+
+.post h6 {
+    text-align: right;
 }

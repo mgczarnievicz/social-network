@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId;
 var sendEmail = require("./ses").sendEmail;
 /* -----------------------------------------------------------------------
                                GENERAL USE
@@ -398,16 +398,28 @@ exports.addWallPost = function (userId, postInfo) {
         err;
     });
 };
-exports.searchForPost = function (wallUserId, myUserId) {
+exports.getPostInfo = function (portId, myUserId) {
+    // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
+    console.log("The Wall I am going to search:", portId);
+    console.log("I am myUserId:", myUserId);
+    return getPostByPostId(portId)
+        .then(function (result) {
+        console.log("getPostByPostId:result", result.rows[0]);
+        result.rows.map(function (each) {
+            return (each.created_at = each.created_at.toLocaleString("en-GB"));
+        });
+        return result.rows[0];
+        // Here I have to map to put nice the date.
+    })
+        .catch(function (err) { return err; });
+};
+exports.searchForTheNewestPosts = function (wallUserId, myUserId) {
     // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
     console.log("The Wall I am going to search:", wallUserId);
     console.log("I am myUserId:", myUserId);
     return searchPostByUserId(wallUserId)
         .then(function (result) {
-        console.log("result from searchPostByUser Id", result.rows);
-        result.rows.map(function (each) {
-            return (each.created_at = each.created_at.toLocaleString("en-GB"));
-        });
+        console.log("searchPostByUser: result: ", result.rows);
         return result.rows;
         // Here I have to map to put nice the date.
     })

@@ -12,6 +12,8 @@ import e from "express";
 
 library.add(faHeart, faComments, faPlay);
 
+import Post from "./post";
+
 //<FontAwesomeIcon icon="fa-solid fa-comments" />
 //<FontAwesomeIcon icon="fa-solid fa-heart" />
 
@@ -29,14 +31,14 @@ wallwriter_surname: "Elsa"
 writer_id: 1 */
 interface WallPost {
     id: number;
-    walluser_id: number;
-    writer_id: number;
-    walluser_name: string;
-    walluser_surname: string;
-    wallwriter_name: string;
-    wallwriter_surname: string;
-    post: string;
-    created_at: string;
+    //     walluser_id: number;
+    //     writer_id: number;
+    //     walluser_name: string;
+    //     walluser_surname: string;
+    //     wallwriter_name: string;
+    //     wallwriter_surname: string;
+    //     post: string;
+    //     created_at: string;
 }
 
 export default function WallPost(props: WallProps) {
@@ -56,14 +58,13 @@ export default function WallPost(props: WallProps) {
     useEffect(() => {
         console.log("Props in Wall Post:", props);
 
-        fetch(`/getPost/?from=${wallId}`)
+        // Here I only want the las 5 post id.
+        fetch(`/getWallPost/?from=${wallId}`)
             .then((respBody) => respBody.json())
             .then((data) => {
                 console.log("Data from /getPost", data);
                 if (data.status == "Success") {
-                    console.log("I am here");
                     setPosts(data.posts);
-                    console.log("My post after setting them", posts);
                 }
             })
             .catch((err) => console.log("Error in getPost", err));
@@ -82,23 +83,17 @@ export default function WallPost(props: WallProps) {
         //     console.log("Error in getting data from /getPost");
         // }
     }, []);
-    console.log("posts", posts);
-
-    /*  created_at: "21/07/2022, 17:10:13"
-id: 8
-post: "I am with you!"
-walluser_id: 5
-walluser_name: "Lori"
-walluser_surname: "Antonio"
-wallwriter_name: "Elsa"
-wallwriter_surname: "Elsa"
-writer_id: 1 */
 
     return (
         <div className="posts-container">
             <h1>This are post!</h1>
 
             {posts &&
+                posts.map((each: WallPost) => {
+                    return <Post key={each.id} postId={each.id} />;
+                })}
+
+            {/* {posts &&
                 posts.map((each: WallPost) => {
                     return (
                         <div key={each.id} className="post">
@@ -138,11 +133,7 @@ writer_id: 1 */
                             </div>
                         </div>
                     );
-                })}
-            {/* <div>
-                <FontAwesomeIcon icon="heart" size="3x" color="grey" />
-                <FontAwesomeIcon icon="comments" size="2x" color="green" />
-            </div> */}
+                })} */}
         </div>
     );
 }

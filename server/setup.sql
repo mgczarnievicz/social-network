@@ -40,7 +40,7 @@ CREATE TABLE wall_posts(
     walluser_id INT REFERENCES users(id) NOT NULL,
     writer_id INT REFERENCES users(id) NOT NULL,
     post TEXT,
-  ""  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE wall_posts_likes(

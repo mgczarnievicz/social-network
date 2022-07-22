@@ -17,7 +17,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForPost = _a.searchForPost, getFriends = _a.getFriends;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends;
 // @ts-ignore
 var app = (0, express_1.default)();
 // REVIEW: this! I can only have import!
@@ -189,14 +189,32 @@ app.get("/api/friendshipStatus/:viewUser", function (req, res) {
         });
     });
 });
-app.get("/getPost/", function (req, res) {
-    console.log("-----------------------------------------------------------------------------\n\t Get Post:", req.query);
-    searchForPost(req.query.from, req.session.userId)
+app.get("/getWallPost/", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Get WALL Post:", req.query);
+    // I Just need the post Id
+    searchForTheNewestPosts(req.query.from, req.session.userId)
         .then(function (posts) {
-        console.log("In server what I am going to send to client", posts);
+        console.log("searchForTheNewestPosts: In server what I am going to send to client:", posts);
         res.json({
             status: "Success",
             posts: posts,
+        });
+    })
+        .catch(function (err) {
+        res.json({
+            status: "Error",
+        });
+    });
+});
+app.get("/getPost/", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t Get Post:", req.query);
+    // I need all the post Info, the likes, comments all.
+    getPostInfo(req.query.postId, req.session.userId)
+        .then(function (post) {
+        console.log("In server what I am going to send to client", post);
+        res.json({
+            status: "Success",
+            post: post,
         });
     })
         .catch(function (err) {

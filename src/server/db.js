@@ -147,18 +147,27 @@ exports.getPostByPostId = function (userId) {
     var param = [userId];
     return db.query(q, param);
 };
-/*
-SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at
-FROM wall_posts
-INNER JOIN users AS walluser
-ON walluser_id=walluser.id
-INNER JOIN users AS wallwriter
-ON wall_posts.writer_id=wallwriter.id
-WHERE writer_id = 1
-ORDER BY wall_posts.created_at DESC
-LIMIT 5
-
-*/
+/* ---------------------------------------------------------------
+                  COMMENTS POST TABLE
+----------------------------------------------------------------*/
+exports.addComment = function (post_id, writer_id, comment) {
+    var q = "INSERT INTO wall_posts (post_id, writer_id, comment)\n    VALUES ($1,$2, $3)   \n    RETURNING * ";
+    var param = [post_id, writer_id, comment];
+    return db.query(q, param);
+};
+// exports.searchPostByPostId = (userId: number): QueryResult => {
+//     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at
+//                 FROM wall_posts
+//                 INNER JOIN users AS walluser
+//                 ON walluser_id=walluser.id
+//                 INNER JOIN users AS wallwriter
+//                 ON wall_posts.writer_id=wallwriter.id
+//                 WHERE wall_posts.id = $1
+//                 ORDER BY wall_posts.created_at DESC
+//                 LIMIT 5`;
+//     const param = [userId];
+//     return db.query(q, param);
+// };
 /* For maintain a list of online Users
 interface UserSockets {
     [key: number]: Array<string>;

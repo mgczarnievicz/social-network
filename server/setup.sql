@@ -53,7 +53,7 @@ CREATE TABLE wall_comments(
     id SERIAL PRIMARY KEY,
     post_id INT REFERENCES wall_posts(id) NOT NULL,
     writer_id INT REFERENCES users(id) NOT NULL,
-    post TEXT,
+    comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

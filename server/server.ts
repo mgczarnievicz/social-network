@@ -1,12 +1,7 @@
-import express, { Express, Request, NextFunction } from "express";
+import express, { Express, Request, NextFunction, Response } from "express";
 import compression from "compression";
 import cookieSession from "cookie-session";
 import path from "path";
-// import {
-//     CookieSessionRequest,
-//     CookieSessionObject,
-// } from "@types/cookie-session";
-// import http from "http";
 
 // This is a hack to make Multer available in the Express namespace
 import multer, { FileFilterCallback, Multer } from "multer";
@@ -46,26 +41,15 @@ const {
     getFriends,
 } = require("./process");
 
+import { createServer } from "http";
+import { Server, Socket } from "socket.io";
 // @ts-ignore
 const app = express();
-// REVIEW: this! I can only have import!
-// const server = http.Server(app);
-// const io = require ("socket.io")(server, {allowRequest:(req, callback)=>callback(null, req.header.refer.startsWith("http://localhost:300"))})
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req: Request, callback: Function) =>
         callback(null, req.headers.referer.startsWith("http://localhost:3000")),
 });
-// REVIEW. Merle like this suggest doc
-// import { createServer } from "http";
-import { Server, Socket } from "socket.io";
-// import { Request } from "aws-sdk";
-
-// const httpServer = createServer();
-// const io = new Server(httpServer, {
-//  allowRequest: (req, callback) =>
-//     callback(null, req.headers.referer.startsWith("http://localhost:3000")),
-// });
 
 // Bc we are deploying we need to define where to get the value.
 const COOKIE_SECRET =
@@ -79,9 +63,17 @@ const cookieSessionMiddleware = cookieSession({
     sameSite: true,
 });
 
-// io.use((socket: Socket, next: NextFunction) => {
-//     cookieSessionMiddleware(socket.request, socket.request.res, next);
-// });
+/* Explanation of types:
+Because the libraries are incompatible (the types) we need to tell them that the type is as the other.
+We do this with precaution, is not recommended to do it if you are not 100% sure that they work together.
+ */
+io.use((socket: Socket, next: NextFunction) => {
+    cookieSessionMiddleware(
+        socket.request as Request,
+        (socket.request as Request).res,
+        next
+    );
+});
 
 app.use(cookieSessionMiddleware);
 
@@ -569,40 +561,34 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
-});
-// bc socket can't use an express server we need to have the listening to be done
-// server.listen(process.env.PORT || 3001, function () {
+// app.listen(process.env.PORT || 3001, function () {
 //     console.log("I'm listening.");
 // });
+// bc socket can't use an express server we need to have the listening to be done
+server.listen(process.env.PORT || 3001, function () {
+    console.log("I'm listening.");
+});
 
 /* -------------------------------------------------------------------------------
                                     SOCKET 
 ---------------------------------------------------------------------------------*/
 
-io.on("connection", function (socket: Socket) {
-    let cookieString = socket.request.headers.cookie;
+/*  Explanation of the types:
+because our middleware we know that the socket have a request, and this request knows from above that it will have a 
+cookie session, so we need to tell that the request from socket is the type of Request (Express) (SocketWithSession)
+*/
+interface SocketWithSession extends Socket {
+    request: Request;
+}
 
-    // type SessionType = CookieSessionObject | null | undefined;
-    let req = {
-        connection: { encrypted: false },
-        headers: { cookie: cookieString },
-        session: {},
-    };
-    let res = { getHeader: () => {}, setHeader: () => {} };
-    //
-    // cookieSessionMiddleware(req, res, () => {
-    //     console.log(req.session);
-    // });
-
-    // if (!socket.request.session.userId) {
-    //     return socket.disconnect(true);
-    // }
-    // const userId = socket.request.session.userId;
-    // console.log(
-    //     `User with the id: ${userId} and socket id ${socket.id} just connected.`
-    // );
+io.on("connection", function (socket: SocketWithSession) {
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+    const userId = socket.request.session.userId;
+    console.log(
+        `User with the id: ${userId} and socket id ${socket.id} just connected.`
+    );
 
     socket.emit("last-10-messages", {
         messages: ["some stuff", "Locket"],

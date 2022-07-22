@@ -7,11 +7,6 @@ var express_1 = __importDefault(require("express"));
 var compression_1 = __importDefault(require("compression"));
 var cookie_session_1 = __importDefault(require("cookie-session"));
 var path_1 = __importDefault(require("path"));
-// import {
-//     CookieSessionRequest,
-//     CookieSessionObject,
-// } from "@types/cookie-session";
-// import http from "http";
 // This is a hack to make Multer available in the Express namespace
 var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
@@ -20,21 +15,12 @@ var s3 = require("./s3");
 var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends;
 // @ts-ignore
 var app = (0, express_1.default)();
-// REVIEW: this! I can only have import!
-// const server = http.Server(app);
-// const io = require ("socket.io")(server, {allowRequest:(req, callback)=>callback(null, req.header.refer.startsWith("http://localhost:300"))})
 var server = require("http").Server(app);
 var io = require("socket.io")(server, {
     allowRequest: function (req, callback) {
         return callback(null, req.headers.referer.startsWith("http://localhost:3000"));
     },
 });
-// import { Request } from "aws-sdk";
-// const httpServer = createServer();
-// const io = new Server(httpServer, {
-//  allowRequest: (req, callback) =>
-//     callback(null, req.headers.referer.startsWith("http://localhost:3000")),
-// });
 // Bc we are deploying we need to define where to get the value.
 var COOKIE_SECRET = process.env.COOKIE_SECRET || require("./secrets").COOKIE_SECRET;
 app.use((0, compression_1.default)());
@@ -43,9 +29,13 @@ var cookieSessionMiddleware = (0, cookie_session_1.default)({
     maxAge: 1000 * 60 * 60 * 24 * 15,
     sameSite: true,
 });
-// io.use((socket: Socket, next: NextFunction) => {
-//     cookieSessionMiddleware(socket.request, socket.request.res, next);
-// });
+/* Explanation of types:
+Because the libraries are incompatible (the types) we need to tell them that the type is as the other.
+We do this with precaution, is not recommended to do it if you are not 100% sure that they work together.
+ */
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 app.use(cookieSessionMiddleware);
 var storage = multer_1.default.diskStorage({
     destination: function (req, file, callback) {
@@ -447,36 +437,19 @@ app.post("/wallPost.json", function (req, res) {
 app.get("*", function (req, res) {
     res.sendFile(path_1.default.join(__dirname, "..", "client", "index.html"));
 });
-app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
-});
-// bc socket can't use an express server we need to have the listening to be done
-// server.listen(process.env.PORT || 3001, function () {
+// app.listen(process.env.PORT || 3001, function () {
 //     console.log("I'm listening.");
 // });
-/* -------------------------------------------------------------------------------
-                                    SOCKET
----------------------------------------------------------------------------------*/
+// bc socket can't use an express server we need to have the listening to be done
+server.listen(process.env.PORT || 3001, function () {
+    console.log("I'm listening.");
+});
 io.on("connection", function (socket) {
-    var cookieString = socket.request.headers.cookie;
-    // type SessionType = CookieSessionObject | null | undefined;
-    var req = {
-        connection: { encrypted: false },
-        headers: { cookie: cookieString },
-        session: {},
-    };
-    var res = { getHeader: function () { }, setHeader: function () { } };
-    //
-    // cookieSessionMiddleware(req, res, () => {
-    //     console.log(req.session);
-    // });
-    // if (!socket.request.session.userId) {
-    //     return socket.disconnect(true);
-    // }
-    // const userId = socket.request.session.userId;
-    // console.log(
-    //     `User with the id: ${userId} and socket id ${socket.id} just connected.`
-    // );
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+    var userId = socket.request.session.userId;
+    console.log("User with the id: ".concat(userId, " and socket id ").concat(socket.id, " just connected."));
     socket.emit("last-10-messages", {
         messages: ["some stuff", "Locket"],
     });

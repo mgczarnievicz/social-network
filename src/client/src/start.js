@@ -23,7 +23,7 @@ var reducer_1 = __importDefault(require("./redux/reducer"));
 var react_dom_1 = __importDefault(require("react-dom"));
 var welcome_1 = __importDefault(require("./welcome"));
 var app_1 = __importDefault(require("./app"));
-// import { init } from "./socket";
+var socket_1 = require("./socket");
 var store = (0, redux_1.createStore)(reducer_1.default, (0, redux_1.applyMiddleware)(redux_thunk_1.default));
 // composeWithDevTools(applyMiddleware(immutableState.default()));
 fetch("/user/id.json")
@@ -35,7 +35,7 @@ fetch("/user/id.json")
     }
     else {
         // I want to initialize Websocket connection ans pass the store to it
-        // init(store);
+        (0, socket_1.init)(store);
         react_dom_1.default.render((0, jsx_runtime_1.jsx)(react_redux_1.Provider, __assign({ store: store }, { children: (0, jsx_runtime_1.jsx)(app_1.default, {}) })), document.querySelector("main"));
     }
 });

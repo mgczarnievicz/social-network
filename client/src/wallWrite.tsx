@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/reducer";
 import { ProfileInfoWBio } from "./typesClient";
+import { asyncNewPost } from "./redux/wall/slice";
+import { text } from "stream/consumers";
 
 interface WriteWallProps {
     wallUserId?: number;
@@ -14,7 +16,8 @@ interface postIfo {
 }
 
 export default function WallWrite(props: WriteWallProps) {
-    const [post, setPost] = useState<string | null>(null);
+    const dispatch = useDispatch();
+    const [post, setPost] = useState<string | null>("");
 
     const userInfo: ProfileInfoWBio = useSelector(
         (state: RootState) => state.user
@@ -22,34 +25,30 @@ export default function WallWrite(props: WriteWallProps) {
 
     const wallId = props.wallUserId || userInfo.id;
 
-    async function submitPost() {
-        console.log("post value", post);
-        try {
-            const responds = await fetch("/wallPost.json", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ wallUserId: wallId, post }),
-            });
-            const data = await responds.json();
-            console.log("Data received from POST wall post", data);
-            // now clean the campus.
-            setPost("");
-        } catch (err) {
-            console.log("Error in post wall:", err);
-        }
+    function submitPost() {
+        let abort = false;
+        dispatch(asyncNewPost(abort, wallId, post));
+        setPost("");
+
+        return () => {
+            // this function runs, whenever there is another useEffect that gets
+            // triggered after the initial one
+            console.log("cleanup running");
+            abort = true;
+        };
     }
 
     return (
-        <>
+        <div className="input-post">
             <textarea
-                // value={post}
+                value={post}
                 onChange={(e) => {
                     setPost(e.target.value);
                 }}
                 rows={3}
-                cols={50}
+                cols={10}
             ></textarea>
-            <button onClick={submitPost}>Save</button>
-        </>
+            <button onClick={submitPost}>Post</button>
+        </div>
     );
 }

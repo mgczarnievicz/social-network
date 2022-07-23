@@ -50,6 +50,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var react_router_1 = require("react-router");
+var react_fontawesome_1 = require("@fortawesome/react-fontawesome");
+var fontawesome_svg_core_1 = require("@fortawesome/fontawesome-svg-core");
+var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
+fontawesome_svg_core_1.library.add(free_solid_svg_icons_1.faMagnifyingGlass);
 // interface FriendInfo {
 //     id: number;
 //     name: string;
@@ -69,7 +73,8 @@ function FindPeople() {
     })}*/
     var _this = this;
     var _a = (0, react_1.useState)(""), searchInput = _a[0], setSearch = _a[1];
-    var _b = (0, react_1.useState)(null), friends = _b[0], setFriends = _b[1];
+    var _b = (0, react_1.useState)("Newest Users"), text = _b[0], setText = _b[1];
+    var _c = (0, react_1.useState)(null), friends = _c[0], setFriends = _c[1];
     var history = (0, react_router_1.useHistory)();
     (0, react_1.useEffect)(function () {
         var abort = false;
@@ -88,6 +93,15 @@ function FindPeople() {
                         data = _a.sent();
                         console.log("data from /searchFriend", data);
                         if (!abort) {
+                            if (searchInput) {
+                                setText("");
+                            }
+                            else {
+                                setText("Newest Users");
+                            }
+                            if (data.friends.length == 0) {
+                                setText("No Results");
+                            }
                             setFriends(data.friends);
                         }
                         else {
@@ -112,7 +126,7 @@ function FindPeople() {
     function seeFriendProfile(idUserToSee) {
         history.push("/user/".concat(idUserToSee));
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-container container-main-width" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-inputs" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("input", { onChange: function (e) { return setSearch(e.target.value); }, value: searchInput }), !searchInput && (0, jsx_runtime_1.jsx)("h1", { children: "See the newest Users!" })] })), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friend-container" }, { children: friends &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-container container-main-width" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "search-inputs" }, { children: [(0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)("h1", { children: text }) }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("input", { onChange: function (e) { return setSearch(e.target.value); }, value: searchInput, placeholder: "Search" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "magnifying-glass", color: "grey" })] })] })), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friend-container" }, { children: friends &&
                     friends.map(function (friend, i) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friend-info", onClick: function () {
                                 seeFriendProfile(friend.id);

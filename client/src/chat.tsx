@@ -45,7 +45,7 @@ export default function Chat() {
     }
 
     return (
-        <div className="container-main-width">
+        <div className="container-main-width chat-section">
             <h1>Welcome to chat</h1>
             <div className="chat-container">
                 {messagesInfo &&

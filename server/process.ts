@@ -453,10 +453,10 @@ exports.addWallPost = (
     postInfo: { wallUserId: number; post: string }
 ) => {
     console.log("In addWallPost, in process", userId, postInfo);
-    addPost(postInfo.wallUserId, userId, postInfo.post)
+    return addPost(postInfo.wallUserId, userId, postInfo.post)
         .then((result: QueryResult) => {
-            console.log("Result from addWallPost:", result.rows);
-            return result.rows;
+            console.log("Result from addWallPost:", result.rows[0]);
+            return result.rows[0];
         })
         .catch((err: QueryResult) => {
             err;

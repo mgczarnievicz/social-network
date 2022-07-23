@@ -389,10 +389,10 @@ exports.getFriends = function (userId) {
 -------------------------------------------------------------------------*/
 exports.addWallPost = function (userId, postInfo) {
     console.log("In addWallPost, in process", userId, postInfo);
-    addPost(postInfo.wallUserId, userId, postInfo.post)
+    return addPost(postInfo.wallUserId, userId, postInfo.post)
         .then(function (result) {
-        console.log("Result from addWallPost:", result.rows);
-        return result.rows;
+        console.log("Result from addWallPost:", result.rows[0]);
+        return result.rows[0];
     })
         .catch(function (err) {
         err;

@@ -24,8 +24,6 @@ export default function Wall(props: WallProps) {
     console.log("The wall I am going to tell the server to search:", wallId);
 
     useEffect(() => {
-        /*      1. Make a fetch request to gets my friends and wannabees.
-        2. dispatch an action creator and pass the data recived.         */
         let abort = false;
         dispatch(asyncReceiveWallPosts(abort, wallId));
 
@@ -38,7 +36,7 @@ export default function Wall(props: WallProps) {
     }, []);
 
     return (
-        <div className="container-main-width">
+        <div className="container-main-width wall-container">
             <WallWrite />
             <WallPost />
         </div>

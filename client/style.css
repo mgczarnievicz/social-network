@@ -113,7 +113,7 @@ button:hover {
 }
 
 .form h1,
-p {
+.form p {
     text-align: center;
 }
 
@@ -152,7 +152,7 @@ p {
 
 header {
     width: 100%;
-    height: 120px;
+    height: 70px;
     padding: 0px 10px;
     /* margin-bottom: 20px; */
     display: flex;
@@ -169,9 +169,10 @@ header .logo-img img {
 }
 
 header .profilePhoto img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
+    margin-top: 5px;
     /* border-radius: 50%; */
 }
 
@@ -182,11 +183,12 @@ header nav {
 }
 
 header nav a {
-    height: 50%;
+    height: 76%;
     margin-left: 10px;
     padding: 10px 30px;
     text-decoration: none;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
     color: white;
 }
 
@@ -299,19 +301,23 @@ label {
 .search-inputs {
     display: flex;
     flex-direction: row;
-    /* height: 30px; */
-
-    padding: 10px 0px;
+    justify-content: space-between;
+    /* padding: 10px 0px; */
+    padding: 10px 25px 4px 60px;
 }
 
 .search-inputs input {
     margin: 10px;
     font-size: 20px;
-    background-color: none;
+    background-color: transparent;
 
     border: none;
-    border-bottom: var(--color-dark) 2px solid;
+    border-bottom: var(--color-board) 2px solid;
     padding-left: 5px;
+}
+
+.search-inputs h1 {
+    align-self: flex-start;
 }
 
 .friend-container {
@@ -338,6 +344,9 @@ label {
 -----------------------------------------------------------------------*/
 .friends-wannabees-container {
     width: 90%;
+}
+.friends-wannabees-container h1 {
+    margin-left: 60px;
 }
 .friends-wannabees {
     width: 100%;
@@ -368,6 +377,7 @@ label {
     width: 100%;
     text-align: center;
 }
+
 .friends-wannabees-profile button {
     width: 100%;
 }
@@ -387,10 +397,13 @@ label {
 /* ----------------------------------------------------------------------
                                    CHAT SECTION 
 ------------------------------------------------------------------------*/
+.chat-section {
+    width: 57vw;
+}
 
 .chat-container {
     width: 57vw;
-    height: 300px;
+    height: 350px;
     /* overflow-y: scroll; */
     overflow: auto;
     border-radius: 5px;
@@ -436,14 +449,28 @@ h3 {
     cursor: pointer;
 }
 
+.chat-section textarea {
+    width: 90%;
+    height: 68px;
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 12px;
+}
+
 /* ----------------------------------------------------------------------
                                    POST SECTION 
 ------------------------------------------------------------------------*/
+
+.wall-container {
+    max-width: 835px;
+}
 
 .posts-container {
     width: 80%;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .post {
@@ -452,6 +479,7 @@ h3 {
     padding: 10px;
     border: 2px solid var(--color-dark-green);
     border-radius: 12px;
+    background-color: antiquewhite;
 }
 .post .icons {
     width: 100%;
@@ -472,4 +500,28 @@ h3 {
 
 .post h6 {
     text-align: right;
+}
+
+.input-post {
+    width: 80%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-post textarea {
+    width: 90%;
+    height: 68px;
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 12px;
+}
+
+.input-post button {
+    width: 110px;
+    align-self: flex-end;
+    margin-right: 40px;
+    margin-top: 0px;
 }

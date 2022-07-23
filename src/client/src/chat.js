@@ -46,7 +46,7 @@ function Chat() {
         console.log("idUserToSee", idUserToSee);
         history.push("/user/".concat(idUserToSee));
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "container-main-width" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome to chat" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "chat-container" }, { children: messagesInfo &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "container-main-width chat-section" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome to chat" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "chat-container" }, { children: messagesInfo &&
                     messagesInfo.map(function (each) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "message" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: each.name, surname: each.surname, photourl: each.photourl }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "message-info" }, { children: [(0, jsx_runtime_1.jsxs)("p", __assign({ onClick: function () {
                                                 seeFriendProfile(each.user_id);

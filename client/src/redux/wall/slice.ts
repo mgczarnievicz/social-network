@@ -84,3 +84,32 @@ export const asyncReceiveWallPosts =
             console.log("Error", err);
         }
     };
+
+export const asyncNewPost =
+    (abort: boolean, wallId: number, post: string): UserThunk =>
+    async (dispatch: Dispatch) => {
+        console.log("I am in asyncReceiveWallPosts");
+        try {
+            const respBody = await await fetch("/newPost.json", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ wallUserId: wallId, post }),
+            });
+            const data = await respBody.json();
+            console.log("Data from /wallPost.json", data);
+
+            if (!abort) {
+                if (data.status == "Success") {
+                    return dispatch({
+                        type: `/wallPost/newPost`,
+                        payload: { newPost: data.payload },
+                    });
+                }
+            } else {
+                console.log("ignore don't run a a state update");
+            }
+        } catch (err) {
+            // handle fetch failure
+            console.log("Error", err);
+        }
+    };

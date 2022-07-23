@@ -262,7 +262,7 @@ exports.addPost = (
 ): QueryResult => {
     const q = `INSERT INTO wall_posts (walluser_id, writer_id, post)
     VALUES ($1,$2, $3)   
-    RETURNING * `;
+    RETURNING id AS post_id `;
 
     const param = [walluser_id, writer_id, post];
     return db.query(q, param);

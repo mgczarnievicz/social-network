@@ -531,9 +531,9 @@ app.post("/api/setFriendshipStatus", (req, res) => {
         );
 });
 
-app.post("/wallPost.json", (req, res) => {
+app.post("/newPost.json", (req, res) => {
     console.log(
-        `-----------------------------------------------------------------------------\n\t Wall Post Status:`,
+        `-----------------------------------------------------------------------------\n\t New Post Status:`,
         req.body
     );
     /* Req.body:
@@ -546,6 +546,7 @@ app.post("/wallPost.json", (req, res) => {
             console.log("result in wallPost.json", result);
             res.json({
                 status: "Success",
+                payload: result,
             });
         })
         .catch((err: QueryResult) => {

@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { ProfileInfo } from "./typesClient";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faMagnifyingGlass);
+
 // interface FriendInfo {
 //     id: number;
 //     name: string;
@@ -22,6 +28,8 @@ export default function FindPeople() {
     })}*/
 
     const [searchInput, setSearch] = useState("");
+    const [text, setText] = useState("Newest Users");
+
     const [friends, setFriends] = useState(null);
     const history = useHistory();
 
@@ -36,6 +44,14 @@ export default function FindPeople() {
                 const data = await respBody.json();
                 console.log("data from /searchFriend", data);
                 if (!abort) {
+                    if (searchInput) {
+                        setText("");
+                    } else {
+                        setText("Newest Users");
+                    }
+                    if (data.friends.length == 0) {
+                        setText("No Results");
+                    }
                     setFriends(data.friends);
                 } else {
                     console.log("ignore don't run a a state update");
@@ -59,13 +75,18 @@ export default function FindPeople() {
     return (
         <div className="search-container container-main-width">
             <div className="search-inputs">
-                <h1>Friends</h1>
-
-                <input
-                    onChange={(e) => setSearch(e.target.value)}
-                    value={searchInput}
-                />
-                {!searchInput && <h1>See the newest Users!</h1>}
+                {/* {!searchInput && <h1>Newest Users</h1>} */}
+                <div>
+                    <h1>{text}</h1>
+                </div>
+                <div>
+                    <input
+                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchInput}
+                        placeholder="Search"
+                    />
+                    <FontAwesomeIcon icon="magnifying-glass" color="grey" />
+                </div>
             </div>
             <div className="friend-container">
                 {friends &&

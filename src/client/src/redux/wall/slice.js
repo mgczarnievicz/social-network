@@ -45,7 +45,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.asyncReceiveWallPosts = exports.updateWallPost = void 0;
+exports.asyncNewPost = exports.asyncReceiveWallPosts = exports.updateWallPost = void 0;
 // typeof ProfileInfoWBio
 function postsReducer(posts, action) {
     if (posts === void 0) { posts = []; }
@@ -126,3 +126,48 @@ var asyncReceiveWallPosts = function (abort, wallId) {
     }); };
 };
 exports.asyncReceiveWallPosts = asyncReceiveWallPosts;
+var asyncNewPost = function (abort, wallId, post) {
+    return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+        var respBody, data, err_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log("I am in asyncReceiveWallPosts");
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 5, , 6]);
+                    return [4 /*yield*/, fetch("/newPost.json", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ wallUserId: wallId, post: post }),
+                        })];
+                case 2: return [4 /*yield*/, _a.sent()];
+                case 3:
+                    respBody = _a.sent();
+                    return [4 /*yield*/, respBody.json()];
+                case 4:
+                    data = _a.sent();
+                    console.log("Data from /wallPost.json", data);
+                    if (!abort) {
+                        if (data.status == "Success") {
+                            return [2 /*return*/, dispatch({
+                                    type: "/wallPost/newPost",
+                                    payload: { newPost: data.payload },
+                                })];
+                        }
+                    }
+                    else {
+                        console.log("ignore don't run a a state update");
+                    }
+                    return [3 /*break*/, 6];
+                case 5:
+                    err_2 = _a.sent();
+                    // handle fetch failure
+                    console.log("Error", err_2);
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); };
+};
+exports.asyncNewPost = asyncNewPost;

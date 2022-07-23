@@ -412,8 +412,8 @@ app.post("/api/setFriendshipStatus", function (req, res) {
         });
     });
 });
-app.post("/wallPost.json", function (req, res) {
-    console.log("-----------------------------------------------------------------------------\n\t Wall Post Status:", req.body);
+app.post("/newPost.json", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t New Post Status:", req.body);
     /* Req.body:
         - wallUserId
         - post
@@ -423,6 +423,7 @@ app.post("/wallPost.json", function (req, res) {
         console.log("result in wallPost.json", result);
         res.json({
             status: "Success",
+            payload: result,
         });
     })
         .catch(function (err) {

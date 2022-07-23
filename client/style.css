@@ -555,14 +555,20 @@ h3 {
                                   FRIENDS SECTION 
 ------------------------------------------------------------------------*/
 .friends-container {
+    width: 300px;
     border: 2px solid var(--color-board);
     border-radius: 12px;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .friends {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .friends-round {
@@ -576,6 +582,7 @@ h3 {
     width: 100px;
     height: 100px;
     margin-bottom: 0px;
+    object-fit: cover;
 }
 .friends-round h4 {
     width: 100%;

@@ -28,8 +28,8 @@ export default function WallComments(props: commentProps) {
 
     return (
         <>
-            {/* {props.writeComment && <CommentWrite postId={props.postId} />} */}
-            <Comments key={props.postId} postId={props.postId} />
+            {/* {props.writeComment && <CommentWrite postId={props.postId} />} key={props.postId}*/}
+            <Comments postId={props.postId} />
             <CommentWrite postId={props.postId} />
         </>
     );

@@ -38,8 +38,9 @@ export default function CommentDisplay(props: CommentProps) {
     return (
         <>
             {commentInfo && (
-                <div key={commentInfo.comment_id} className="comment-post">
-                    {/* <pre>{JSON.stringify(props)}</pre> */}
+                // key={commentInfo.comment_id}
+                <div className="comment-post">
+                    <pre>{JSON.stringify(commentInfo.comment_id)}</pre>
                     <p>
                         {commentInfo.name} {commentInfo.surname}
                     </p>

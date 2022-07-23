@@ -31,6 +31,8 @@ function CommentDisplay(props) {
             abort = true;
         };
     }, []);
-    return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: commentInfo && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "comment-post" }, { children: [(0, jsx_runtime_1.jsxs)("p", { children: [commentInfo.name, " ", commentInfo.surname] }), (0, jsx_runtime_1.jsx)("h3", { children: commentInfo.comment }), (0, jsx_runtime_1.jsx)("h6", { children: commentInfo.created_at })] }), commentInfo.comment_id)) }));
+    return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: commentInfo && (
+        // key={commentInfo.comment_id}
+        (0, jsx_runtime_1.jsxs)("div", __assign({ className: "comment-post" }, { children: [(0, jsx_runtime_1.jsx)("pre", { children: JSON.stringify(commentInfo.comment_id) }), (0, jsx_runtime_1.jsxs)("p", { children: [commentInfo.name, " ", commentInfo.surname] }), (0, jsx_runtime_1.jsx)("h3", { children: commentInfo.comment }), (0, jsx_runtime_1.jsx)("h6", { children: commentInfo.created_at })] }))) }));
 }
 exports.default = CommentDisplay;

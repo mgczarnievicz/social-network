@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ProfilePhoto from "./profilePhoto";
 import BioEditor from "./bioEditor";
 import { ProfileInfoWBio } from "./typesClient";
+import Friends from "./friends";
 
 interface ProfileProps {
     toggleUploader?: Function;
@@ -24,7 +25,7 @@ export default function Profile(props: ProfileProps) {
                     Welcome {userInfo.name} {userInfo.surname}
                 </h1>
                 <BioEditor />
-               
+                {/* <Friends otherUserId={userInfo.id} /> */}
             </div>
         </div>
     );

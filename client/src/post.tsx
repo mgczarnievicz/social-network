@@ -84,8 +84,8 @@ export default function Post(props: postProps) {
         <>
             {postInfo && (
                 <>
-                    <div key={postInfo.id} className="post">
-                        {/* <h1>This is post: {postInfo.id}</h1> */}
+                    <div className="post">
+                        {/* <h1>This is post: {postInfo.id} key={postInfo.id}</h1> */}
                         {postInfo.walluser_id == postInfo.writer_id && (
                             <p>
                                 {postInfo.walluser_name}{" "}
@@ -125,10 +125,10 @@ export default function Post(props: postProps) {
                             />
                         </div>
                     </div>
-                    <WallComments key={postInfo.id} postId={postInfo.id} />
+                    <WallComments postId={postInfo.id} />
                 </>
             )}
-            {/* comments.map((each: WallPost) => { */}
+            {/* comments.map((each: WallPost) => { key={postInfo.id} */}
         </>
     );
 }

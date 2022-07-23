@@ -8,9 +8,13 @@ import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import App from "./app";
 import { init } from "./socket";
+import { composeWithDevTools } from "redux-devtools-extension";
+import * as immutableState from "redux-immutable-state-invariant";
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
-// composeWithDevTools(applyMiddleware(immutableState.default()));
+const store = createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(immutableState.default(), thunk))
+);
 
 fetch("/user/id.json")
     .then((response) => response.json())

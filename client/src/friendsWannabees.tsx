@@ -9,6 +9,7 @@ import {
     asyncChangeFriendStatus,
     asyncReceiveFriendStatus,
 } from "./redux/friends/slice";
+import { useHistory } from "react-router";
 
 // DictionaryButtonAction for FriendButton values: {
 //     "Add Friend": "wannabee",
@@ -20,6 +21,8 @@ import {
 
 export default function FriendsAndWannabees() {
     const dispatch = useDispatch();
+    const history = useHistory();
+
     const wannabees = useSelector((state: RootState) =>
         state.friends?.filter((friend: FriendProfile) => !friend.accepted)
     );
@@ -54,6 +57,12 @@ export default function FriendsAndWannabees() {
         );
         dispatch(asyncChangeFriendStatus(buttonAction, friendId));
     };
+
+    function seeFriendProfile(idUserToSee: number) {
+        console.log("idUserToSee", idUserToSee);
+        history.push(`/user/${idUserToSee}`);
+    }
+
     console.log("actualFriends", actualFriends);
     console.log("wannabees", wannabees);
 
@@ -75,6 +84,9 @@ export default function FriendsAndWannabees() {
                                             "/defaultProfile.png"
                                         }
                                         alt={`${friend.name} ${friend.surname}`}
+                                        onClick={() => {
+                                            seeFriendProfile(friend.id);
+                                        }}
                                     />
                                     <h3>
                                         {friend.name} {friend.surname}
@@ -107,6 +119,9 @@ export default function FriendsAndWannabees() {
                                             "/defaultProfile.png"
                                         }
                                         alt={`${wannabee.name} ${wannabee.surname}`}
+                                        onClick={() => {
+                                            seeFriendProfile(wannabee.id);
+                                        }}
                                     />
                                     <h3>
                                         {wannabee.name} {wannabee.surname}

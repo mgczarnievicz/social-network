@@ -19,7 +19,9 @@ export default function messagesReducer(
             messages = action.payload.newestMsg;
             break;
         case "messages_general/received":
-            messages.push(action.payload.message);
+            console.log("In messages_general/received", action.payload.message);
+            messages = [action.payload.message, ...messages];
+            // messages.push(action.payload.message);
             break;
         default:
             break;
@@ -36,9 +38,9 @@ export function messagesReceived(messages: Array<ChatInfo>) {
     };
 }
 
-export function addNewMessage(messages: ChatInfo) {
+export function addNewMessage(message: ChatInfo) {
     return {
         type: "messages_general/received",
-        payload: { messages },
+        payload: { message },
     };
 }

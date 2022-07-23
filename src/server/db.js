@@ -112,11 +112,11 @@ module.exports.newGeneralMsg = function (senderId, message) {
     return db.query(q, param);
 };
 module.exports.getLastMsgGeneralMsg = function () {
-    var q = "SELECT users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at\n                FROM message_general\n                INNER JOIN users  \n                ON users.id=message_general.sender_id\n                ORDER BY message_general.send_at DESC\n                LIMIT 5";
+    var q = "SELECT users.id AS user_id, users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at\n                FROM message_general\n                INNER JOIN users  \n                ON users.id=message_general.sender_id\n                ORDER BY message_general.send_at DESC\n                LIMIT 5";
     return db.query(q, []);
 };
 module.exports.getMessageGeneralMsgById = function (msgId) {
-    var q = "SELECT users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at\n                FROM message_general\n                INNER JOIN users  \n                ON users.id=message_general.sender_id\n                WHERE message_general.id=$1";
+    var q = "SELECT users.id AS user_id, users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at\n                FROM message_general\n                INNER JOIN users  \n                ON users.id=message_general.sender_id\n                WHERE message_general.id=$1";
     return db.query(q, [msgId]);
 };
 /* ---------------------------------------------------------------
@@ -128,7 +128,7 @@ exports.addPost = function (walluser_id, writer_id, post) {
     return db.query(q, param);
 };
 exports.searchPostByUserId = function (userId) {
-    var q = "SELECT id FROM wall_posts\n        WHERE walluser_id = $1 OR\n        writer_id = $1\n        ORDER BY wall_posts.created_at DESC\n        LIMIT 5 ";
+    var q = "SELECT id AS post_id FROM wall_posts\n        WHERE walluser_id = $1 OR\n        writer_id = $1\n        ORDER BY wall_posts.created_at DESC\n        LIMIT 5 ";
     var param = [userId];
     return db.query(q, param);
 };

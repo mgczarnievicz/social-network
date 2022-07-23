@@ -230,7 +230,7 @@ module.exports.newGeneralMsg = (
 };
 
 module.exports.getLastMsgGeneralMsg = (): QueryResult<UserBasicInfo> => {
-    const q = `SELECT users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at
+    const q = `SELECT users.id AS user_id, users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at
                 FROM message_general
                 INNER JOIN users  
                 ON users.id=message_general.sender_id
@@ -243,7 +243,7 @@ module.exports.getLastMsgGeneralMsg = (): QueryResult<UserBasicInfo> => {
 module.exports.getMessageGeneralMsgById = (
     msgId: number
 ): QueryResult<UserBasicInfo> => {
-    const q = `SELECT users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at
+    const q = `SELECT users.id AS user_id, users.name, users.surname, users.photourl, message_general.id ,message_general.message, message_general.send_at
                 FROM message_general
                 INNER JOIN users  
                 ON users.id=message_general.sender_id
@@ -269,7 +269,7 @@ exports.addPost = (
 };
 
 exports.searchPostByUserId = (userId: number): QueryResult => {
-    const q = `SELECT id FROM wall_posts
+    const q = `SELECT id AS post_id FROM wall_posts
         WHERE walluser_id = $1 OR
         writer_id = $1
         ORDER BY wall_posts.created_at DESC

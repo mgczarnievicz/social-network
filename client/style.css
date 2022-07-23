@@ -416,6 +416,26 @@ h3 {
     text-align: right;
 }
 
+.message .profilePhoto img {
+    width: 50px;
+    height: 50px;
+    margin: 0px 10px 0px 0px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+}
+
+.message .message-info {
+    flex-grow: 2;
+}
+.message-info p:hover {
+    cursor: pointer;
+}
+
 /* ----------------------------------------------------------------------
                                    POST SECTION 
 ------------------------------------------------------------------------*/

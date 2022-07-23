@@ -599,18 +599,19 @@ io.on("connection", function (socket: SocketWithSession) {
     }
 
     const userId = socket.request.session.userId;
-    // if (userSocket[userId]) {
-    //     // Fist Time connecting.
-    //     userSocket[userId] = ["socket.id"];
-    // } else {
-    //     // There is already the key.
-    //     userSocket[userId].push(socket.id);
-    // }
 
     console.log(
         `User with the id: ${userId} and socket id ${socket.id} just connected.`
     );
     console.log("Mi list of connection", userSocket);
+
+    if (userSocket[userId]) {
+        // There is already the key.
+        userSocket[userId].push(socket.id);
+    } else {
+        // Fist Time connecting.
+        userSocket[userId] = [socket.id];
+    }
 
     /* ----------------------------------------------------
                     General Chat

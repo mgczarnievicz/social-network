@@ -453,15 +453,16 @@ io.on("connection", function (socket) {
         return socket.disconnect(true);
     }
     var userId = socket.request.session.userId;
-    // if (userSocket[userId]) {
-    //     // Fist Time connecting.
-    //     userSocket[userId] = ["socket.id"];
-    // } else {
-    //     // There is already the key.
-    //     userSocket[userId].push(socket.id);
-    // }
     console.log("User with the id: ".concat(userId, " and socket id ").concat(socket.id, " just connected."));
     console.log("Mi list of connection", userSocket);
+    if (userSocket[userId]) {
+        // There is already the key.
+        userSocket[userId].push(socket.id);
+    }
+    else {
+        // Fist Time connecting.
+        userSocket[userId] = [socket.id];
+    }
     /* ----------------------------------------------------
                     General Chat
     -------------------------------------------------------*/

@@ -58,17 +58,20 @@ export default function Post(props: postProps) {
 
     useEffect(() => {
         let postToDisplay: number;
-        if (props.postId) {
-            postToDisplay = props.postId;
-        } else {
-            postToDisplay = 1;
-            // postToDisplay = Number.parseInt(postIdToSee);
+        console.log("postIdToSee in post", postIdToSee);
+        console.log("props in post", props);
+
+        if (postIdToSee) {
+            postToDisplay = Number.parseInt(postIdToSee);
 
             console.log("otherUserId after parseInt", postToDisplay);
             if (Number.isNaN(postToDisplay)) {
                 history.replace("/");
             }
+        } else {
+            postToDisplay = props.postId;
         }
+
         console.log("postToDisplay:", postToDisplay);
 
         fetch(`/getPost/?postId=${postToDisplay}`)
@@ -80,20 +83,6 @@ export default function Post(props: postProps) {
                 }
             })
             .catch((err) => console.log("Error in getPost", err));
-
-        // try {
-        //     console.log(`/getPost/?from=${wallId}`);
-
-        //     const respBody = await fetch(`/getPost/?from=${wallId}`);
-        //     const data = await respBody.json();
-        //     console.log("Data from /getPost", data);
-        //     if (data.status == "Success") {
-        //         console.log("I am here");
-        //         setPost(data.posts);
-        //     }
-        // } catch {
-        //     console.log("Error in getting data from /getPost");
-        // }
     }, []);
     console.log("postInfo", postInfo);
 

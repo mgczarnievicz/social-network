@@ -1,4 +1,3 @@
-import e from "express";
 import React, {
     Component,
     ChangeEvent,
@@ -8,13 +7,17 @@ import React, {
 } from "react";
 
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { RootState } from "./redux/reducer";
 import { socket } from "./socket";
 import { ChatInfo } from "./typesClient";
+import ProfilePhoto from "./profilePhoto";
 
 export default function Chat() {
     const messagesInfo = useSelector((state: RootState) => state.messages);
-    // KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+    const history = useHistory();
+
+    console.log("messagesInfo", messagesInfo);
 
     useEffect(() => {
         let abort = false;
@@ -35,6 +38,12 @@ export default function Chat() {
             event.target.value = "";
         }
     };
+
+    function seeFriendProfile(idUserToSee: number) {
+        console.log("idUserToSee", idUserToSee);
+        history.push(`/user/${idUserToSee}`);
+    }
+
     return (
         <div className="container-main-width">
             <h1>Welcome to chat</h1>
@@ -43,11 +52,22 @@ export default function Chat() {
                     messagesInfo.map((each: ChatInfo) => {
                         return (
                             <div className="message" key={each.id}>
-                                <p>
-                                    {each.name} {each.surname}
-                                </p>
-                                <h3>{each.message}</h3>
-                                <h6>{each.send_at}</h6>
+                                <ProfilePhoto
+                                    name={each.name}
+                                    surname={each.surname}
+                                    photourl={each.photourl}
+                                />
+                                <div className="message-info">
+                                    <p
+                                        onClick={() => {
+                                            seeFriendProfile(each.user_id);
+                                        }}
+                                    >
+                                        {each.name} {each.surname}
+                                    </p>
+                                    <h3>{each.message}</h3>
+                                    <h6>{each.send_at}</h6>
+                                </div>
                             </div>
                         );
                     })}

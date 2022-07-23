@@ -279,21 +279,6 @@ exports.searchPostByUserId = (userId: number): QueryResult => {
     return db.query(q, param);
 };
 
-// exports.searchPostByPostId = (userId: number): QueryResult => {
-//     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at
-//                 FROM wall_posts
-//                 INNER JOIN users AS walluser
-//                 ON walluser_id=walluser.id
-//                 INNER JOIN users AS wallwriter
-//                 ON wall_posts.writer_id=wallwriter.id
-//                 WHERE wall_posts.id = $1
-//                 ORDER BY wall_posts.created_at DESC
-//                 LIMIT 5`;
-
-//     const param = [userId];
-//     return db.query(q, param);
-// };
-
 exports.getPostByPostId = (userId: number): QueryResult => {
     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at 
                 FROM wall_posts
@@ -321,6 +306,27 @@ exports.addComment = (
     RETURNING * `;
 
     const param = [post_id, writer_id, comment];
+    return db.query(q, param);
+};
+
+exports.searchCommentsByPostId = (postId: number): QueryResult => {
+    const q = `SELECT id AS comment_id FROM wall_comments
+        WHERE post_id = $1 
+        ORDER BY wall_comments.created_at DESC
+        LIMIT 3 `;
+
+    const param = [postId];
+    return db.query(q, param);
+};
+
+exports.getCommentById = (commentId: number): QueryResult => {
+    const q = `SELECT users.name, users.surname, wall_comments.id AS comment_id, wall_comments.post_id,  wall_comments.comment, wall_comments.created_at 
+    FROM wall_comments
+    INNER JOIN users
+    ON wall_comments.writer_id = users.id
+    WHERE wall_comments.id = $1 `;
+
+    const param = [commentId];
     return db.query(q, param);
 };
 

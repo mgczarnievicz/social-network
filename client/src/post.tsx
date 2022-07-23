@@ -8,24 +8,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/reducer";
 import { ProfileInfoWBio } from "./typesClient";
 import { useHistory, useParams } from "react-router";
+import WallComments from "./wallComment";
 
 library.add(faHeart, faComments, faPlay);
-
-//<FontAwesomeIcon icon="fa-solid fa-comments" />
-//<FontAwesomeIcon icon="fa-solid fa-heart" />
 
 interface postProps {
     postId?: number;
 }
-/*  created_at: "21/07/2022, 17:10:13"
-id: 8
-post: "I am with you!"
-walluser_id: 5
-walluser_name: "Lori"
-walluser_surname: "Antonio"
-wallwriter_name: "Elsa"
-wallwriter_surname: "Elsa"
-writer_id: 1 */
+
 interface PostInfo {
     id: number;
     walluser_id: number;
@@ -93,42 +83,50 @@ export default function Post(props: postProps) {
     return (
         <>
             {postInfo && (
-                <div key={postInfo.id} className="post">
-                    {/* <h1>This is post: {postInfo.id}</h1> */}
-                    {postInfo.walluser_id == postInfo.writer_id && (
-                        <p>
-                            {postInfo.walluser_name} {postInfo.walluser_surname}
-                        </p>
-                    )}
-                    {postInfo.walluser_id != postInfo.writer_id && (
-                        <div className="user-post">
+                <>
+                    <div key={postInfo.id} className="post">
+                        {/* <h1>This is post: {postInfo.id}</h1> */}
+                        {postInfo.walluser_id == postInfo.writer_id && (
                             <p>
                                 {postInfo.walluser_name}{" "}
                                 {postInfo.walluser_surname}
                             </p>
+                        )}
+                        {postInfo.walluser_id != postInfo.writer_id && (
+                            <div className="user-post">
+                                <p>
+                                    {postInfo.walluser_name}{" "}
+                                    {postInfo.walluser_surname}
+                                </p>
+                                <FontAwesomeIcon
+                                    icon="play"
+                                    size="xs"
+                                    color="darkgray"
+                                    className="post-to"
+                                />
+                                <p>
+                                    {postInfo.wallwriter_name}{" "}
+                                    {postInfo.wallwriter_surname}
+                                </p>
+                            </div>
+                        )}
+                        <h3>{postInfo.post}</h3>
+                        <h6>{postInfo.created_at}</h6>
+                        <div className="icons">
                             <FontAwesomeIcon
-                                icon="play"
-                                size="xs"
-                                color="darkgray"
-                                className="post-to"
+                                icon="heart"
+                                size="1x"
+                                color="grey"
                             />
-                            <p>
-                                {postInfo.wallwriter_name}{" "}
-                                {postInfo.wallwriter_surname}
-                            </p>
+                            <FontAwesomeIcon
+                                icon="comments"
+                                size="1x"
+                                color="green"
+                            />
                         </div>
-                    )}
-                    <h3>{postInfo.post}</h3>
-                    <h6>{postInfo.created_at}</h6>
-                    <div className="icons">
-                        <FontAwesomeIcon icon="heart" size="1x" color="grey" />
-                        <FontAwesomeIcon
-                            icon="comments"
-                            size="1x"
-                            color="green"
-                        />
                     </div>
-                </div>
+                    <WallComments key={postInfo.id} postId={postInfo.id} />
+                </>
             )}
             {/* comments.map((each: WallPost) => { */}
         </>

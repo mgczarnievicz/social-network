@@ -4,6 +4,8 @@ import { useHistory, useParams } from "react-router";
 import ProfilePhoto from "./profilePhoto";
 import FriendButton from "./friendButton";
 import { ProfileInfoWBio } from "./typesClient";
+import Wall from "./wall";
+import Friends from "./friends";
 
 export default function OtherProfile() {
     // DON'T TOUCH IF BREAKS FRIEND BUTTON
@@ -94,6 +96,8 @@ export default function OtherProfile() {
                                     }
                                 )}
                         </div>
+                        <Friends otherUserId={user.id} />
+                        <Wall wallUserId={user.id} />
                     </div>
                 </>
             )}

@@ -25,6 +25,8 @@ const {
     getLastMsgGeneralMsg,
     newGeneralMsg,
     getMessageGeneralMsgById,
+    searchCommentsByPostId,
+    getCommentById,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -42,6 +44,13 @@ import {
 } from "./typesServer";
 import { DataBrew } from "aws-sdk";
 
+const DATE_OPTION = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+};
 /* -----------------------------------------------------------------------
                                GENERAL USE
 -------------------------------------------------------------------------*/
@@ -445,6 +454,44 @@ exports.getFriends = (userId: number) => {
         .catch((err: QueryResult) => err);
 };
 
+/* -----------------------------------------------------------------------------
+                        SOCKET SECTION
+-------------------------------------------------------------------------------*/
+exports.getNewestChatMsg = () => {
+    return getLastMsgGeneralMsg()
+        .then((result: QueryResult) => {
+            console.log("getLastMsgGeneralMsg result", result.rows);
+            result.rows.map(
+                (each) =>
+                    (each.send_at = each.send_at.toLocaleString(
+                        "en-GB",
+                        DATE_OPTION
+                    ))
+            );
+            return result.rows;
+        })
+        .catch((err: QueryResult) => false);
+};
+
+exports.addNewMessageGeneralChat = (senderId: number, message: string) => {
+    return newGeneralMsg(senderId, message)
+        .then((result: QueryResult) => {
+            console.log("newGeneralMsg row:", result.rows);
+            return getMessageGeneralMsgById(result.rows[0].id).then(
+                (resp: QueryResult) => {
+                    console.log("getLastMsgGeneralMsg result", resp.rows[0]);
+                    resp.rows[0].send_at = resp.rows[0].send_at.toLocaleString(
+                        "en-GB",
+                        DATE_OPTION
+                    );
+
+                    return resp.rows[0];
+                }
+            );
+        })
+        .catch((err: QueryResult) => false);
+};
+
 /* -----------------------------------------------------------------------
                                 WALL SECTION
 -------------------------------------------------------------------------*/
@@ -465,15 +512,14 @@ exports.addWallPost = (
 
 exports.getPostInfo = (portId: number, myUserId: number) => {
     // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
-    console.log("The Wall I am going to search:", portId);
-    console.log("I am myUserId:", myUserId);
-
     return getPostByPostId(portId)
         .then((result: QueryResult) => {
-            console.log("getPostByPostId:result", result.rows[0]);
             result.rows.map(
                 (each) =>
-                    (each.created_at = each.created_at.toLocaleString("en-GB"))
+                    (each.created_at = each.created_at.toLocaleString(
+                        "en-GB",
+                        DATE_OPTION
+                    ))
             );
             return result.rows[0];
             // Here I have to map to put nice the date.
@@ -483,46 +529,50 @@ exports.getPostInfo = (portId: number, myUserId: number) => {
 
 exports.searchForTheNewestPosts = (wallUserId: number, myUserId: number) => {
     // search Post of the wall that I am in. The wallUserId can be the one writing the Post in his own Wall or in a friend Wall.
-    console.log("The Wall I am going to search:", wallUserId);
-    console.log("I am myUserId:", myUserId);
-
     return searchPostByUserId(wallUserId)
         .then((result: QueryResult) => {
-            console.log("searchPostByUser: result: ", result.rows);
+            // console.log("searchPostByUser: result: ", result.rows);
             return result.rows;
             // Here I have to map to put nice the date.
         })
         .catch((err: QueryResult) => err);
 };
 
-/* -----------------------------------------------------------------------------
-                        SOCKET SECTION
--------------------------------------------------------------------------------*/
-exports.getNewestChatMsg = () => {
-    return getLastMsgGeneralMsg()
+/* -----------------------------------------------------------------------
+                                COMMENTS SECTION
+-------------------------------------------------------------------------*/
+
+exports.searchCommentsId = (postId: number) => {
+    return searchCommentsByPostId(postId)
         .then((result: QueryResult) => {
-            console.log("getLastMsgGeneralMsg result", result.rows);
-            result.rows.map(
-                (each) => (each.send_at = each.send_at.toLocaleString("en-GB"))
-            );
+            console.log("Search Comments by COMMENT Id", result.rows);
+            const arrayCommentsId: Array<string> = [];
+            result.rows.map((each) => {
+                arrayCommentsId.push(each.comment_id);
+            });
             return result.rows;
         })
-        .catch((err: QueryResult) => false);
+        .catch((err: QueryResult) => err);
 };
 
-exports.addNewMessageGeneralChat = (senderId: number, message: string) => {
-    return newGeneralMsg(senderId, message)
+exports.getCommentInfo = (commentId: number) => {
+    return getCommentById(commentId)
         .then((result: QueryResult) => {
-            console.log("newGeneralMsg row:", result.rows);
-            return getMessageGeneralMsgById(result.rows[0].id).then(
-                (resp: QueryResult) => {
-                    console.log("getLastMsgGeneralMsg result", resp.rows[0]);
-                    resp.rows[0].send_at =
-                        resp.rows[0].send_at.toLocaleString("en-GB");
-
-                    return resp.rows[0];
-                }
-            );
+            // console.log("Result from Db get comment", result.rows);
+            result.rows[0].created_at =
+                result.rows[0].created_at.toLocaleString("en-GB", DATE_OPTION);
+            return result.rows[0];
         })
-        .catch((err: QueryResult) => false);
+        .catch((err: QueryResult) => err);
+};
+
+exports.addNewComment = (writer_id: number) => {
+    // return addComment(post_id, writer_id, comment)
+    //     .then((result: QueryResult) => {
+    //         // console.log("Result from Db get comment", result.rows);
+    //         result.rows[0].created_at =
+    //             result.rows[0].created_at.toLocaleString("en-GB", DATE_OPTION);
+    //         return result.rows[0];
+    //     })
+    //     .catch((err: QueryResult) => err);
 };

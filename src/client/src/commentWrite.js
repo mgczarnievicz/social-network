@@ -12,19 +12,16 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = require("react");
 var react_redux_1 = require("react-redux");
-var slice_1 = require("./redux/wall/slice");
+var react_1 = require("react");
 function WallWrite(props) {
     var dispatch = (0, react_redux_1.useDispatch)();
-    var _a = (0, react_1.useState)(""), post = _a[0], setPost = _a[1];
+    var _a = (0, react_1.useState)(""), comment = _a[0], setComment = _a[1];
     var userInfo = (0, react_redux_1.useSelector)(function (state) { return state.user; });
-    var wallId = props.wallUserId || userInfo.id;
-    console.log("wallId", wallId);
     function submitPost() {
         var abort = false;
-        dispatch((0, slice_1.asyncNewPost)(abort, wallId, post));
-        setPost("");
+        // dispatch(asyncNewComment(abort, props.postId, comment));
+        setComment("");
         return function () {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
@@ -32,8 +29,18 @@ function WallWrite(props) {
             abort = true;
         };
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "input-post" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: post, onChange: function (e) {
-                    setPost(e.target.value);
-                }, rows: 3, cols: 10 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: submitPost }, { children: "Post" }))] })));
+    var keyCheck = function (event) {
+        console.log("event.target.value", event.target.value);
+        setComment(event.target.value);
+        console.log("Comment", comment);
+        if (event.key === "Enter") {
+            event.preventDefault();
+            console.log("event.target.value", event.target.value);
+            event.target.value = "";
+        }
+    };
+    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "input-post" }, { children: (0, jsx_runtime_1.jsx)("textarea", { 
+            // value={comment}
+            onKeyDown: keyCheck, rows: 3, cols: 10 }) })));
 }
 exports.default = WallWrite;

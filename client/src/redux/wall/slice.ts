@@ -33,13 +33,6 @@ export default function postsReducer(
                                     ACTION
 ----------------------------------------------------------------------------------------------*/
 
-export function updateWallPost(newPost: number) {
-    return {
-        type: `/wallPost/newPost`,
-        payload: { newPost },
-    };
-}
-
 /* -------------------------------------------------------------------------------------------
                                     ASYNC: ThunkAction
 ----------------------------------------------------------------------------------------------*/
@@ -67,7 +60,7 @@ export const asyncReceiveWallPosts =
         try {
             const respBody = await fetch(`/getWallPost/?from=${wallId}`);
             const data = await respBody.json();
-            console.log("Data from /getPost", data);
+            console.log("Data from /getWallPost", data);
 
             if (!abort) {
                 if (data.status == "Success") {

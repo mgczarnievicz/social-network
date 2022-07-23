@@ -28,12 +28,13 @@ function FriendsAndWannabees() {
     var history = (0, react_router_1.useHistory)();
     var wannabees = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return !friend.accepted; }); });
     var actualFriends = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return friend.accepted; }); });
+    var user = (0, react_redux_1.useSelector)(function (state) { return state.user; });
     console.log("I am in Friends & Wannabees");
     (0, react_1.useEffect)(function () {
         /*      1. Make a fetch request to gets my friends and wannabees.
         2. dispatch an action creator and pass the data recived.         */
         var abort = false;
-        dispatch((0, slice_1.asyncReceiveFriendStatus)(abort));
+        dispatch((0, slice_1.asyncReceiveFriendStatus)(abort, user.id));
         return function () {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one

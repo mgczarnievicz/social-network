@@ -19,6 +19,8 @@ var react_1 = require("react");
 var react_router_1 = require("react-router");
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
 var friendButton_1 = __importDefault(require("./friendButton"));
+var wall_1 = __importDefault(require("./wall"));
+var friends_1 = __importDefault(require("./friends"));
 function OtherProfile() {
     // DON'T TOUCH IF BREAKS FRIEND BUTTON
     var _a = (0, react_1.useState)(null), user = _a[0], setUser = _a[1];
@@ -78,6 +80,6 @@ function OtherProfile() {
                                     user.bio.map(function (bioSentence, i) {
                                         console.log("Bio ", bioSentence);
                                         return (0, jsx_runtime_1.jsx)("h3", { children: bioSentence }, i);
-                                    })] }))] })) }))] }));
+                                    })] })), (0, jsx_runtime_1.jsx)(friends_1.default, { otherUserId: user.id }), (0, jsx_runtime_1.jsx)(wall_1.default, { wallUserId: user.id })] })) }))] }));
 }
 exports.default = OtherProfile;

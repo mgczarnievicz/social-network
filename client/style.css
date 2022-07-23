@@ -525,3 +525,59 @@ h3 {
     margin-right: 40px;
     margin-top: 0px;
 }
+
+.comment-container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.comment-post {
+    width: 60%;
+    border: 1px solid var(--color-dark-green);
+    background-color: #caf3d879;
+    border-radius: 12px;
+    margin-top: 5px;
+    padding: 10px;
+}
+.comment-post h3 {
+    text-align: center;
+}
+.comment-post p {
+    text-align: left;
+}
+
+.comment-post h6 {
+    text-align: right;
+}
+
+/* ----------------------------------------------------------------------
+                                  FRIENDS SECTION 
+------------------------------------------------------------------------*/
+.friends-container {
+    border: 2px solid var(--color-board);
+    border-radius: 12px;
+    padding: 10px;
+}
+.friends {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.friends-round {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.friends-round img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0px;
+}
+.friends-round h4 {
+    width: 100%;
+    text-align: center;
+}

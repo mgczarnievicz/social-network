@@ -24,3 +24,20 @@ export interface ChatInfo {
 export interface PostId {
     post_id: number;
 }
+
+export interface CommentsId {
+    comment_id: number;
+}
+export interface CommentsObject {
+    [key: number]: Array<CommentsId>;
+}
+
+export interface ChatInfo {
+    id: number;
+    user_id: number;
+    name: string;
+    surname: string;
+    message: string;
+    send_at: string;
+    photourl?: string;
+}

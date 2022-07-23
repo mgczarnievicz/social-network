@@ -30,13 +30,15 @@ export default function FriendsAndWannabees() {
         state.friends?.filter((friend: FriendProfile) => friend.accepted)
     );
 
+    const user = useSelector((state: RootState) => state.user);
+
     console.log("I am in Friends & Wannabees");
 
     useEffect(() => {
         /*      1. Make a fetch request to gets my friends and wannabees.
         2. dispatch an action creator and pass the data recived.         */
         let abort = false;
-        dispatch(asyncReceiveFriendStatus(abort));
+        dispatch(asyncReceiveFriendStatus(abort, user.id));
 
         return () => {
             // this function runs, whenever there is another useEffect that gets

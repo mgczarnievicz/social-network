@@ -109,14 +109,14 @@ type FriendThunk = ThunkAction<void, RootState, null, Action<ActionType>>;
   */
 
 export const asyncReceiveFriendStatus =
-    (abort: boolean): FriendThunk =>
+    (abort: boolean, userId: number): FriendThunk =>
     async (dispatch: Dispatch) => {
         console.log("I am in asyncReceiveFriendStatus");
         try {
             // handle fetch success
-            const respBody = await fetch("/getFriends.json");
+            const respBody = await fetch(`/getFriends/?from=${userId}`);
             const data = await respBody.json();
-            console.log("Data from /getFriends.json", data);
+            console.log("Data from /getFriends/?from=${wallId}", data);
             //
             if (!abort) {
                 // We want to despatch the data

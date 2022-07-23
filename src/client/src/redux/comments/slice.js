@@ -45,24 +45,55 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.asyncNewPost = exports.asyncReceiveWallPosts = void 0;
-// typeof ProfileInfoWBio
-function postsReducer(posts, action) {
-    if (posts === void 0) { posts = []; }
+exports.asyncNewComment = exports.asyncReceiveComments = void 0;
+// export default function commentsReducer(
+//     comments: CommentsObject = {},
+//     action: ActionType
+// ) {
+//     switch (action.type) {
+//         case "/comments/receive":
+//             console.log("In /comments/receive", action.payload);
+//             //I received a new key value and the array.
+//             comments = {
+//                 ...comments,
+//                 [action.payload.postId as number]: action.payload.commentsId,
+//             };
+//             break;
+//         case "/comments/newComment":
+//             console.log("In /comments/new Comment", action.payload.commentsId);
+//             // for(key in comments){
+//             //     if(key == )
+//             // }
+//             // comments = {...comments, action.payload};
+//             break;
+//     }
+//     return comments;
+// }
+function commentsReducer(comments, action) {
+    if (comments === void 0) { comments = []; }
     switch (action.type) {
-        case "/wallPost/receive":
-            console.log("/wallPost/receive action.payload", action.payload);
-            posts = action.payload.postsId;
+        case "/comments/receive":
+            console.log("In /comments/receive", action.payload);
+            //I received a new key value and the array.
+            comments = action.payload.commentsId;
+            // comments = [...action.payload.commentsId, ...comments];
+            // comments = {
+            //     ...comments,
+            //     [action.payload.postId as number]: action.payload.commentsId,
+            // };
             break;
-        case "/wallPost/newPost":
-            posts = __spreadArray([action.payload.newPost], posts, true);
-            break;
-        default:
+        case "/comments/newComment":
+            console.log("In /comments/new Comment", action.payload.commentsId);
+            // for(key in comments){
+            //     if(key == )
+            // }
+            // comments = {...comments, action.payload};
+            comments = __spreadArray(__spreadArray([], action.payload.commentsId, true), comments, true);
             break;
     }
-    return posts;
+    return comments;
 }
-exports.default = postsReducer;
+exports.default = commentsReducer;
 /*
     type ThunkAction<R, S, E, A extends Action>
 
@@ -76,7 +107,7 @@ exports.default = postsReducer;
       (this means that it should be an object
       that must have a `type` field.) Action type is defined in the redux typings.
   */
-var asyncReceiveWallPosts = function (abort, wallId) {
+var asyncReceiveComments = function (abort, postId) {
     return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
         var respBody, data, err_1;
         return __generator(this, function (_a) {
@@ -86,18 +117,19 @@ var asyncReceiveWallPosts = function (abort, wallId) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("/getWallPost/?from=".concat(wallId))];
+                    return [4 /*yield*/, fetch("/getCommentsByPostId/?postId=".concat(postId))];
                 case 2:
                     respBody = _a.sent();
                     return [4 /*yield*/, respBody.json()];
                 case 3:
                     data = _a.sent();
-                    console.log("Data from /getWallPost", data);
+                    console.log("Data from /getCommentsByPostId", data);
+                    console.log("postId, data.commentsId", postId, data.commentsId);
                     if (!abort) {
                         if (data.status == "Success") {
                             return [2 /*return*/, dispatch({
-                                    type: "/wallPost/receive",
-                                    payload: { postsId: data.posts },
+                                    type: "/comments/receive",
+                                    payload: { commentsId: data.commentsId },
                                 })];
                         }
                     }
@@ -115,8 +147,8 @@ var asyncReceiveWallPosts = function (abort, wallId) {
         });
     }); };
 };
-exports.asyncReceiveWallPosts = asyncReceiveWallPosts;
-var asyncNewPost = function (abort, wallId, post) {
+exports.asyncReceiveComments = asyncReceiveComments;
+var asyncNewComment = function (abort, wallId, post) {
     return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
         var respBody, data, err_2;
         return __generator(this, function (_a) {
@@ -126,7 +158,7 @@ var asyncNewPost = function (abort, wallId, post) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 5, , 6]);
-                    return [4 /*yield*/, fetch("/newPost.json", {
+                    return [4 /*yield*/, fetch("/newComment.json", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ wallUserId: wallId, post: post }),
@@ -137,12 +169,12 @@ var asyncNewPost = function (abort, wallId, post) {
                     return [4 /*yield*/, respBody.json()];
                 case 4:
                     data = _a.sent();
-                    console.log("Data from /wallPost.json", data);
+                    console.log("Data from /newComment.json", data);
                     if (!abort) {
                         if (data.status == "Success") {
                             return [2 /*return*/, dispatch({
-                                    type: "/wallPost/newPost",
-                                    payload: { newPost: data.payload },
+                                    type: "/comments/newComment",
+                                    payload: { newComment: data.payload },
                                 })];
                         }
                     }
@@ -160,4 +192,4 @@ var asyncNewPost = function (abort, wallId, post) {
         });
     }); };
 };
-exports.asyncNewPost = asyncNewPost;
+exports.asyncNewComment = asyncNewComment;

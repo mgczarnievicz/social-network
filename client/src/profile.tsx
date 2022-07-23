@@ -24,6 +24,7 @@ export default function Profile(props: ProfileProps) {
                     Welcome {userInfo.name} {userInfo.surname}
                 </h1>
                 <BioEditor />
+               
             </div>
         </div>
     );

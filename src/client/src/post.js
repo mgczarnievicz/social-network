@@ -10,6 +10,9 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
@@ -18,6 +21,7 @@ var fontawesome_svg_core_1 = require("@fortawesome/fontawesome-svg-core");
 var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
 var react_redux_1 = require("react-redux");
 var react_router_1 = require("react-router");
+var wallComment_1 = __importDefault(require("./wallComment"));
 fontawesome_svg_core_1.library.add(free_solid_svg_icons_1.faHeart, free_solid_svg_icons_1.faComments, free_solid_svg_icons_1.faPlay);
 function Post(props) {
     var _a = (0, react_1.useState)(), postInfo = _a[0], setPostInfo = _a[1];
@@ -59,6 +63,6 @@ function Post(props) {
     function clickedComment() {
         console.log("I clicked In comments! Lets Add some!");
     }
-    return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: postInfo && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "post" }, { children: [postInfo.walluser_id == postInfo.writer_id && ((0, jsx_runtime_1.jsxs)("p", { children: [postInfo.walluser_name, " ", postInfo.walluser_surname] })), postInfo.walluser_id != postInfo.writer_id && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "user-post" }, { children: [(0, jsx_runtime_1.jsxs)("p", { children: [postInfo.walluser_name, " ", postInfo.walluser_surname] }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "play", size: "xs", color: "darkgray", className: "post-to" }), (0, jsx_runtime_1.jsxs)("p", { children: [postInfo.wallwriter_name, " ", postInfo.wallwriter_surname] })] }))), (0, jsx_runtime_1.jsx)("h3", { children: postInfo.post }), (0, jsx_runtime_1.jsx)("h6", { children: postInfo.created_at }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "icons" }, { children: [(0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "1x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "1x", color: "green" })] }))] }), postInfo.id)) }));
+    return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: postInfo && ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "post" }, { children: [postInfo.walluser_id == postInfo.writer_id && ((0, jsx_runtime_1.jsxs)("p", { children: [postInfo.walluser_name, " ", postInfo.walluser_surname] })), postInfo.walluser_id != postInfo.writer_id && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "user-post" }, { children: [(0, jsx_runtime_1.jsxs)("p", { children: [postInfo.walluser_name, " ", postInfo.walluser_surname] }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "play", size: "xs", color: "darkgray", className: "post-to" }), (0, jsx_runtime_1.jsxs)("p", { children: [postInfo.wallwriter_name, " ", postInfo.wallwriter_surname] })] }))), (0, jsx_runtime_1.jsx)("h3", { children: postInfo.post }), (0, jsx_runtime_1.jsx)("h6", { children: postInfo.created_at }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "icons" }, { children: [(0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "1x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "1x", color: "green" })] }))] }), postInfo.id), (0, jsx_runtime_1.jsx)(wallComment_1.default, { postId: postInfo.id }, postInfo.id)] })) }));
 }
 exports.default = Post;

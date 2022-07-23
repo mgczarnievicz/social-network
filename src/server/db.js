@@ -132,19 +132,6 @@ exports.searchPostByUserId = function (userId) {
     var param = [userId];
     return db.query(q, param);
 };
-// exports.searchPostByPostId = (userId: number): QueryResult => {
-//     const q = `SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at
-//                 FROM wall_posts
-//                 INNER JOIN users AS walluser
-//                 ON walluser_id=walluser.id
-//                 INNER JOIN users AS wallwriter
-//                 ON wall_posts.writer_id=wallwriter.id
-//                 WHERE wall_posts.id = $1
-//                 ORDER BY wall_posts.created_at DESC
-//                 LIMIT 5`;
-//     const param = [userId];
-//     return db.query(q, param);
-// };
 exports.getPostByPostId = function (userId) {
     var q = "SELECT walluser.name AS walluser_name , walluser.surname AS walluser_surname,wallwriter.name AS wallwriter_name, wallwriter.surname AS wallwriter_surname, wall_posts.walluser_id, wall_posts.writer_id, wall_posts.id, wall_posts.post, wall_posts.created_at \n                FROM wall_posts\n                INNER JOIN users AS walluser \n                ON walluser_id=walluser.id \n                INNER JOIN users AS wallwriter \n                ON wall_posts.writer_id=wallwriter.id \n                WHERE wall_posts.id = $1\n                ";
     var param = [userId];
@@ -156,6 +143,16 @@ exports.getPostByPostId = function (userId) {
 exports.addComment = function (post_id, writer_id, comment) {
     var q = "INSERT INTO wall_posts (post_id, writer_id, comment)\n    VALUES ($1,$2, $3)   \n    RETURNING * ";
     var param = [post_id, writer_id, comment];
+    return db.query(q, param);
+};
+exports.searchCommentsByPostId = function (postId) {
+    var q = "SELECT id AS comment_id FROM wall_comments\n        WHERE post_id = $1 \n        ORDER BY wall_comments.created_at DESC\n        LIMIT 3 ";
+    var param = [postId];
+    return db.query(q, param);
+};
+exports.getCommentById = function (commentId) {
+    var q = "SELECT users.name, users.surname, wall_comments.id AS comment_id, wall_comments.post_id,  wall_comments.comment, wall_comments.created_at \n    FROM wall_comments\n    INNER JOIN users\n    ON wall_comments.writer_id = users.id\n    WHERE wall_comments.id = $1 ";
+    var param = [commentId];
     return db.query(q, param);
 };
 /*

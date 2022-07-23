@@ -41,6 +41,8 @@ const {
     getFriends,
     getNewestChatMsg,
     addNewMessageGeneralChat,
+    searchCommentsId,
+    getCommentInfo,
 } = require("./process");
 
 import { createServer } from "http";
@@ -173,11 +175,12 @@ app.get("/getUserInfo.json", (req, res) => {
     });
 });
 
-app.get("/getFriends.json", (req, res) => {
+app.get("/getFriends/", (req, res) => {
     console.log(
-        `-----------------------------------------------------------------------------\n\t Get Friends`
+        `-----------------------------------------------------------------------------\n\t Get Friends`,
+        req.query
     );
-    getFriends(req.session.userId)
+    getFriends(req.query.from)
         .then((data: []) => {
             res.json({
                 status: "Success",
@@ -266,10 +269,10 @@ app.get("/getWallPost/", (req, res) => {
     // I Just need the post Id
     searchForTheNewestPosts(req.query.from, req.session.userId)
         .then((posts: []) => {
-            console.log(
-                "searchForTheNewestPosts: In server what I am going to send to client:",
-                posts
-            );
+            // console.log(
+            //     "searchForTheNewestPosts: In server what I am going to send to client:",
+            //     posts
+            // );
             res.json({
                 status: "Success",
                 posts,
@@ -290,10 +293,58 @@ app.get("/getPost/", (req, res) => {
     // I need all the post Info, the likes, comments all.
     getPostInfo(req.query.postId, req.session.userId)
         .then((post: {}) => {
-            console.log("In server what I am going to send to client", post);
+            // console.log("In server what I am going to send to client", post);
             res.json({
                 status: "Success",
                 post,
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
+});
+
+app.get("/getCommentsByPostId/", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get Comments:`,
+        req.query
+    );
+    // I need all the post Info, the likes, comments all.
+    searchCommentsId(req.query.postId)
+        .then((commentsId: []) => {
+            console.log(
+                "In server what I am going to send to client",
+                commentsId
+            );
+            res.json({
+                status: "Success",
+                commentsId,
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
+});
+
+app.get("/getCommentInfo/", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t Get Comment Info:`,
+        req.query
+    );
+    // I need all the post Info, the likes, comments all.
+    getCommentInfo(req.query.commentId)
+        .then((commentInfo: {}) => {
+            console.log(
+                "In server what I am going to send to client",
+                commentInfo
+            );
+            res.json({
+                status: "Success",
+                commentInfo,
             });
         })
         .catch((err: QueryResult) => {
@@ -622,7 +673,7 @@ io.on("connection", function (socket: SocketWithSession) {
         getNewestChatMsg().then((result: Array<{}> | boolean) => {
             console.log("IN newest-generalMsg-chat", result);
             if (result != false) {
-                io.emit("newest-generalMsg-chat", result);
+                socket.emit("newest-generalMsg-chat", result);
             }
         });
     });

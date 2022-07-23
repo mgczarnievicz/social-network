@@ -37,7 +37,7 @@ export default function Wall(props: WallProps) {
 
     return (
         <div className="container-main-width wall-container">
-            <WallWrite />
+            <WallWrite wallUserId={props.wallUserId} />
             <WallPost />
         </div>
     );

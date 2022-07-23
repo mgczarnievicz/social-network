@@ -1,12 +1,19 @@
-import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/reducer";
 import { ProfileInfoWBio } from "./typesClient";
 import { asyncNewPost } from "./redux/wall/slice";
 import { text } from "stream/consumers";
 
+import React, {
+    Component,
+    ChangeEvent,
+    useState,
+    KeyboardEvent,
+    useEffect,
+} from "react";
+
 interface WriteWallProps {
-    wallUserId?: number;
+    postId?: number;
 }
 
 interface postIfo {
@@ -17,19 +24,16 @@ interface postIfo {
 
 export default function WallWrite(props: WriteWallProps) {
     const dispatch = useDispatch();
-    const [post, setPost] = useState<string | null>("");
+    const [comment, setComment] = useState<string>("");
 
     const userInfo: ProfileInfoWBio = useSelector(
         (state: RootState) => state.user
     );
 
-    const wallId = props.wallUserId || userInfo.id;
-    console.log("wallId", wallId);
-
     function submitPost() {
         let abort = false;
-        dispatch(asyncNewPost(abort, wallId, post));
-        setPost("");
+        // dispatch(asyncNewComment(abort, props.postId, comment));
+        setComment("");
 
         return () => {
             // this function runs, whenever there is another useEffect that gets
@@ -39,17 +43,27 @@ export default function WallWrite(props: WriteWallProps) {
         };
     }
 
+    const keyCheck = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+        console.log("event.target.value", event.target.value);
+
+        setComment(event.target.value);
+        console.log("Comment", comment);
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            console.log("event.target.value", event.target.value);
+            event.target.value = "";
+        }
+    };
+
     return (
         <div className="input-post">
             <textarea
-                value={post}
-                onChange={(e) => {
-                    setPost(e.target.value);
-                }}
+                // value={comment}
+                onKeyDown={keyCheck}
                 rows={3}
                 cols={10}
             ></textarea>
-            <button onClick={submitPost}>Post</button>
         </div>
     );
 }

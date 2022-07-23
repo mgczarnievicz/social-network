@@ -130,7 +130,7 @@ exports.receiveFriendStatus = receiveFriendStatus;
       (this means that it should be an object
       that must have a `type` field.) Action type is defined in the redux typings.
   */
-var asyncReceiveFriendStatus = function (abort) {
+var asyncReceiveFriendStatus = function (abort, userId) {
     return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
         var respBody, data, err_1;
         return __generator(this, function (_a) {
@@ -140,13 +140,13 @@ var asyncReceiveFriendStatus = function (abort) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch("/getFriends.json")];
+                    return [4 /*yield*/, fetch("/getFriends/?from=".concat(userId))];
                 case 2:
                     respBody = _a.sent();
                     return [4 /*yield*/, respBody.json()];
                 case 3:
                     data = _a.sent();
-                    console.log("Data from /getFriends.json", data);
+                    console.log("Data from /getFriends/?from=${wallId}", data);
                     //
                     if (!abort) {
                         // We want to despatch the data

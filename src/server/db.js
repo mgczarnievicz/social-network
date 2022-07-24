@@ -141,12 +141,12 @@ exports.getPostByPostId = function (userId) {
                   COMMENTS POST TABLE
 ----------------------------------------------------------------*/
 exports.addComment = function (post_id, writer_id, comment) {
-    var q = "INSERT INTO wall_posts (post_id, writer_id, comment)\n    VALUES ($1,$2, $3)   \n    RETURNING * ";
+    var q = "INSERT INTO wall_comments (post_id, writer_id, comment)\n    VALUES ($1,$2, $3)   \n    RETURNING  wall_comments.id AS comment_id, wall_comments.post_id ";
     var param = [post_id, writer_id, comment];
     return db.query(q, param);
 };
 exports.searchCommentsByPostId = function (postId) {
-    var q = "SELECT id AS comment_id FROM wall_comments\n        WHERE post_id = $1 \n        ORDER BY wall_comments.created_at DESC\n        LIMIT 3 ";
+    var q = "SELECT id AS comment_id,  post_id  FROM wall_comments\n        WHERE post_id = $1 \n        ORDER BY wall_comments.created_at DESC\n        LIMIT 3 ";
     var param = [postId];
     return db.query(q, param);
 };

@@ -27,6 +27,7 @@ const {
     getMessageGeneralMsgById,
     searchCommentsByPostId,
     getCommentById,
+    addComment,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -546,10 +547,10 @@ exports.searchCommentsId = (postId: number) => {
     return searchCommentsByPostId(postId)
         .then((result: QueryResult) => {
             console.log("Search Comments by COMMENT Id", result.rows);
-            const arrayCommentsId: Array<string> = [];
-            result.rows.map((each) => {
-                arrayCommentsId.push(each.comment_id);
-            });
+            // const arrayCommentsId: Array<string> = [];
+            // result.rows.map((each) => {
+            //     arrayCommentsId.push(each.comment_id);
+            // });
             return result.rows;
         })
         .catch((err: QueryResult) => err);
@@ -566,13 +567,18 @@ exports.getCommentInfo = (commentId: number) => {
         .catch((err: QueryResult) => err);
 };
 
-exports.addNewComment = (writer_id: number) => {
-    // return addComment(post_id, writer_id, comment)
-    //     .then((result: QueryResult) => {
-    //         // console.log("Result from Db get comment", result.rows);
-    //         result.rows[0].created_at =
-    //             result.rows[0].created_at.toLocaleString("en-GB", DATE_OPTION);
-    //         return result.rows[0];
-    //     })
-    //     .catch((err: QueryResult) => err);
+interface NewComment {
+    post_id: number;
+    comment: string;
+}
+
+exports.addCommentToPost = (writer_id: number, newComment: NewComment) => {
+    return addComment(newComment.post_id, writer_id, newComment.comment)
+        .then((result: QueryResult) => {
+            console.log("Result from Db get comment", result.rows);
+            // result.rows[0].created_at =
+            //     result.rows[0].created_at.toLocaleString("en-GB", DATE_OPTION);
+            return result.rows[0];
+        })
+        .catch((err: QueryResult) => err);
 };

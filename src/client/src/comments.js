@@ -22,7 +22,10 @@ function Comments(props) {
     console.log("Props in function comments:");
     //
     //[props.postId]
-    var commentsId = (0, react_redux_1.useSelector)(function (state) { return state.comments; });
+    var commentsId = (0, react_redux_1.useSelector)(function (state) {
+        var _a;
+        return (_a = state.comments) === null || _a === void 0 ? void 0 : _a.filter(function (each) { return each.post_id == props.postId; });
+    });
     console.log("in Comments", commentsId);
     return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "comment-container" }, { children: commentsId &&
             commentsId.map(function (each) {

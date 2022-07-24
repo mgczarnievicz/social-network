@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId, getLastMsgGeneralMsg = _a.getLastMsgGeneralMsg, newGeneralMsg = _a.newGeneralMsg, getMessageGeneralMsgById = _a.getMessageGeneralMsgById, searchCommentsByPostId = _a.searchCommentsByPostId, getCommentById = _a.getCommentById;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId, getLastMsgGeneralMsg = _a.getLastMsgGeneralMsg, newGeneralMsg = _a.newGeneralMsg, getMessageGeneralMsgById = _a.getMessageGeneralMsgById, searchCommentsByPostId = _a.searchCommentsByPostId, getCommentById = _a.getCommentById, addComment = _a.addComment;
 var sendEmail = require("./ses").sendEmail;
 var DATE_OPTION = {
     day: "numeric",
@@ -460,10 +460,10 @@ exports.searchCommentsId = function (postId) {
     return searchCommentsByPostId(postId)
         .then(function (result) {
         console.log("Search Comments by COMMENT Id", result.rows);
-        var arrayCommentsId = [];
-        result.rows.map(function (each) {
-            arrayCommentsId.push(each.comment_id);
-        });
+        // const arrayCommentsId: Array<string> = [];
+        // result.rows.map((each) => {
+        //     arrayCommentsId.push(each.comment_id);
+        // });
         return result.rows;
     })
         .catch(function (err) { return err; });
@@ -478,13 +478,13 @@ exports.getCommentInfo = function (commentId) {
     })
         .catch(function (err) { return err; });
 };
-exports.addNewComment = function (writer_id) {
-    // return addComment(post_id, writer_id, comment)
-    //     .then((result: QueryResult) => {
-    //         // console.log("Result from Db get comment", result.rows);
-    //         result.rows[0].created_at =
-    //             result.rows[0].created_at.toLocaleString("en-GB", DATE_OPTION);
-    //         return result.rows[0];
-    //     })
-    //     .catch((err: QueryResult) => err);
+exports.addCommentToPost = function (writer_id, newComment) {
+    return addComment(newComment.post_id, writer_id, newComment.comment)
+        .then(function (result) {
+        console.log("Result from Db get comment", result.rows);
+        // result.rows[0].created_at =
+        //     result.rows[0].created_at.toLocaleString("en-GB", DATE_OPTION);
+        return result.rows[0];
+    })
+        .catch(function (err) { return err; });
 };

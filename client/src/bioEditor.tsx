@@ -70,7 +70,11 @@ function BioEditor(props: BioProps) {
                     {bio &&
                         bio.map((bioSentence: string, i: number) => {
                             console.log("Bio ", bioSentence);
-                            return <h3 key={i}>{bioSentence}</h3>;
+                            return (
+                                <h3 className="bio-text" key={i}>
+                                    {bioSentence}
+                                </h3>
+                            );
                         })}
 
                     {/* <h3>{bio}</h3> */}

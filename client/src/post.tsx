@@ -85,7 +85,7 @@ export default function Post(props: postProps) {
             {postInfo && (
                 <>
                     <div className="post">
-                        {/* <h1>This is post: {postInfo.id} key={postInfo.id}</h1> */}
+                        {/* <pre>{JSON.stringify(postInfo.id)}</pre> */}
                         {postInfo.walluser_id == postInfo.writer_id && (
                             <p>
                                 {postInfo.walluser_name}{" "}
@@ -122,10 +122,17 @@ export default function Post(props: postProps) {
                                 icon="comments"
                                 size="1x"
                                 color="green"
+                                onClick={() => {
+                                    setShowCommentInput(!showCommentInput);
+                                }}
                             />
                         </div>
                     </div>
-                    <WallComments postId={postInfo.id} />
+                    <WallComments
+                        // key={postInfo.id}
+                        postId={postInfo.id}
+                        writeComment={showCommentInput}
+                    />
                 </>
             )}
             {/* comments.map((each: WallPost) => { key={postInfo.id} */}

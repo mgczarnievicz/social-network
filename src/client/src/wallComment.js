@@ -20,6 +20,6 @@ function WallComments(props) {
             abort = true;
         };
     }, []);
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(comments_1.default, { postId: props.postId }), (0, jsx_runtime_1.jsx)(commentWrite_1.default, { postId: props.postId })] }));
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [props.writeComment && ((0, jsx_runtime_1.jsx)(commentWrite_1.default, { postId: props.postId }, props.postId)), (0, jsx_runtime_1.jsx)(comments_1.default, { postId: props.postId })] }));
 }
 exports.default = WallComments;

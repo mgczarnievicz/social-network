@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/reducer";
 import { ProfileInfoWBio } from "./typesClient";
-import { asyncNewPost } from "./redux/wall/slice";
+import { asyncNewComment } from "./redux/comments/slice";
 import { text } from "stream/consumers";
 
 import React, {
@@ -30,19 +30,6 @@ export default function WallWrite(props: WriteWallProps) {
         (state: RootState) => state.user
     );
 
-    function submitPost() {
-        let abort = false;
-        // dispatch(asyncNewComment(abort, props.postId, comment));
-        setComment("");
-
-        return () => {
-            // this function runs, whenever there is another useEffect that gets
-            // triggered after the initial one
-            console.log("cleanup running");
-            abort = true;
-        };
-    }
-
     const keyCheck = (event: KeyboardEvent<HTMLTextAreaElement>) => {
         console.log("event.target.value", event.target.value);
 
@@ -52,14 +39,16 @@ export default function WallWrite(props: WriteWallProps) {
         if (event.key === "Enter") {
             event.preventDefault();
             console.log("event.target.value", event.target.value);
+            dispatch(asyncNewComment(props.postId, comment));
             event.target.value = "";
         }
     };
 
     return (
-        <div className="input-post">
+        <div className="input-comment">
             <textarea
                 // value={comment}
+                placeholder="write a comment"
                 onKeyDown={keyCheck}
                 rows={3}
                 cols={10}

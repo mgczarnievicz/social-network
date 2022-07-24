@@ -1,6 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faHeart);
+
 interface CommentProps {
     comment_id: number;
 }
@@ -40,12 +46,15 @@ export default function CommentDisplay(props: CommentProps) {
             {commentInfo && (
                 // key={commentInfo.comment_id}
                 <div className="comment-post">
-                    <pre>{JSON.stringify(commentInfo.comment_id)}</pre>
+                    {/* <pre>{JSON.stringify(commentInfo.comment_id)}</pre> */}
                     <p>
                         {commentInfo.name} {commentInfo.surname}
                     </p>
-                    <h3>{commentInfo.comment}</h3>
-                    <h6>{commentInfo.created_at}</h6>
+                    <h4>{commentInfo.comment}</h4>
+                    <div className="comment-icon icons">
+                        <FontAwesomeIcon icon="heart" size="sm" color="grey" />
+                        <h6>{commentInfo.created_at}</h6>
+                    </div>
                 </div>
             )}
         </>

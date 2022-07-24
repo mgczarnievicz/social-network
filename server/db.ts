@@ -301,16 +301,16 @@ exports.addComment = (
     writer_id: number,
     comment: string
 ): QueryResult => {
-    const q = `INSERT INTO wall_posts (post_id, writer_id, comment)
+    const q = `INSERT INTO wall_comments (post_id, writer_id, comment)
     VALUES ($1,$2, $3)   
-    RETURNING * `;
+    RETURNING  wall_comments.id AS comment_id, wall_comments.post_id `;
 
     const param = [post_id, writer_id, comment];
     return db.query(q, param);
 };
 
 exports.searchCommentsByPostId = (postId: number): QueryResult => {
-    const q = `SELECT id AS comment_id FROM wall_comments
+    const q = `SELECT id AS comment_id,  post_id  FROM wall_comments
         WHERE post_id = $1 
         ORDER BY wall_comments.created_at DESC
         LIMIT 3 `;

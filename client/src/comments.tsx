@@ -16,8 +16,10 @@ export default function Comments(props: commentProps) {
 
     //
     //[props.postId]
-    const commentsId: Array<CommentsId> = useSelector(
-        (state: RootState) => state.comments
+    const commentsId: Array<CommentsId> = useSelector((state: RootState) =>
+        state.comments?.filter(
+            (each: CommentsId) => each.post_id == props.postId
+        )
     );
 
     console.log("in Comments", commentsId);

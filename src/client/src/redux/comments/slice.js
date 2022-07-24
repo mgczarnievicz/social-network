@@ -75,20 +75,12 @@ function commentsReducer(comments, action) {
         case "/comments/receive":
             console.log("In /comments/receive", action.payload);
             //I received a new key value and the array.
-            comments = action.payload.commentsId;
-            // comments = [...action.payload.commentsId, ...comments];
-            // comments = {
-            //     ...comments,
-            //     [action.payload.postId as number]: action.payload.commentsId,
-            // };
+            // comments = action.payload.commentsId;
+            comments = __spreadArray(__spreadArray([], comments, true), action.payload.commentsId, true);
             break;
         case "/comments/newComment":
             console.log("In /comments/new Comment", action.payload.commentsId);
-            // for(key in comments){
-            //     if(key == )
-            // }
-            // comments = {...comments, action.payload};
-            comments = __spreadArray(__spreadArray([], action.payload.commentsId, true), comments, true);
+            comments = __spreadArray([action.payload.newComment], comments, true);
             break;
     }
     return comments;
@@ -148,12 +140,13 @@ var asyncReceiveComments = function (abort, postId) {
     }); };
 };
 exports.asyncReceiveComments = asyncReceiveComments;
-var asyncNewComment = function (abort, wallId, post) {
+var asyncNewComment = function (post_id, comment) {
     return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-        var respBody, data, err_2;
+        var abort, respBody, data, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    abort = false;
                     console.log("I am in asyncReceiveWallPosts");
                     _a.label = 1;
                 case 1:
@@ -161,7 +154,7 @@ var asyncNewComment = function (abort, wallId, post) {
                     return [4 /*yield*/, fetch("/newComment.json", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ wallUserId: wallId, post: post }),
+                            body: JSON.stringify({ post_id: post_id, comment: comment }),
                         })];
                 case 2: return [4 /*yield*/, _a.sent()];
                 case 3:
@@ -187,7 +180,12 @@ var asyncNewComment = function (abort, wallId, post) {
                     // handle fetch failure
                     console.log("Error", err_2);
                     return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                case 6: return [2 /*return*/, function () {
+                        // this function runs, whenever there is another useEffect that gets
+                        // triggered after the initial one
+                        console.log("cleanup running");
+                        abort = true;
+                    }];
             }
         });
     }); };

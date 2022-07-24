@@ -47,23 +47,12 @@ export default function commentsReducer(
         case "/comments/receive":
             console.log("In /comments/receive", action.payload);
             //I received a new key value and the array.
-            comments = action.payload.commentsId;
-            // comments = [...action.payload.commentsId, ...comments];
-
-            // comments = {
-            //     ...comments,
-            //     [action.payload.postId as number]: action.payload.commentsId,
-            // };
-
+            // comments = action.payload.commentsId;
+            comments = [...comments, ...action.payload.commentsId];
             break;
         case "/comments/newComment":
             console.log("In /comments/new Comment", action.payload.commentsId);
-
-            // for(key in comments){
-            //     if(key == )
-            // }
-            // comments = {...comments, action.payload};
-            comments = [...action.payload.commentsId, ...comments];
+            comments = [action.payload.newComment, ...comments];
 
             break;
     }
@@ -119,14 +108,15 @@ export const asyncReceiveComments =
     };
 
 export const asyncNewComment =
-    (abort: boolean, wallId: number, post: string): UserThunk =>
+    (post_id: number, comment: string): UserThunk =>
     async (dispatch: Dispatch) => {
+        let abort = false;
         console.log("I am in asyncReceiveWallPosts");
         try {
             const respBody = await await fetch("/newComment.json", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ wallUserId: wallId, post }),
+                body: JSON.stringify({ post_id, comment }),
             });
             const data = await respBody.json();
             console.log("Data from /newComment.json", data);
@@ -145,4 +135,10 @@ export const asyncNewComment =
             // handle fetch failure
             console.log("Error", err);
         }
+        return () => {
+            // this function runs, whenever there is another useEffect that gets
+            // triggered after the initial one
+            console.log("cleanup running");
+            abort = true;
+        };
     };

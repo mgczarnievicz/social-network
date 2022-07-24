@@ -256,10 +256,19 @@ label {
 }
 
 .profile-info {
+    min-width: 300px;
+    max-width: 505px;
     flex-grow: 2;
     padding: 10px 10px;
+    padding-left: 50px;
 }
-
+/* .profile-info h1 {
+    padding: 10px 10px;
+    text-align: center;
+} */
+.bio-text {
+    font-weight: 400;
+}
 .photo-friendButton button {
     width: 100%;
     padding-top: 3px;
@@ -476,12 +485,13 @@ h3 {
 .post {
     width: 90%;
     margin: 10px 20px;
+    margin-bottom: 0px;
     padding: 10px;
     border: 2px solid var(--color-dark-green);
     border-radius: 12px;
     background-color: antiquewhite;
 }
-.post .icons {
+.icons {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -529,6 +539,7 @@ h3 {
 .comment-container {
     width: 90%;
     display: flex;
+    /* flex-direction: column-reverse; */
     flex-direction: column;
     align-items: flex-end;
 }
@@ -550,15 +561,33 @@ h3 {
 .comment-post h6 {
     text-align: right;
 }
+.input-comment {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.input-comment textarea {
+    width: 60%;
+    height: 68px;
+    font-size: 16px;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 12px;
+}
 
 /* ----------------------------------------------------------------------
                                   FRIENDS SECTION 
 ------------------------------------------------------------------------*/
 .friends-container {
-    width: 300px;
+    min-width: 300px;
+    max-width: 505px;
+
     border: 2px solid var(--color-board);
     border-radius: 12px;
     padding: 10px;
+    margin: 10px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;

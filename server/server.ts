@@ -43,6 +43,7 @@ const {
     addNewMessageGeneralChat,
     searchCommentsId,
     getCommentInfo,
+    addCommentToPost,
 } = require("./process");
 
 import { createServer } from "http";
@@ -594,6 +595,26 @@ app.post("/newPost.json", (req, res) => {
 
     addWallPost(req.session.userId, req.body)
         .then((result: QueryResult) => {
+            console.log("result in wallPost.json", result);
+            res.json({
+                status: "Success",
+                payload: result,
+            });
+        })
+        .catch((err: QueryResult) => {
+            res.json({
+                status: "Error",
+            });
+        });
+});
+
+app.post("/newComment.json", (req, res) => {
+    console.log(
+        `-----------------------------------------------------------------------------\n\t New Comment Status:`,
+        req.body
+    );
+    addCommentToPost(req.session.userId, req.body)
+        .then((result: {}) => {
             console.log("result in wallPost.json", result);
             res.json({
                 status: "Success",

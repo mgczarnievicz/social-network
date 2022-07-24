@@ -12,7 +12,7 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends, getNewestChatMsg = _a.getNewestChatMsg, addNewMessageGeneralChat = _a.addNewMessageGeneralChat, searchCommentsId = _a.searchCommentsId, getCommentInfo = _a.getCommentInfo;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends, getNewestChatMsg = _a.getNewestChatMsg, addNewMessageGeneralChat = _a.addNewMessageGeneralChat, searchCommentsId = _a.searchCommentsId, getCommentInfo = _a.getCommentInfo, addCommentToPost = _a.addCommentToPost;
 // @ts-ignore
 var app = (0, express_1.default)();
 var server = require("http").Server(app);
@@ -456,6 +456,22 @@ app.post("/newPost.json", function (req, res) {
         - post
     */
     addWallPost(req.session.userId, req.body)
+        .then(function (result) {
+        console.log("result in wallPost.json", result);
+        res.json({
+            status: "Success",
+            payload: result,
+        });
+    })
+        .catch(function (err) {
+        res.json({
+            status: "Error",
+        });
+    });
+});
+app.post("/newComment.json", function (req, res) {
+    console.log("-----------------------------------------------------------------------------\n\t New Comment Status:", req.body);
+    addCommentToPost(req.session.userId, req.body)
         .then(function (result) {
         console.log("result in wallPost.json", result);
         res.json({

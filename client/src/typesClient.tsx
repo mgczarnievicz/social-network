@@ -27,6 +27,7 @@ export interface PostId {
 
 export interface CommentsId {
     comment_id: number;
+    post_id: number;
 }
 export interface CommentsObject {
     [key: number]: Array<CommentsId>;

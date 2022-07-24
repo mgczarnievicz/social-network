@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var encryption = require("./encryption");
 var crypto_random_string_1 = __importDefault(require("crypto-random-string"));
-var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId, getLastMsgGeneralMsg = _a.getLastMsgGeneralMsg, newGeneralMsg = _a.newGeneralMsg, getMessageGeneralMsgById = _a.getMessageGeneralMsgById, searchCommentsByPostId = _a.searchCommentsByPostId, getCommentById = _a.getCommentById, addComment = _a.addComment;
+var _a = require("./db"), registerUser = _a.registerUser, getUserByEmail = _a.getUserByEmail, searchUserByEmail = _a.searchUserByEmail, updatePassword = _a.updatePassword, registerCode = _a.registerCode, searchCode = _a.searchCode, updateProfileImage = _a.updateProfileImage, getUserDataById = _a.getUserDataById, upDateBioByUserId = _a.upDateBioByUserId, getNewestUsers = _a.getNewestUsers, getMatchingFriends = _a.getMatchingFriends, searchProfileByUserId = _a.searchProfileByUserId, getFriendship = _a.getFriendship, updateFriendshipById = _a.updateFriendshipById, deleteFriendshipById = _a.deleteFriendshipById, addFriendship = _a.addFriendship, addPost = _a.addPost, searchFriendshipByUserId = _a.searchFriendshipByUserId, searchPostByUserId = _a.searchPostByUserId, getPostByPostId = _a.getPostByPostId, getLastMsgGeneralMsg = _a.getLastMsgGeneralMsg, newGeneralMsg = _a.newGeneralMsg, getMessageGeneralMsgById = _a.getMessageGeneralMsgById, searchCommentsByPostId = _a.searchCommentsByPostId, getCommentById = _a.getCommentById, addComment = _a.addComment, getPrivateMsgByUsersId = _a.getPrivateMsgByUsersId, newPrivateMsg = _a.newPrivateMsg, getPrivateMsgById = _a.getPrivateMsgById;
 var sendEmail = require("./ses").sendEmail;
 var DATE_OPTION = {
     day: "numeric",
@@ -394,7 +394,7 @@ exports.getFriends = function (userId) {
 /* -----------------------------------------------------------------------------
                         SOCKET SECTION
 -------------------------------------------------------------------------------*/
-exports.getNewestChatMsg = function () {
+var getNewestChatGeneral = function () {
     return getLastMsgGeneralMsg()
         .then(function (result) {
         console.log("getLastMsgGeneralMsg result", result.rows);
@@ -405,7 +405,34 @@ exports.getNewestChatMsg = function () {
     })
         .catch(function (err) { return false; });
 };
-exports.addNewMessageGeneralChat = function (senderId, message) {
+var getPrivateMessage = function (userId, userIdToChat) {
+    console.log("in getPrivateMessage ", userId, userIdToChat);
+    return getPrivateMsgByUsersId(userId, userIdToChat)
+        .then(function (result) {
+        console.log("getPrivateMessage result", result.rows);
+        result.rows.map(function (each) {
+            return (each.send_at = each.send_at.toLocaleString("en-GB", DATE_OPTION));
+        });
+        return result.rows;
+    })
+        .catch(function (err) {
+        console.log("Error in DB getPrivateMessage", err);
+        return false;
+    });
+};
+exports.getMessage = function (userId, userIdToChat) {
+    if (userIdToChat) {
+        // Private Messages
+        console.log("Private Message", userIdToChat);
+        return getPrivateMessage(userId, userIdToChat);
+    }
+    else {
+        //General Messages
+        console.log("General Message");
+        return getNewestChatGeneral();
+    }
+};
+var addNewMessageGeneralChat = function (senderId, message) {
     return newGeneralMsg(senderId, message)
         .then(function (result) {
         console.log("newGeneralMsg row:", result.rows);
@@ -416,6 +443,34 @@ exports.addNewMessageGeneralChat = function (senderId, message) {
         });
     })
         .catch(function (err) { return false; });
+};
+// getPrivateMsgById
+var addNewMessagePrivateChat = function (senderId, newMsg) {
+    return newPrivateMsg(senderId, newMsg.receiver_id, newMsg.message)
+        .then(function (result) {
+        console.log("new Private Msg row:", result.rows);
+        return getPrivateMsgById(result.rows[0].id).then(function (resp) {
+            console.log("getLastMsgGeneralMsg result", resp.rows[0]);
+            resp.rows[0].send_at = resp.rows[0].send_at.toLocaleString("en-GB", DATE_OPTION);
+            return resp.rows[0];
+        });
+    })
+        .catch(function (err) {
+        console.log("Error in newPrivateMsg", err);
+        return false;
+    });
+};
+exports.addNewMessage = function (userId, newMsg) {
+    if (newMsg.receiver_id) {
+        // Private Messages
+        console.log("New Private Message", newMsg);
+        return addNewMessagePrivateChat(userId, newMsg);
+    }
+    else {
+        //General Messages
+        console.log("New General Message", newMsg);
+        return addNewMessageGeneralChat(userId, newMsg.message);
+    }
 };
 /* -----------------------------------------------------------------------
                                 WALL SECTION

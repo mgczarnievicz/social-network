@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS wall_comments_likes;
 DROP TABLE IF EXISTS wall_comments;
 
 DROP TABLE IF EXISTS message_general;
+DROP TABLE IF EXISTS message_private;
+
 
 
 DROP TABLE IF EXISTS users;
@@ -73,11 +75,11 @@ CREATE TABLE message_general(
     send_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE message_individual(
+CREATE TABLE message_private(
     id SERIAL PRIMARY KEY,
-    sender INT REFERENCES users(id) NOT NULL,
-    reciever INT REFERENCES users(id) NOT NULL
-    message TEXT
+    sender_id INT REFERENCES users(id) NOT NULL,
+    receiver_id INT REFERENCES users(id) NOT NULL,
+    message TEXT,
     send_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

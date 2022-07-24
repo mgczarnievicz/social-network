@@ -1,4 +1,40 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -12,7 +48,8 @@ var multer_1 = __importDefault(require("multer"));
 // import uidSafe from "uid-safe";
 var uidSafe = require("uid-safe");
 var s3 = require("./s3");
-var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends, getNewestChatMsg = _a.getNewestChatMsg, addNewMessageGeneralChat = _a.addNewMessageGeneralChat, searchCommentsId = _a.searchCommentsId, getCommentInfo = _a.getCommentInfo, addCommentToPost = _a.addCommentToPost;
+var _a = require("./process"), verifyingEmptyInputs = _a.verifyingEmptyInputs, registerNewUser = _a.registerNewUser, logInVerify = _a.logInVerify, noEmptyInputsValid = _a.noEmptyInputsValid, foundEmail = _a.foundEmail, setNewPassword = _a.setNewPassword, saveProfileImage = _a.saveProfileImage, getUserInfo = _a.getUserInfo, upDateBio = _a.upDateBio, searchForFiends = _a.searchForFiends, searchForProfile = _a.searchForProfile, searchFriendshipStatus = _a.searchFriendshipStatus, setFriendshipStatus = _a.setFriendshipStatus, addWallPost = _a.addWallPost, searchForTheNewestPosts = _a.searchForTheNewestPosts, getPostInfo = _a.getPostInfo, getFriends = _a.getFriends, getMessage = _a.getMessage, searchCommentsId = _a.searchCommentsId, getCommentInfo = _a.getCommentInfo, addCommentToPost = _a.addCommentToPost, addNewMessage = _a.addNewMessage;
+var getInfoOnlineUsers = require("./db").getInfoOnlineUsers;
 // @ts-ignore
 var app = (0, express_1.default)();
 var server = require("http").Server(app);
@@ -498,50 +535,95 @@ app.get("*", function (req, res) {
 server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
-var userSocket = {};
-var onlineUsers = Object.keys(userSocket);
+// UsersOnlineInfo;
+var userOnline = {};
 io.on("connection", function (socket) {
+    var _this = this;
     if (!socket.request.session.userId) {
         // Here I have to go through my userSocket and delete the connection.
         // userSocket[];
         return socket.disconnect(true);
     }
+    var InfoOnlineUsers = function () { return __awaiter(_this, void 0, void 0, function () {
+        var onlineUsers, resp, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    onlineUsers = Object.keys(userOnline);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    console.log("listOnlineUsers", onlineUsers);
+                    return [4 /*yield*/, getInfoOnlineUsers(onlineUsers)];
+                case 2:
+                    resp = _a.sent();
+                    console.log("InfoOnlineUsers", resp.rows);
+                    io.emit("online-users", resp.rows);
+                    return [3 /*break*/, 4];
+                case 3:
+                    err_1 = _a.sent();
+                    console.log("Error InfoOnlineUsers", err_1);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); };
     var userId = socket.request.session.userId;
     console.log("User with the id: ".concat(userId, " and socket id ").concat(socket.id, " just connected."));
-    console.log("Mi list of connection", userSocket);
-    if (userSocket[userId]) {
+    /* ----------------------------------------------------
+    Keeping Track Online Users
+    -------------------------------------------------------*/
+    socket.on("disconnect", function () {
+        userOnline[userId].filter(function (eachSocket) {
+            eachSocket != socket.id;
+        });
+        if (userOnline[userId]) {
+            delete userOnline[userId];
+        }
+        // Notify the disconnection.
+        InfoOnlineUsers();
+    });
+    if (userOnline[userId]) {
         // There is already the key.
-        userSocket[userId].push(socket.id);
+        userOnline[userId].push(socket.id);
     }
     else {
         // Fist Time connecting.
-        userSocket[userId] = [socket.id];
+        userOnline[userId] = [socket.id];
     }
+    InfoOnlineUsers();
+    console.log("Mi list of connection", userOnline);
     /* ----------------------------------------------------
-                    General Chat
+                    Chat
     -------------------------------------------------------*/
-    socket.on("newest-generalMsg-chat", function (mes) {
-        getNewestChatMsg().then(function (result) {
-            console.log("IN newest-generalMsg-chat", result);
-            if (result != false) {
-                socket.emit("newest-generalMsg-chat", result);
+    socket.on("chat-newest-message", function (userIdToChat) {
+        console.log("BEFORE DB newest-privetMsg-chat", userIdToChat);
+        getMessage(userId, userIdToChat).then(function (result) {
+            console.log("IN newest-message-chat", result);
+            if (result) {
+                //I send it back to whom it asked.
+                socket.emit("chat-newest-message", result);
             }
         });
     });
-    socket.on("generalMsg-new-message", function (newMsg) {
+    socket.on("chat-new-message", function (newMsg) {
         console.log("New Message", newMsg);
-        addNewMessageGeneralChat(userId, newMsg).then(function (result) {
+        addNewMessage(userId, newMsg).then(function (result) {
             console.log("IN generalMsg-new-message", result);
-            if (result != false) {
-                io.emit("generalMsg-new-message", result);
+            if (result) {
+                // Here I have to see to whom send it.
+                if (newMsg.receiver_id) {
+                    //Send it to the specific one
+                    userOnline[newMsg.receiver_id].map(function (eachSocket) {
+                        io.to(eachSocket).emit("chat-new-message", result);
+                    });
+                    socket.emit("chat-new-message", result);
+                }
+                else {
+                    //General to send
+                    io.emit("chat-new-message", result);
+                }
             }
         });
-        /*
-        1. we want to know who send the message
-        2. we need to add this msg to the chats table.
-        3. we want to retrieved user information about the author.
-        4. compose a message object that contains user info and message
-        5. send back to all connect socket, that there is a new message
-        */
     });
 });

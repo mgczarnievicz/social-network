@@ -56,6 +56,9 @@ exports.getNewestUsers = function (userId) {
 exports.searchProfileByUserId = function (id) {
     return db.query("SELECT id, name, surname, photoUrl, bio FROM users \n        WHERE id=$1;", [id]);
 };
+exports.getInfoOnlineUsers = function (ids) {
+    return db.query("SELECT id, name, surname, photoUrl FROM users \n        WHERE id=ANY($1);", [ids]);
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/
@@ -155,6 +158,24 @@ exports.getCommentById = function (commentId) {
     var param = [commentId];
     return db.query(q, param);
 };
+/* ---------------------------------------------------------------
+                  PRIVATE MESSAGE TABLE
+----------------------------------------------------------------*/
+exports.getPrivateMsgByUsersId = function (sender_id, receiver_id) {
+    var q = "SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,\n\t senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at\n                FROM message_private\n                INNER JOIN users AS senderUser\n                ON message_private.sender_id=senderUser.id\n                WHERE (message_private.sender_id = $1 AND message_private.receiver_id = $2)\n\t\t\t\tOR (message_private.sender_id = $2 AND message_private.receiver_id = $1)\n                ORDER BY message_private. send_at DESC\n                LIMIT 5";
+    var param = [sender_id, receiver_id];
+    return db.query(q, param);
+};
+exports.newPrivateMsg = function (sender_id, receiver_id, message) {
+    var q = "INSERT INTO message_private(sender_id, receiver_id,message)\n    VALUES ($1, $2, $3 )\n    RETURNING id";
+    var param = [sender_id, receiver_id, message];
+    return db.query(q, param);
+};
+exports.getPrivateMsgById = function (id) {
+    var q = "SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,\n\t senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at\n                FROM message_private\n                INNER JOIN users AS senderUser\n                ON message_private.sender_id=senderUser.id\n                WHERE message_private.id = $1 ";
+    var param = [id];
+    return db.query(q, param);
+};
 /*
 SELECT users.name, users.surname, wall_comments.comment, wall_comments.created_at
                 FROM wall_comments
@@ -163,6 +184,11 @@ SELECT users.name, users.surname, wall_comments.comment, wall_comments.created_a
                WHERE wall_posts.id = $1
                 ORDER BY wall_posts.created_at DESC
                 LIMIT 5`
+
+
+
+                INSERT INTO message_private(sender_id, receiver_id,message)
+    VALUES (152, 1,'Como anda este chat no?' );
 
 */
 // exports.searchPostByPostId = (userId: number): QueryResult => {

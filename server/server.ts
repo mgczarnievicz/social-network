@@ -19,6 +19,7 @@ import {
     LogInUser,
     UserBasicInfo,
     FriendShipResponds,
+    UsersOnlineInfo,
 } from "./typesServer";
 
 const {
@@ -39,12 +40,14 @@ const {
     searchForTheNewestPosts,
     getPostInfo,
     getFriends,
-    getNewestChatMsg,
-    addNewMessageGeneralChat,
+    getMessage,
     searchCommentsId,
     getCommentInfo,
     addCommentToPost,
+    addNewMessage,
 } = require("./process");
+
+const { getInfoOnlineUsers } = require("./db");
 
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
@@ -657,12 +660,11 @@ interface SocketWithSession extends Socket {
 }
 
 /* For maintain a list of online Users */
-interface UserSockets {
+interface UserOnline {
     [key: number]: Array<string>;
 }
-
-const userSocket: UserSockets = {};
-const onlineUsers = Object.keys(userSocket);
+// UsersOnlineInfo;
+const userOnline: UserOnline = {};
 
 io.on("connection", function (socket: SocketWithSession) {
     if (!socket.request.session.userId) {
@@ -671,51 +673,86 @@ io.on("connection", function (socket: SocketWithSession) {
         return socket.disconnect(true);
     }
 
+    const InfoOnlineUsers = async () => {
+        const onlineUsers = Object.keys(userOnline);
+        try {
+            console.log("listOnlineUsers", onlineUsers);
+            const resp: QueryResult = await getInfoOnlineUsers(onlineUsers);
+            console.log("InfoOnlineUsers", resp.rows);
+            io.emit("online-users", resp.rows);
+        } catch (err) {
+            console.log("Error InfoOnlineUsers", err);
+        }
+    };
+
     const userId = socket.request.session.userId;
 
     console.log(
         `User with the id: ${userId} and socket id ${socket.id} just connected.`
     );
-    console.log("Mi list of connection", userSocket);
-
-    if (userSocket[userId]) {
-        // There is already the key.
-        userSocket[userId].push(socket.id);
-    } else {
-        // Fist Time connecting.
-        userSocket[userId] = [socket.id];
-    }
 
     /* ----------------------------------------------------
-                    General Chat
+    Keeping Track Online Users
     -------------------------------------------------------*/
 
-    socket.on("newest-generalMsg-chat", (mes: string) => {
-        getNewestChatMsg().then((result: Array<{}> | boolean) => {
-            console.log("IN newest-generalMsg-chat", result);
-            if (result != false) {
-                socket.emit("newest-generalMsg-chat", result);
+    socket.on("disconnect", () => {
+        userOnline[userId].filter((eachSocket: string) => {
+            eachSocket != socket.id;
+        });
+
+        if (userOnline[userId]) {
+            delete userOnline[userId];
+        }
+
+        // Notify the disconnection.
+        InfoOnlineUsers();
+    });
+
+    if (userOnline[userId]) {
+        // There is already the key.
+        userOnline[userId].push(socket.id);
+    } else {
+        // Fist Time connecting.
+        userOnline[userId] = [socket.id];
+    }
+    InfoOnlineUsers();
+    console.log("Mi list of connection", userOnline);
+
+    /* ----------------------------------------------------
+                    Chat
+    -------------------------------------------------------*/
+
+    socket.on("chat-newest-message", (userIdToChat: number) => {
+        console.log("BEFORE DB newest-privetMsg-chat", userIdToChat);
+        getMessage(userId, userIdToChat).then((result: Array<{}> | boolean) => {
+            console.log("IN newest-message-chat", result);
+            if (result) {
+                //I send it back to whom it asked.
+                socket.emit("chat-newest-message", result);
             }
         });
     });
 
-    socket.on("generalMsg-new-message", (newMsg: string) => {
-        console.log("New Message", newMsg);
-        addNewMessageGeneralChat(userId, newMsg).then(
-            (result: {} | boolean) => {
+    socket.on(
+        "chat-new-message",
+        (newMsg: { message: string; receiver_id: number }) => {
+            console.log("New Message", newMsg);
+            addNewMessage(userId, newMsg).then((result: {} | boolean) => {
                 console.log("IN generalMsg-new-message", result);
-                if (result != false) {
-                    io.emit("generalMsg-new-message", result);
+                if (result) {
+                    // Here I have to see to whom send it.
+                    if (newMsg.receiver_id) {
+                        //Send it to the specific one
+                        userOnline[newMsg.receiver_id].map((eachSocket) => {
+                            io.to(eachSocket).emit("chat-new-message", result);
+                        });
+                        socket.emit("chat-new-message", result);
+                    } else {
+                        //General to send
+                        io.emit("chat-new-message", result);
+                    }
                 }
-            }
-        );
-
-        /*
-        1. we want to know who send the message
-        2. we need to add this msg to the chats table.
-        3. we want to retrieved user information about the author.
-        4. compose a message object that contains user info and message
-        5. send back to all connect socket, that there is a new message
-        */
-    });
+            });
+        }
+    );
 });

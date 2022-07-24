@@ -16,13 +16,6 @@ var react_1 = require("react");
 var react_redux_1 = require("react-redux");
 var slice_1 = require("./redux/friends/slice");
 var react_router_1 = require("react-router");
-// DictionaryButtonAction for FriendButton values: {
-//     "Add Friend": "wannabee",
-//     Unfriend: "delete",
-//     "Cancel Request": "delete",
-//     "Accept Friend": "accept",
-//     "Delete Request": "delete",
-// };
 function FriendsAndWannabees() {
     var dispatch = (0, react_redux_1.useDispatch)();
     var history = (0, react_router_1.useHistory)();

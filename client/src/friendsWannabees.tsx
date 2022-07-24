@@ -11,14 +11,6 @@ import {
 } from "./redux/friends/slice";
 import { useHistory } from "react-router";
 
-// DictionaryButtonAction for FriendButton values: {
-//     "Add Friend": "wannabee",
-//     Unfriend: "delete",
-//     "Cancel Request": "delete",
-//     "Accept Friend": "accept",
-//     "Delete Request": "delete",
-// };
-
 export default function FriendsAndWannabees() {
     const dispatch = useDispatch();
     const history = useHistory();

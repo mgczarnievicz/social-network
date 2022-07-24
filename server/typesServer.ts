@@ -39,6 +39,13 @@ export interface UserResetPassword {
     newPassword: string;
 }
 
+export interface UsersOnlineInfo {
+    id: number;
+    name: string;
+    surname: string;
+    photourl: string;
+}
+
 export type StringObject = NewUserRegistration | LogInUser | UserResetPassword;
 
 export interface UserLoggingIn extends NewUserRegistration {

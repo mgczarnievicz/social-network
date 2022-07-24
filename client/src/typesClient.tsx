@@ -21,6 +21,17 @@ export interface ChatInfo {
     photourl?: string;
 }
 
+export interface PrivateChatInfo {
+    id: number;
+    receiver_name: string;
+    receiver_surname: string;
+    sender_name: string;
+    sender_surname: string;
+    message: string;
+    send_at: string;
+    photourl?: string;
+}
+
 export interface PostId {
     post_id: number;
 }

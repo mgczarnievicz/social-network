@@ -3,7 +3,10 @@ import { ChatInfo } from "./../../typesClient";
 
 interface ActionType {
     type: string;
-    payload: { message?: ChatInfo; newestMsg?: Array<ChatInfo> };
+    payload: {
+        message?: ChatInfo;
+        newestMsg?: Array<ChatInfo>;
+    };
 }
 
 export default function messagesReducer(
@@ -11,17 +14,12 @@ export default function messagesReducer(
     action: ActionType
 ) {
     switch (action.type) {
-        case "messages_general/newestMsg":
-            console.log(
-                "action.payload IN messages_general/newestMsg",
-                action.payload
-            );
+        case "messages/newestMsg":
             messages = action.payload.newestMsg;
             break;
         case "messages_general/received":
-            console.log("In messages_general/received", action.payload.message);
             messages = [action.payload.message, ...messages];
-            // messages.push(action.payload.message);
+
             break;
         default:
             break;
@@ -33,7 +31,7 @@ export default function messagesReducer(
 // Action Creator
 export function messagesReceived(messages: Array<ChatInfo>) {
     return {
-        type: "messages_general/newestMsg",
+        type: "messages/newestMsg",
         payload: { newestMsg: messages },
     };
 }

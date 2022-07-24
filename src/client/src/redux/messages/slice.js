@@ -13,14 +13,11 @@ exports.addNewMessage = exports.messagesReceived = void 0;
 function messagesReducer(messages, action) {
     if (messages === void 0) { messages = []; }
     switch (action.type) {
-        case "messages_general/newestMsg":
-            console.log("action.payload IN messages_general/newestMsg", action.payload);
+        case "messages/newestMsg":
             messages = action.payload.newestMsg;
             break;
         case "messages_general/received":
-            console.log("In messages_general/received", action.payload.message);
             messages = __spreadArray([action.payload.message], messages, true);
-            // messages.push(action.payload.message);
             break;
         default:
             break;
@@ -31,7 +28,7 @@ exports.default = messagesReducer;
 // Action Creator
 function messagesReceived(messages) {
     return {
-        type: "messages_general/newestMsg",
+        type: "messages/newestMsg",
         payload: { newestMsg: messages },
     };
 }

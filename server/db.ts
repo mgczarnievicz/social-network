@@ -122,6 +122,14 @@ exports.searchProfileByUserId = (id: number): QueryResult => {
         [id]
     );
 };
+
+exports.getInfoOnlineUsers = (ids: Array<number>): QueryResult => {
+    return db.query(
+        `SELECT id, name, surname, photoUrl FROM users 
+        WHERE id=ANY($1);`,
+        [ids]
+    );
+};
 /* ---------------------------------------------------------------
                    Reset Password TABLE
 ----------------------------------------------------------------*/
@@ -330,6 +338,48 @@ exports.getCommentById = (commentId: number): QueryResult => {
     return db.query(q, param);
 };
 
+/* ---------------------------------------------------------------
+                  PRIVATE MESSAGE TABLE
+----------------------------------------------------------------*/
+
+exports.getPrivateMsgByUsersId = (sender_id: number, receiver_id: number) => {
+    const q = `SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,
+	 senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at
+                FROM message_private
+                INNER JOIN users AS senderUser
+                ON message_private.sender_id=senderUser.id
+                WHERE (message_private.sender_id = $1 AND message_private.receiver_id = $2)
+				OR (message_private.sender_id = $2 AND message_private.receiver_id = $1)
+                ORDER BY message_private. send_at DESC
+                LIMIT 5`;
+    const param = [sender_id, receiver_id];
+    return db.query(q, param);
+};
+
+exports.newPrivateMsg = (
+    sender_id: number,
+    receiver_id: number,
+    message: string
+): QueryResult => {
+    const q = `INSERT INTO message_private(sender_id, receiver_id,message)
+    VALUES ($1, $2, $3 )
+    RETURNING id`;
+
+    const param = [sender_id, receiver_id, message];
+    return db.query(q, param);
+};
+
+exports.getPrivateMsgById = (id: number) => {
+    const q = `SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,
+	 senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at
+                FROM message_private
+                INNER JOIN users AS senderUser
+                ON message_private.sender_id=senderUser.id
+                WHERE message_private.id = $1 `;
+    const param = [id];
+    return db.query(q, param);
+};
+
 /* 
 SELECT users.name, users.surname, wall_comments.comment, wall_comments.created_at 
                 FROM wall_comments
@@ -338,6 +388,11 @@ SELECT users.name, users.surname, wall_comments.comment, wall_comments.created_a
                WHERE wall_posts.id = $1
                 ORDER BY wall_posts.created_at DESC
                 LIMIT 5`
+
+
+
+                INSERT INTO message_private(sender_id, receiver_id,message)
+    VALUES (152, 1,'Como anda este chat no?' );
 
 */
 

@@ -404,70 +404,6 @@ label {
 }
 
 /* ----------------------------------------------------------------------
-                                   CHAT SECTION 
-------------------------------------------------------------------------*/
-.chat-section {
-    width: 57vw;
-}
-
-.chat-container {
-    width: 57vw;
-    height: 350px;
-    /* overflow-y: scroll; */
-    overflow: auto;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column-reverse;
-}
-
-.chat-container .message {
-    border: 1px solid var(--color-dark);
-    background-color: antiquewhite;
-
-    border-radius: 12px;
-    padding: 10px;
-    margin: 10px;
-}
-
-.chat-container .message p,
-h3 {
-    text-align: left;
-}
-
-.chat-container .message h6 {
-    text-align: right;
-}
-
-.message .profilePhoto img {
-    width: 50px;
-    height: 50px;
-    margin: 0px 10px 0px 0px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.message {
-    display: flex;
-    flex-direction: row;
-}
-
-.message .message-info {
-    flex-grow: 2;
-}
-.message-info p:hover {
-    cursor: pointer;
-}
-
-.chat-section textarea {
-    width: 90%;
-    height: 68px;
-    font-size: 16px;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 12px;
-}
-
-/* ----------------------------------------------------------------------
                                    POST SECTION 
 ------------------------------------------------------------------------*/
 
@@ -616,4 +552,121 @@ h3 {
 .friends-round h4 {
     width: 100%;
     text-align: center;
+}
+/* ----------------------------------------------------------------------
+                                   CHAT SECTION 
+------------------------------------------------------------------------*/
+
+.chat-container {
+    width: 80%;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* ----------------------------------------------------------------------
+                                   MESSAGE SECTION 
+------------------------------------------------------------------------*/
+
+.message-section {
+    width: 57vw;
+}
+
+.message-container {
+    width: 57vw;
+    height: 350px;
+    /* overflow-y: scroll; */
+    overflow: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.message-container .message {
+    border: 1px solid var(--color-dark);
+    background-color: antiquewhite;
+
+    border-radius: 12px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.message-container .message p,
+h3 {
+    text-align: left;
+}
+
+.message-container .message h6 {
+    text-align: right;
+}
+
+.message .profilePhoto img {
+    width: 50px;
+    height: 50px;
+    margin: 0px 10px 0px 0px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+}
+
+.message .message-info {
+    flex-grow: 2;
+}
+.message-info p:hover {
+    cursor: pointer;
+}
+
+.message-section textarea {
+    width: 90%;
+    height: 68px;
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 12px;
+}
+/* ----------------------------------------------------------------------
+                                  ONLINE USERS SECTION 
+------------------------------------------------------------------------*/
+.onlineUsers-container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--color-dark);
+    border-radius: 12px;
+    padding: 10px;
+    background-color: #d9ebc5;
+}
+
+.user-online:hover {
+    border: 1px solid #f4716d;
+    border-radius: 12px;
+    background-color: var(--color-board);
+    color: whitesmoke;
+}
+.user-online:hover img {
+    border: whitesmoke 2px solid;
+}
+
+.user-online {
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+}
+
+.user-online img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0px;
+}
+
+.user-online h4 {
+    width: 100%;
+    padding-left: 10px;
 }

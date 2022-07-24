@@ -9,11 +9,13 @@ var slice_2 = __importDefault(require("./user/slice"));
 var slice_3 = __importDefault(require("./messages/slice"));
 var slice_4 = __importDefault(require("./wall/slice"));
 var slice_5 = __importDefault(require("./comments/slice"));
+var slice_6 = __importDefault(require("./usersOnline/slice"));
 var rootReducer = (0, redux_1.combineReducers)({
     friends: slice_1.default,
     user: slice_2.default,
     messages: slice_3.default,
     posts: slice_4.default,
     comments: slice_5.default,
+    onlineUsers: slice_6.default,
 });
 exports.default = rootReducer;

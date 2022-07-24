@@ -28,6 +28,9 @@ const {
     searchCommentsByPostId,
     getCommentById,
     addComment,
+    getPrivateMsgByUsersId,
+    newPrivateMsg,
+    getPrivateMsgById,
 } = require("./db");
 
 const { sendEmail } = require("./ses");
@@ -458,7 +461,7 @@ exports.getFriends = (userId: number) => {
 /* -----------------------------------------------------------------------------
                         SOCKET SECTION
 -------------------------------------------------------------------------------*/
-exports.getNewestChatMsg = () => {
+const getNewestChatGeneral = () => {
     return getLastMsgGeneralMsg()
         .then((result: QueryResult) => {
             console.log("getLastMsgGeneralMsg result", result.rows);
@@ -474,7 +477,39 @@ exports.getNewestChatMsg = () => {
         .catch((err: QueryResult) => false);
 };
 
-exports.addNewMessageGeneralChat = (senderId: number, message: string) => {
+const getPrivateMessage = (userId: number, userIdToChat: number) => {
+    console.log("in getPrivateMessage ", userId, userIdToChat);
+    return getPrivateMsgByUsersId(userId, userIdToChat)
+        .then((result: QueryResult) => {
+            console.log("getPrivateMessage result", result.rows);
+            result.rows.map(
+                (each) =>
+                    (each.send_at = each.send_at.toLocaleString(
+                        "en-GB",
+                        DATE_OPTION
+                    ))
+            );
+            return result.rows;
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error in DB getPrivateMessage", err);
+            return false;
+        });
+};
+
+exports.getMessage = (userId: number, userIdToChat: number) => {
+    if (userIdToChat) {
+        // Private Messages
+        console.log("Private Message", userIdToChat);
+        return getPrivateMessage(userId, userIdToChat);
+    } else {
+        //General Messages
+        console.log("General Message");
+        return getNewestChatGeneral();
+    }
+};
+
+const addNewMessageGeneralChat = (senderId: number, message: string) => {
     return newGeneralMsg(senderId, message)
         .then((result: QueryResult) => {
             console.log("newGeneralMsg row:", result.rows);
@@ -492,7 +527,46 @@ exports.addNewMessageGeneralChat = (senderId: number, message: string) => {
         })
         .catch((err: QueryResult) => false);
 };
+// getPrivateMsgById
+const addNewMessagePrivateChat = (
+    senderId: number,
+    newMsg: { message: string; receiver_id: number }
+) => {
+    return newPrivateMsg(senderId, newMsg.receiver_id, newMsg.message)
+        .then((result: QueryResult) => {
+            console.log("new Private Msg row:", result.rows);
+            return getPrivateMsgById(result.rows[0].id).then(
+                (resp: QueryResult) => {
+                    console.log("getLastMsgGeneralMsg result", resp.rows[0]);
+                    resp.rows[0].send_at = resp.rows[0].send_at.toLocaleString(
+                        "en-GB",
+                        DATE_OPTION
+                    );
 
+                    return resp.rows[0];
+                }
+            );
+        })
+        .catch((err: QueryResult) => {
+            console.log("Error in newPrivateMsg", err);
+            return false;
+        });
+};
+
+exports.addNewMessage = (
+    userId: number,
+    newMsg: { message: string; receiver_id: number }
+) => {
+    if (newMsg.receiver_id) {
+        // Private Messages
+        console.log("New Private Message", newMsg);
+        return addNewMessagePrivateChat(userId, newMsg);
+    } else {
+        //General Messages
+        console.log("New General Message", newMsg);
+        return addNewMessageGeneralChat(userId, newMsg.message);
+    }
+};
 /* -----------------------------------------------------------------------
                                 WALL SECTION
 -------------------------------------------------------------------------*/

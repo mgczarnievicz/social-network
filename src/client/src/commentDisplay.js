@@ -21,11 +21,11 @@ function CommentDisplay(props) {
     var _a = (0, react_1.useState)(), commentInfo = _a[0], setCommentInfo = _a[1];
     (0, react_1.useEffect)(function () {
         var abort = false;
-        console.log("In Comment Display props", props);
+        // console.log("In Comment Display props", props);
         fetch("/getCommentInfo/?commentId=".concat(props.comment_id))
             .then(function (respBody) { return respBody.json(); })
             .then(function (data) {
-            console.log("Data from /getPost", data);
+            // console.log("Data from /getPost", data);
             if (data.status == "Success") {
                 setCommentInfo(data.commentInfo);
             }

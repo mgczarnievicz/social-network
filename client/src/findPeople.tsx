@@ -37,12 +37,11 @@ export default function FindPeople() {
         let abort = false;
         (async () => {
             try {
-                console.log("searchInput right now", searchInput);
                 const respBody = await fetch(
                     `/searchFriend?search=${searchInput}`
                 );
                 const data = await respBody.json();
-                console.log("data from /searchFriend", data);
+                
                 if (!abort) {
                     if (searchInput) {
                         setText("");
@@ -63,7 +62,6 @@ export default function FindPeople() {
         return () => {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
-            console.log("cleanup running");
             abort = true;
         };
     }, [searchInput]);

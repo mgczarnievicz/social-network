@@ -19,8 +19,6 @@ var react_redux_1 = require("react-redux");
 var commentDisplay_1 = __importDefault(require("./commentDisplay"));
 function Comments(props) {
     // I have to search for the comments Id for the post I am in.
-    console.log("Props in function comments:");
-    //
     //[props.postId]
     var commentsId = (0, react_redux_1.useSelector)(function (state) {
         var _a;

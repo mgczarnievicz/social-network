@@ -84,14 +84,12 @@ function FindPeople() {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        console.log("searchInput right now", searchInput);
                         return [4 /*yield*/, fetch("/searchFriend?search=".concat(searchInput))];
                     case 1:
                         respBody = _a.sent();
                         return [4 /*yield*/, respBody.json()];
                     case 2:
                         data = _a.sent();
-                        console.log("data from /searchFriend", data);
                         if (!abort) {
                             if (searchInput) {
                                 setText("");
@@ -119,7 +117,6 @@ function FindPeople() {
         return function () {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
-            console.log("cleanup running");
             abort = true;
         };
     }, [searchInput]);

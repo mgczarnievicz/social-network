@@ -26,18 +26,11 @@ export default function FriendButton(props: FriendButtonProps) {
     useEffect(() => {
         let abort = false;
         if (!abort) {
-            console.log(`viewUser: ${props.viewUser}`);
-
             fetch(`/api/friendshipStatus/${props.viewUser}`)
                 .then((resp) => {
                     return resp.json();
                 })
                 .then((data) => {
-                    console.log(
-                        "data received form api/friendshipStatus",
-                        data
-                    );
-                    console.log("data.data", data.data);
                     setFriendshipStatus(data.data);
                     console.log("friendshipStatus", friendshipStatus);
                 })
@@ -48,13 +41,8 @@ export default function FriendButton(props: FriendButtonProps) {
         };
     }, []);
 
-    console.log("friendshipStatus outside!", friendshipStatus);
-    console.log("props", props);
-
     function buttonHandler() {
         //When we press the button we want to do a post request to my server!
-        console.log("Clicked in button friendship");
-        console.log("friendshipStatus to send:", friendshipStatus);
 
         fetch("/api/setFriendshipStatus", {
             method: "POST",
@@ -63,7 +51,6 @@ export default function FriendButton(props: FriendButtonProps) {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("Data from post setFriendshipStatus", data);
                 setFriendshipStatus(data.data);
             });
     }

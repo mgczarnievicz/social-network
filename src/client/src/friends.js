@@ -24,20 +24,17 @@ function Friends(props) {
     var dispatch = (0, react_redux_1.useDispatch)();
     var history = (0, react_router_1.useHistory)();
     var friends = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return friend.accepted; }); });
-    console.log("I am in Friends & Wannabees");
     (0, react_1.useEffect)(function () {
         var abort = false;
         dispatch((0, slice_1.asyncReceiveFriendStatus)(abort, props.otherUserId));
         return function () {
-            console.log("cleanup running");
             abort = true;
         };
     }, []);
     function seeFriendProfile(idUserToSee) {
-        console.log("idUserToSee", idUserToSee);
+        // console.log("idUserToSee", idUserToSee);
         history.push("/user/".concat(idUserToSee));
     }
-    console.log("actualFriends", friends);
     return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-container" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends" }, { children: friends &&
                     friends.map(function (friend) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-round", onClick: function () {

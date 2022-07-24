@@ -30,15 +30,12 @@ export default function WallWrite(props: WriteWallProps) {
         (state: RootState) => state.user
     );
 
-    const keyCheck = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-        console.log("event.target.value", event.target.value);
-
+    const keyCheck = (event: KeyboardEvent<HTMLTextAreaElement>) => {        
         setComment(event.target.value);
-        console.log("Comment", comment);
 
         if (event.key === "Enter") {
             event.preventDefault();
-            console.log("event.target.value", event.target.value);
+            // console.log("event.target.value", event.target.value);
             dispatch(asyncNewComment(props.postId, comment));
             event.target.value = "";
         }

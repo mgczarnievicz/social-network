@@ -1,4 +1,3 @@
-import { log } from "console";
 import React from "react";
 import { Component } from "react";
 import { ChangeEvent } from "react";
@@ -42,10 +41,7 @@ class ResetPassword extends Component<ResetProps, ResetState> {
         );
     }
     handleSendEmail() {
-        console.log("Send Email!");
-        console.log("this.state.email", this.state.email);
         const { error, view, ...userInput } = this.state;
-        console.log("userInput", userInput);
 
         fetch("/resetPassword/sendEmail.json", {
             method: "POST",
@@ -56,8 +52,6 @@ class ResetPassword extends Component<ResetProps, ResetState> {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from POST/ SendEmail", data);
-
                 if (data.status === "Success") {
                     this.setState({
                         view: 2,
@@ -74,15 +68,11 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                     error: true,
                 });
             });
-        // (e.target as HTMLInputElement)
-        // emailRef.current.value = "";
-        console.log("this.state:", this.state);
     }
 
     handleSetNewPassword() {
-        console.log("Set New Password");
         const { error, view, ...userInput } = this.state;
-        console.log("userInput", userInput);
+
         fetch("/resetPassword/setNewPassword.json", {
             method: "POST",
             headers: {
@@ -92,8 +82,6 @@ class ResetPassword extends Component<ResetProps, ResetState> {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from POST/ setNewPassword", data);
-
                 if (data.status === "Success") {
                     this.setState({
                         view: 3,
@@ -110,7 +98,6 @@ class ResetPassword extends Component<ResetProps, ResetState> {
                     error: true,
                 });
             });
-        console.log("this.state:", this.state);
     }
 
     determineViewToRender() {

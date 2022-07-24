@@ -25,9 +25,7 @@ var wallComment_1 = __importDefault(require("./wallComment"));
 fontawesome_svg_core_1.library.add(free_solid_svg_icons_1.faHeart, free_solid_svg_icons_1.faComments, free_solid_svg_icons_1.faPlay);
 function Post(props) {
     var _a = (0, react_1.useState)(), postInfo = _a[0], setPostInfo = _a[1];
-    var _b = (0, react_1.useState)([]), comments = _b[0], setComments = _b[1];
-    var _c = (0, react_1.useState)(""), commentInput = _c[0], setCommentInput = _c[1];
-    var _d = (0, react_1.useState)(false), showCommentInput = _d[0], setShowCommentInput = _d[1];
+    var _b = (0, react_1.useState)(false), showCommentInput = _b[0], setShowCommentInput = _b[1];
     var postIdToSee = (0, react_router_1.useParams)().postIdToSee;
     var history = (0, react_router_1.useHistory)();
     var userInfo = (0, react_redux_1.useSelector)(function (state) { return state.user; });
@@ -36,11 +34,8 @@ function Post(props) {
     }
     (0, react_1.useEffect)(function () {
         var postToDisplay;
-        console.log("postIdToSee in post", postIdToSee);
-        console.log("props in post", props);
         if (postIdToSee) {
             postToDisplay = Number.parseInt(postIdToSee);
-            console.log("otherUserId after parseInt", postToDisplay);
             if (Number.isNaN(postToDisplay)) {
                 history.replace("/");
             }
@@ -60,9 +55,6 @@ function Post(props) {
             .catch(function (err) { return console.log("Error in getPost", err); });
     }, []);
     console.log("postInfo", postInfo);
-    function clickedComment() {
-        console.log("I clicked In comments! Lets Add some!");
-    }
     return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: postInfo && ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "post" }, { children: [postInfo.walluser_id == postInfo.writer_id && ((0, jsx_runtime_1.jsxs)("p", { children: [postInfo.walluser_name, " ", postInfo.walluser_surname] })), postInfo.walluser_id != postInfo.writer_id && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "user-post" }, { children: [(0, jsx_runtime_1.jsxs)("p", { children: [postInfo.walluser_name, " ", postInfo.walluser_surname] }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "play", size: "xs", color: "darkgray", className: "post-to" }), (0, jsx_runtime_1.jsxs)("p", { children: [postInfo.wallwriter_name, " ", postInfo.wallwriter_surname] })] }))), (0, jsx_runtime_1.jsx)("h3", { children: postInfo.post }), (0, jsx_runtime_1.jsx)("h6", { children: postInfo.created_at }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "icons" }, { children: [(0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "heart", size: "1x", color: "grey" }), (0, jsx_runtime_1.jsx)(react_fontawesome_1.FontAwesomeIcon, { icon: "comments", size: "1x", color: "green", onClick: function () {
                                         setShowCommentInput(!showCommentInput);
                                     } })] }))] })), (0, jsx_runtime_1.jsx)(wallComment_1.default

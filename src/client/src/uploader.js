@@ -42,17 +42,13 @@ var Uploader = /** @class */ (function (_super) {
     // HTMLFormElement HTMLFormElement React.SyntheticEvent
     Uploader.prototype.setNewPhoto = function (event) {
         var _this = this;
-        console.log("I am clicking accept!");
         event.preventDefault();
-        // /upload.json
-        console.log("event target in setNewPhoto:", event.target);
         fetch("/upload.json", {
             method: "POST",
             body: new FormData(event.target),
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
-            console.log("Data received POST load.json", data);
             if (data.status === "Success") {
                 // Call function form parent with the argument as the url.
                 _this.props.upDatingPhoto(data.photourl);
@@ -62,7 +58,6 @@ var Uploader = /** @class */ (function (_super) {
                     error: true,
                 });
             }
-            console.log("this.state:", _this.state);
         })
             .catch(function () {
             // this.setState(

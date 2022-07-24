@@ -53,7 +53,6 @@ var store = (0, redux_1.createStore)(reducer_1.default, (0, redux_devtools_exten
 fetch("/user/id.json")
     .then(function (response) { return response.json(); })
     .then(function (data) {
-    console.log("data from /user/id.json ", data);
     if (!data.userId) {
         react_dom_1.default.render((0, jsx_runtime_1.jsx)(welcome_1.default, {}), document.querySelector("main"));
     }

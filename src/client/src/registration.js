@@ -63,8 +63,6 @@ var Registration = /** @class */ (function (_super) {
     Registration.prototype.handleSubmit = function () {
         var _this = this;
         var _a = this.state, error = _a.error, newUser = __rest(_a, ["error"]);
-        console.log("Clicked submit in Registration!");
-        console.log("newUser", newUser);
         fetch("/registration.json", {
             method: "POST",
             headers: {
@@ -74,7 +72,6 @@ var Registration = /** @class */ (function (_super) {
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
-            console.log("data from POST/ registration", data);
             if (data.status === "Success") {
                 // location.replace("/");
                 location.reload();
@@ -84,7 +81,6 @@ var Registration = /** @class */ (function (_super) {
                     error: true,
                 });
             }
-            console.log("this.state:", _this.state);
         })
             .catch(function () {
             _this.setState({

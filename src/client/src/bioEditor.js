@@ -32,7 +32,7 @@ function BioEditor(props) {
         setDraftBio(event.target.value);
     }
     function submitBio() {
-        console.log("U clicked Save Bio!");
+        // console.log("U clicked Save Bio!");
         fetch("/setBioInfo.json", {
             method: "POST",
             headers: {
@@ -42,7 +42,7 @@ function BioEditor(props) {
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
-            console.log("Data from update Bio", data);
+            // console.log("Data from update Bio", data);
             if (data.status === "Success") {
                 setShowTextArea(false);
                 setDraftBio("");
@@ -59,7 +59,7 @@ function BioEditor(props) {
     }
     return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-container" }, { children: [bio && !showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [bio &&
                         bio.map(function (bioSentence, i) {
-                            console.log("Bio ", bioSentence);
+                            // console.log("Bio ", bioSentence);
                             return ((0, jsx_runtime_1.jsx)("h3", __assign({ className: "bio-text" }, { children: bioSentence }), i));
                         }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: toggleBioEditor }, { children: "Edit Bio" }))] }))), !bio && !showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: toggleBioEditor }, { children: "Add Bio" }))), showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: draftBio, onChange: handleBioChange, rows: 5, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: submitBio }, { children: "Save" }))] })))] })));
 }

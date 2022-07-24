@@ -12,7 +12,6 @@ interface ProfileProps {
 }
 
 export default function Profile(props: ProfileProps) {
-    console.log("log the props in Profile");
     const userInfo: ProfileInfoWBio = useSelector(
         (state: RootState) => state.user
     );

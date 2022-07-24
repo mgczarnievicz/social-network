@@ -60,9 +60,7 @@ var LogIn = /** @class */ (function (_super) {
     };
     LogIn.prototype.handleSubmit = function () {
         var _this = this;
-        console.log("Clicked submit!");
         var _a = this.state, error = _a.error, newUser = __rest(_a, ["error"]);
-        console.log("newUser", newUser);
         fetch("/login.json", {
             method: "POST",
             headers: {
@@ -72,7 +70,6 @@ var LogIn = /** @class */ (function (_super) {
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
-            console.log("data from POST/ login", data);
             if (data.status === "Success") {
                 location.replace("/");
             }

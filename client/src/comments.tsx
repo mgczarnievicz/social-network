@@ -12,9 +12,7 @@ interface commentProps {
 
 export default function Comments(props: commentProps) {
     // I have to search for the comments Id for the post I am in.
-    console.log("Props in function comments:");
 
-    //
     //[props.postId]
     const commentsId: Array<CommentsId> = useSelector((state: RootState) =>
         state.comments?.filter(

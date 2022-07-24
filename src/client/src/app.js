@@ -36,16 +36,15 @@ function App(props) {
         var abort = false;
         dispatch((0, slice_1.asyncReceiveUser)(abort));
         return function () {
-            console.log("cleanup running");
             abort = true;
         };
     }, []);
     function toggleUploader() {
-        console.log("ToggleModal is running");
+        // console.log("ToggleModal is running");
         setUploaderVisible(!uploaderVisible);
     }
     function upDatingPhoto(url) {
-        console.log("This is arg", url);
+        // console.log("This is arg", url);
         setUploaderVisible(false);
         dispatch((0, slice_1.userUpdatePhotoUrl)(url));
     }

@@ -20,10 +20,7 @@ export default class Uploader extends Component<UploaderProps> {
     }
     // HTMLFormElement HTMLFormElement React.SyntheticEvent
     setNewPhoto(event: React.ChangeEvent<HTMLFormElement>) {
-        console.log("I am clicking accept!");
         event.preventDefault();
-        // /upload.json
-        console.log("event target in setNewPhoto:", event.target);
 
         fetch("/upload.json", {
             method: "POST",
@@ -31,8 +28,6 @@ export default class Uploader extends Component<UploaderProps> {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("Data received POST load.json", data);
-
                 if (data.status === "Success") {
                     // Call function form parent with the argument as the url.
                     this.props.upDatingPhoto(data.photourl);
@@ -41,7 +36,6 @@ export default class Uploader extends Component<UploaderProps> {
                         error: true,
                     });
                 }
-                console.log("this.state:", this.state);
             })
             .catch(() => {
                 // this.setState(

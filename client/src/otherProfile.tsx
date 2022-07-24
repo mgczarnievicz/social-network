@@ -14,9 +14,7 @@ export default function OtherProfile() {
     const history = useHistory();
 
     useEffect(() => {
-        console.log("Other Profile just render:", idUserToSee);
         const otherUserId = Number.parseInt(idUserToSee);
-        console.log("otherUserId after parseInt", otherUserId);
 
         /* 
         1. Figure out what is the userId we want to fetch information from.
@@ -32,7 +30,6 @@ export default function OtherProfile() {
                 fetch(`/api/profile/${otherUserId}`)
                     .then((resp) => resp.json())
                     .then((data) => {
-                        console.log("data from profile", data);
                         switch (data.status) {
                             case "Equal":
                                 // I called myself
@@ -44,7 +41,7 @@ export default function OtherProfile() {
                                 if (data.profile.bio)
                                     data.profile.bio =
                                         data.profile.bio.split("\n");
-                                console.log("Data after splitting", data);
+                                // console.log("Data after splitting", data);
                                 setUser(data.profile);
                                 break;
                             case "Error":
@@ -91,7 +88,6 @@ export default function OtherProfile() {
                             {user.bio &&
                                 user.bio.map(
                                     (bioSentence: string, i: number) => {
-                                        console.log("Bio ", bioSentence);
                                         return (
                                             <h3 className="bio-text" key={i}>
                                                 {bioSentence}

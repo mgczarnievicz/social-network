@@ -22,7 +22,6 @@ function FriendsAndWannabees() {
     var wannabees = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return !friend.accepted; }); });
     var actualFriends = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return friend.accepted; }); });
     var user = (0, react_redux_1.useSelector)(function (state) { return state.user; });
-    console.log("I am in Friends & Wannabees");
     (0, react_1.useEffect)(function () {
         /*      1. Make a fetch request to gets my friends and wannabees.
         2. dispatch an action creator and pass the data recived.         */
@@ -31,21 +30,17 @@ function FriendsAndWannabees() {
         return function () {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
-            console.log("cleanup running");
             abort = true;
         };
     }, []);
     var buttonHandler = function (buttonAction, friendId) {
         //When we press the button we want to do a post request to my server!
-        console.log("Clicked in button friendship, button action", buttonAction);
         dispatch((0, slice_1.asyncChangeFriendStatus)(buttonAction, friendId));
     };
     function seeFriendProfile(idUserToSee) {
-        console.log("idUserToSee", idUserToSee);
+        // console.log("idUserToSee", idUserToSee);
         history.push("/user/".concat(idUserToSee));
     }
-    console.log("actualFriends", actualFriends);
-    console.log("wannabees", wannabees);
     return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-container" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends-wannabees" }, { children: actualFriends &&
                     actualFriends.map(function (friend) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-profile" }, { children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("img", { src: friend.photourl ||

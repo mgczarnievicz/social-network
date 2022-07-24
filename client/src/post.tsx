@@ -31,8 +31,6 @@ interface CommentInfo {}
 
 export default function Post(props: postProps) {
     const [postInfo, setPostInfo] = useState<PostInfo>();
-    const [comments, setComments] = useState<Array<CommentInfo>>([]);
-    const [commentInput, setCommentInput] = useState<string>("");
     const [showCommentInput, setShowCommentInput] = useState<boolean>(false);
 
     const { postIdToSee } = useParams<Record<string, string | undefined>>();
@@ -48,13 +46,10 @@ export default function Post(props: postProps) {
 
     useEffect(() => {
         let postToDisplay: number;
-        console.log("postIdToSee in post", postIdToSee);
-        console.log("props in post", props);
 
         if (postIdToSee) {
             postToDisplay = Number.parseInt(postIdToSee);
 
-            console.log("otherUserId after parseInt", postToDisplay);
             if (Number.isNaN(postToDisplay)) {
                 history.replace("/");
             }
@@ -75,10 +70,6 @@ export default function Post(props: postProps) {
             .catch((err) => console.log("Error in getPost", err));
     }, []);
     console.log("postInfo", postInfo);
-
-    function clickedComment() {
-        console.log("I clicked In comments! Lets Add some!");
-    }
 
     return (
         <>

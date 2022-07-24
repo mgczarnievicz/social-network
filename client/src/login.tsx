@@ -34,9 +34,8 @@ class LogIn extends Component<LogInProps, LogInState> {
         );
     }
     handleSubmit() {
-        console.log("Clicked submit!");
         const { error, ...newUser } = this.state;
-        console.log("newUser", newUser);
+
         fetch("/login.json", {
             method: "POST",
             headers: {
@@ -46,8 +45,6 @@ class LogIn extends Component<LogInProps, LogInState> {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from POST/ login", data);
-
                 if (data.status === "Success") {
                     location.replace("/");
                 } else {

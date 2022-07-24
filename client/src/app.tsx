@@ -12,7 +12,7 @@ import Wall from "./wall";
 import Chat from "./chat";
 
 import FriendsAndWannabees from "./friendsWannabees";
-import { ProfileInfoWBio, EmptyProps } from "./typesClient";
+import { EmptyProps } from "./typesClient";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/reducer";
@@ -33,18 +33,17 @@ export default function App(props: EmptyProps) {
         let abort = false;
         dispatch(asyncReceiveUser(abort));
         return () => {
-            console.log("cleanup running");
             abort = true;
         };
     }, []);
 
     function toggleUploader() {
-        console.log("ToggleModal is running");
+        // console.log("ToggleModal is running");
         setUploaderVisible(!uploaderVisible);
     }
 
     function upDatingPhoto(url: string) {
-        console.log("This is arg", url);
+        // console.log("This is arg", url);
         setUploaderVisible(false);
         dispatch(userUpdatePhotoUrl(url));
     }

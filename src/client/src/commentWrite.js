@@ -20,12 +20,10 @@ function WallWrite(props) {
     var _a = (0, react_1.useState)(""), comment = _a[0], setComment = _a[1];
     var userInfo = (0, react_redux_1.useSelector)(function (state) { return state.user; });
     var keyCheck = function (event) {
-        console.log("event.target.value", event.target.value);
         setComment(event.target.value);
-        console.log("Comment", comment);
         if (event.key === "Enter") {
             event.preventDefault();
-            console.log("event.target.value", event.target.value);
+            // console.log("event.target.value", event.target.value);
             dispatch((0, slice_1.asyncNewComment)(props.postId, comment));
             event.target.value = "";
         }

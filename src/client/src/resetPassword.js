@@ -64,10 +64,7 @@ var ResetPassword = /** @class */ (function (_super) {
     };
     ResetPassword.prototype.handleSendEmail = function () {
         var _this = this;
-        console.log("Send Email!");
-        console.log("this.state.email", this.state.email);
         var _a = this.state, error = _a.error, view = _a.view, userInput = __rest(_a, ["error", "view"]);
-        console.log("userInput", userInput);
         fetch("/resetPassword/sendEmail.json", {
             method: "POST",
             headers: {
@@ -77,7 +74,6 @@ var ResetPassword = /** @class */ (function (_super) {
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
-            console.log("data from POST/ SendEmail", data);
             if (data.status === "Success") {
                 _this.setState({
                     view: 2,
@@ -95,15 +91,10 @@ var ResetPassword = /** @class */ (function (_super) {
                 error: true,
             });
         });
-        // (e.target as HTMLInputElement)
-        // emailRef.current.value = "";
-        console.log("this.state:", this.state);
     };
     ResetPassword.prototype.handleSetNewPassword = function () {
         var _this = this;
-        console.log("Set New Password");
         var _a = this.state, error = _a.error, view = _a.view, userInput = __rest(_a, ["error", "view"]);
-        console.log("userInput", userInput);
         fetch("/resetPassword/setNewPassword.json", {
             method: "POST",
             headers: {
@@ -113,7 +104,6 @@ var ResetPassword = /** @class */ (function (_super) {
         })
             .then(function (resp) { return resp.json(); })
             .then(function (data) {
-            console.log("data from POST/ setNewPassword", data);
             if (data.status === "Success") {
                 _this.setState({
                     view: 3,
@@ -131,7 +121,6 @@ var ResetPassword = /** @class */ (function (_super) {
                 error: true,
             });
         });
-        console.log("this.state:", this.state);
     };
     ResetPassword.prototype.determineViewToRender = function () {
         // this method determines what the render!

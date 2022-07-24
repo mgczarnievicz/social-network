@@ -35,7 +35,7 @@ function BioEditor(props: BioProps) {
     }
 
     function submitBio() {
-        console.log("U clicked Save Bio!");
+        // console.log("U clicked Save Bio!");
 
         fetch("/setBioInfo.json", {
             method: "POST",
@@ -46,7 +46,7 @@ function BioEditor(props: BioProps) {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("Data from update Bio", data);
+                // console.log("Data from update Bio", data);
                 if (data.status === "Success") {
                     setShowTextArea(false);
                     setDraftBio("");
@@ -69,7 +69,7 @@ function BioEditor(props: BioProps) {
                 <div className="bio-in-display">
                     {bio &&
                         bio.map((bioSentence: string, i: number) => {
-                            console.log("Bio ", bioSentence);
+                            // console.log("Bio ", bioSentence);
                             return (
                                 <h3 className="bio-text" key={i}>
                                     {bioSentence}

@@ -24,8 +24,6 @@ export default function FriendsAndWannabees() {
 
     const user = useSelector((state: RootState) => state.user);
 
-    console.log("I am in Friends & Wannabees");
-
     useEffect(() => {
         /*      1. Make a fetch request to gets my friends and wannabees.
         2. dispatch an action creator and pass the data recived.         */
@@ -35,7 +33,6 @@ export default function FriendsAndWannabees() {
         return () => {
             // this function runs, whenever there is another useEffect that gets
             // triggered after the initial one
-            console.log("cleanup running");
             abort = true;
         };
     }, []);
@@ -45,20 +42,13 @@ export default function FriendsAndWannabees() {
         friendId: number
     ) => {
         //When we press the button we want to do a post request to my server!
-        console.log(
-            "Clicked in button friendship, button action",
-            buttonAction
-        );
         dispatch(asyncChangeFriendStatus(buttonAction, friendId));
     };
 
     function seeFriendProfile(idUserToSee: number) {
-        console.log("idUserToSee", idUserToSee);
+        // console.log("idUserToSee", idUserToSee);
         history.push(`/user/${idUserToSee}`);
     }
-
-    console.log("actualFriends", actualFriends);
-    console.log("wannabees", wannabees);
 
     return (
         <div className="friends-wannabees-container">

@@ -39,8 +39,6 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
     }
     handleSubmit() {
         const { error, ...newUser } = this.state;
-        console.log("Clicked submit in Registration!");
-        console.log("newUser", newUser);
 
         fetch("/registration.json", {
             method: "POST",
@@ -51,8 +49,6 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from POST/ registration", data);
-
                 if (data.status === "Success") {
                     // location.replace("/");
                     location.reload();
@@ -61,7 +57,6 @@ class Registration extends Component<RegistrationProps, RegistrationState> {
                         error: true,
                     });
                 }
-                console.log("this.state:", this.state);
             })
             .catch(() => {
                 this.setState(

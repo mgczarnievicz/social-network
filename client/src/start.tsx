@@ -19,7 +19,6 @@ const store = createStore(
 fetch("/user/id.json")
     .then((response) => response.json())
     .then((data) => {
-        console.log("data from /user/id.json ", data);
         if (!data.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {

@@ -25,12 +25,12 @@ export default function CommentDisplay(props: CommentProps) {
     useEffect(() => {
         let abort = false;
 
-        console.log("In Comment Display props", props);
+        // console.log("In Comment Display props", props);
 
         fetch(`/getCommentInfo/?commentId=${props.comment_id}`)
             .then((respBody) => respBody.json())
             .then((data) => {
-                console.log("Data from /getPost", data);
+                // console.log("Data from /getPost", data);
                 if (data.status == "Success") {
                     setCommentInfo(data.commentInfo);
                 }

@@ -19,24 +19,19 @@ export default function Friends(props: Friends) {
         state.friends?.filter((friend: FriendProfile) => friend.accepted)
     );
 
-    console.log("I am in Friends & Wannabees");
-
     useEffect(() => {
         let abort = false;
         dispatch(asyncReceiveFriendStatus(abort, props.otherUserId));
 
         return () => {
-            console.log("cleanup running");
             abort = true;
         };
     }, []);
 
     function seeFriendProfile(idUserToSee: number) {
-        console.log("idUserToSee", idUserToSee);
+        // console.log("idUserToSee", idUserToSee);
         history.push(`/user/${idUserToSee}`);
     }
-
-    console.log("actualFriends", friends);
 
     return (
         <div className="friends-container">

@@ -17,15 +17,15 @@ export default function Profile(props: ProfileProps) {
     );
 
     return (
-        <div className="profile-component container-main-width">
+        <div className="profile-component container-main-width shadow">
             <ProfilePhoto toggleUploader={props.toggleUploader} />
-            <div className="profile-info">
+            <div className="profile-bio">
                 <h1>
                     Welcome {userInfo.name} {userInfo.surname}
                 </h1>
                 <BioEditor />
-                <Friends otherUserId={userInfo.id} />
             </div>
+            <Friends otherUserId={userInfo.id} />
         </div>
     );
 }

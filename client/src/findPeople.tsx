@@ -8,24 +8,12 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faMagnifyingGlass);
 
-// interface FriendInfo {
-//     id: number;
-//     name: string;
-//     surname: string;
-//     photourl: string;
-// }
-
 export default function FindPeople() {
     /* useEffect allows us to have a lice cycle methods to hook into react's 
     render process it, it accept two arguments:
     1. a callback
     2. an array that limits when the effect should run
-    
-    
-    Its better to user a unique id, not the index that we generate in the loop. 
-    {countries?.map((country, i)=>{
-        return <li key={i}>{country}</li>
-    })}*/
+    */
 
     const [searchInput, setSearch] = useState("");
     const [text, setText] = useState("Newest Users");
@@ -41,7 +29,7 @@ export default function FindPeople() {
                     `/searchFriend?search=${searchInput}`
                 );
                 const data = await respBody.json();
-                
+
                 if (!abort) {
                     if (searchInput) {
                         setText("");

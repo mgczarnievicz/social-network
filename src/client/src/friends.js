@@ -34,10 +34,10 @@ function Friends(props) {
         // friends
     }, []);
     function seeFriendProfile(idUserToSee) {
-        // console.log("idUserToSee", idUserToSee);
-        history.push("/user/".concat(idUserToSee));
+        console.log("idUserToSee", idUserToSee);
+        // history.push(`/user/${idUserToSee}`);
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-container" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends" }, { children: friends &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-container" }, { children: [(0, jsx_runtime_1.jsx)("h2", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends" }, { children: friends &&
                     friends.map(function (friend) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-round", onClick: function () {
                                 seeFriendProfile(friend.id);

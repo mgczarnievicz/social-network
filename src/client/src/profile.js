@@ -21,6 +21,6 @@ var bioEditor_1 = __importDefault(require("./bioEditor"));
 var friends_1 = __importDefault(require("./friends"));
 function Profile(props) {
     var userInfo = (0, react_redux_1.useSelector)(function (state) { return state.user; });
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component container-main-width" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { toggleUploader: props.toggleUploader }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-info" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: ["Welcome ", userInfo.name, " ", userInfo.surname] }), (0, jsx_runtime_1.jsx)(bioEditor_1.default, {}), (0, jsx_runtime_1.jsx)(friends_1.default, { otherUserId: userInfo.id })] }))] })));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-component container-main-width shadow" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { toggleUploader: props.toggleUploader }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "profile-bio" }, { children: [(0, jsx_runtime_1.jsxs)("h1", { children: ["Welcome ", userInfo.name, " ", userInfo.surname] }), (0, jsx_runtime_1.jsx)(bioEditor_1.default, {})] })), (0, jsx_runtime_1.jsx)(friends_1.default, { otherUserId: userInfo.id })] })));
 }
 exports.default = Profile;

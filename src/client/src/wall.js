@@ -36,6 +36,6 @@ function Wall(props) {
             abort = true;
         };
     }, []);
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "container-main-width wall-container" }, { children: [(0, jsx_runtime_1.jsx)(wallWrite_1.default, { wallUserId: props.wallUserId }), (0, jsx_runtime_1.jsx)(wallPost_1.default, {})] })));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "wall-container" }, { children: [(0, jsx_runtime_1.jsx)(wallWrite_1.default, { wallUserId: props.wallUserId }), (0, jsx_runtime_1.jsx)(wallPost_1.default, {})] })));
 }
 exports.default = Wall;

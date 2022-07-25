@@ -57,10 +57,10 @@ function BioEditor(props) {
         setShowTextArea(!showTextArea);
         setDraftBio(stringDraftBio);
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-container" }, { children: [bio && !showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [bio &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-container" }, { children: [bio && !showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-display" }, { children: [bio &&
                         bio.map(function (bioSentence, i) {
                             // console.log("Bio ", bioSentence);
                             return ((0, jsx_runtime_1.jsx)("h3", __assign({ className: "bio-text" }, { children: bioSentence }), i));
-                        }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: toggleBioEditor }, { children: "Edit Bio" }))] }))), !bio && !showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: toggleBioEditor }, { children: "Add Bio" }))), showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-in-display" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: draftBio, onChange: handleBioChange, rows: 5, cols: 50 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: submitBio }, { children: "Save" }))] })))] })));
+                        }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: toggleBioEditor }, { children: "Edit Bio" }))] }))), !bio && !showTextArea && ((0, jsx_runtime_1.jsx)("button", __assign({ onClick: toggleBioEditor }, { children: "Add Bio" }))), showTextArea && ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "bio-display" }, { children: [(0, jsx_runtime_1.jsx)("textarea", { value: draftBio, onChange: handleBioChange, rows: 5, cols: 25 }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: submitBio }, { children: "Save" }))] })))] })));
 }
 exports.default = BioEditor;

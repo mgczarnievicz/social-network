@@ -71,33 +71,46 @@ export default function OtherProfile() {
             )}
             {user && (
                 <>
-                    <div className="profile-component container-main-width">
-                        <div className="photo-friendButton">
-                            <ProfilePhoto
-                                name={user.name}
-                                surname={user.surname}
-                                photourl={user.photourl}
-                            />
-                            <FriendButton viewUser={user.id} />
-                        </div>
+                    <div className="container-main-width other-profile-container">
+                        <div className="other-profile shadow ">
+                            <div className="profile-component">
+                                <div className="photo-friendButton">
+                                    <ProfilePhoto
+                                        name={user.name}
+                                        surname={user.surname}
+                                        photourl={user.photourl}
+                                    />
+                                    <FriendButton viewUser={user.id} />
+                                </div>
 
-                        <div className="profile-info">
-                            <h1>
-                                {user.name} {user.surname}
-                            </h1>
-                            {user.bio &&
-                                user.bio.map(
-                                    (bioSentence: string, i: number) => {
-                                        return (
-                                            <h3 className="bio-text" key={i}>
-                                                {bioSentence}
-                                            </h3>
-                                        );
-                                    }
-                                )}
+                                <div className="bio-display">
+                                    <h1>
+                                        {user.name} {user.surname}
+                                    </h1>
+                                    {user.bio &&
+                                        user.bio.map(
+                                            (
+                                                bioSentence: string,
+                                                i: number
+                                            ) => {
+                                                return (
+                                                    <h3
+                                                        className="bio-text"
+                                                        key={i}
+                                                    >
+                                                        {bioSentence}
+                                                    </h3>
+                                                );
+                                            }
+                                        )}
+                                </div>
+                            </div>
+                            <Friends otherUserId={user.id} />
                         </div>
-                        <Friends otherUserId={user.id} />
-                        <Wall wallUserId={user.id} />
+                        <div className="other-wall-container shadow">
+                            <h1>Leave me a Post</h1>
+                            <Wall wallUserId={user.id} />
+                        </div>
                     </div>
                 </>
             )}

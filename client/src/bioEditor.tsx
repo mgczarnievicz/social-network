@@ -66,7 +66,7 @@ function BioEditor(props: BioProps) {
     return (
         <div className="bio-container">
             {bio && !showTextArea && (
-                <div className="bio-in-display">
+                <div className="bio-display">
                     {bio &&
                         bio.map((bioSentence: string, i: number) => {
                             // console.log("Bio ", bioSentence);
@@ -87,12 +87,12 @@ function BioEditor(props: BioProps) {
             )}
 
             {showTextArea && (
-                <div className="bio-in-display">
+                <div className="bio-display">
                     <textarea
                         value={draftBio}
                         onChange={handleBioChange}
                         rows={5}
-                        cols={50}
+                        cols={25}
                     ></textarea>
                     <button onClick={submitBio}>Save</button>
                 </div>

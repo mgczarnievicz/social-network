@@ -99,7 +99,10 @@ export default function App(props: EmptyProps) {
                         <OtherProfile />
                     </Route>
                     <Route path="/news">
-                        <Wall />
+                        <div className="container-main-width ">
+                            <h1 className="wall-title">My Post</h1>
+                            <Wall />
+                        </div>
                     </Route>
                     <Route path="/friends">
                         <FriendsAndWannabees />

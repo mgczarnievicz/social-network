@@ -9,6 +9,8 @@
 
 * {
     font-family: "Arima", cursive;
+
+    /* font-family: "Mali", cursive; */
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -125,7 +127,7 @@ button:hover {
 }
 
 .profilePhoto img {
-    width: 250px;
+    width: 220px;
     border: 2px solid var(--color-board);
     border-radius: 12px;
     margin: 10px;
@@ -194,6 +196,7 @@ header nav a {
 
 header nav a:hover {
     color: var(--color-board);
+    font-size: 25px;
 }
 
 /* --------------------------------------------------------------------
@@ -238,40 +241,44 @@ label {
     cursor: pointer;
 }
 /* --------------------------------------------------------------------
-                        PROFILE SECTION
+                        GENERAL SECTION
 -----------------------------------------------------------------------*/
 .container-main-width {
+    margin: 30px 0px;
     width: 80%;
+}
+
+.shadow {
+    box-shadow: 0px 0px 66px -15px rgba(0, 0, 0, 0.75);
+    border-radius: 12px;
 }
 
 /* --------------------------------------------------------------------
                         PROFILE SECTION
 -----------------------------------------------------------------------*/
 .profile-component {
-    padding-top: 20px;
-    flex-grow: 2;
+    padding: 20px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    justify-content: center;
 }
 
-.profile-info {
+.profile-bio {
     min-width: 300px;
-    max-width: 505px;
+    max-width: 405px;
     flex-grow: 2;
     padding: 10px 10px;
-    padding-left: 50px;
+    padding-left: 20px;
 }
-/* .profile-info h1 {
-    padding: 10px 10px;
-    text-align: center;
-} */
+
 .bio-text {
     font-weight: 400;
 }
 .photo-friendButton button {
     width: 100%;
     padding-top: 3px;
+    margin: 0px;
 }
 
 .bio-container {
@@ -280,7 +287,7 @@ label {
     min-height: 160px;
 }
 
-.bio-container .bio-in-display {
+.bio-container .bio-display {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -289,7 +296,7 @@ label {
 }
 
 .bio-container button {
-    width: 20%;
+    width: 60%;
     margin-top: 10px;
     color: whitesmoke;
     font-size: 20px;
@@ -298,6 +305,23 @@ label {
     border-radius: 12px;
     padding: 2px;
     align-self: flex-start;
+}
+
+.other-profile-container {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+}
+
+.other-profile {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.other-profile .bio-display {
+    margin-left: 15px;
 }
 
 /* --------------------------------------------------------------------
@@ -406,13 +430,34 @@ label {
 /* ----------------------------------------------------------------------
                                    POST SECTION 
 ------------------------------------------------------------------------*/
-
-.wall-container {
-    max-width: 835px;
+.other-wall-container {
+    width: 100%;
+    /* margin-top: 20px; */
+    margin-left: 20px;
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+.wall-title {
+    text-align: center;
+}
+.wall-container {
+    min-width: 100%;
+    max-width: 835px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-main-width .wall-container {
+    width: 60%;
+}
 .posts-container {
     width: 80%;
+    max-height: 600px;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -517,13 +562,15 @@ label {
                                   FRIENDS SECTION 
 ------------------------------------------------------------------------*/
 .friends-container {
-    min-width: 300px;
-    max-width: 505px;
-
+    width: 75%;
+    min-width: 200px;
+    max-width: 405px;
+    max-height: 415px;
+    background-color: antiquewhite;
     border: 2px solid var(--color-board);
     border-radius: 12px;
     padding: 10px;
-    margin: 10px 10px;
+    margin: 20px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -544,8 +591,8 @@ label {
 
 .friends-round img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     margin-bottom: 0px;
     object-fit: cover;
 }
@@ -559,7 +606,7 @@ label {
 
 .chat-container {
     width: 80%;
-    padding-top: 20px;
+    padding: 20px 0px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -633,6 +680,21 @@ h3 {
 .chat-to-whom {
     display: flex;
     flex-direction: row;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-to-whom h1 {
+    margin-left: 10px;
+}
+
+.chat-to-whom img {
+    border: 3px solid var(--color-dark);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0px;
 }
 /* ----------------------------------------------------------------------
                                   ONLINE USERS SECTION 
@@ -651,21 +713,21 @@ h3 {
     border-radius: 12px;
     background-color: var(--color-board);
     color: whitesmoke;
+    font-size: 20px;
 }
 .user-online:hover img {
     border: whitesmoke 2px solid;
 }
 
 .user-online {
-    width: 250px;
+    width: 230px;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 5px;
 }
 
-.user-online img,
-.chat-to-whom img {
+.user-online img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -675,4 +737,10 @@ h3 {
 .user-online h4 {
     width: 100%;
     padding-left: 10px;
+}
+
+@media screen and (max-width: 1250px) {
+    .container-main-width {
+        width: 95%;
+    }
 }

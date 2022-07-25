@@ -16,8 +16,6 @@ export default function WallPost(props: WallProps) {
 
     return (
         <div className="posts-container">
-            <h1>This are post!</h1>
-
             {posts &&
                 posts.map((each: PostId) => {
                     return <Post key={each.post_id} postId={each.post_id} />;

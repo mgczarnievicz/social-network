@@ -54,23 +54,12 @@ var react_fontawesome_1 = require("@fortawesome/react-fontawesome");
 var fontawesome_svg_core_1 = require("@fortawesome/fontawesome-svg-core");
 var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
 fontawesome_svg_core_1.library.add(free_solid_svg_icons_1.faMagnifyingGlass);
-// interface FriendInfo {
-//     id: number;
-//     name: string;
-//     surname: string;
-//     photourl: string;
-// }
 function FindPeople() {
     /* useEffect allows us to have a lice cycle methods to hook into react's
     render process it, it accept two arguments:
     1. a callback
     2. an array that limits when the effect should run
-    
-    
-    Its better to user a unique id, not the index that we generate in the loop.
-    {countries?.map((country, i)=>{
-        return <li key={i}>{country}</li>
-    })}*/
+    */
     var _this = this;
     var _a = (0, react_1.useState)(""), searchInput = _a[0], setSearch = _a[1];
     var _b = (0, react_1.useState)("Newest Users"), text = _b[0], setText = _b[1];

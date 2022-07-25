@@ -32,13 +32,13 @@ export default function Friends(props: Friends) {
     }, []);
 
     function seeFriendProfile(idUserToSee: number) {
-        // console.log("idUserToSee", idUserToSee);
-        history.push(`/user/${idUserToSee}`);
+        console.log("idUserToSee", idUserToSee);
+        // history.push(`/user/${idUserToSee}`);
     }
 
     return (
         <div className="friends-container">
-            <h1>Friends</h1>
+            <h2>Friends</h2>
             <div className="friends">
                 {friends &&
                     friends.map((friend: FriendProfile) => {

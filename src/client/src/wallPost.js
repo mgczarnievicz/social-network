@@ -21,9 +21,9 @@ function WallPost(props) {
     // In Global State is where the information of the post to display is.
     var posts = (0, react_redux_1.useSelector)(function (state) { return state.posts; });
     console.log("posts to display", posts);
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "posts-container" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "This are post!" }), posts &&
-                posts.map(function (each) {
-                    return (0, jsx_runtime_1.jsx)(post_1.default, { postId: each.post_id }, each.post_id);
-                })] })));
+    return ((0, jsx_runtime_1.jsx)("div", __assign({ className: "posts-container" }, { children: posts &&
+            posts.map(function (each) {
+                return (0, jsx_runtime_1.jsx)(post_1.default, { postId: each.post_id }, each.post_id);
+            }) })));
 }
 exports.default = WallPost;

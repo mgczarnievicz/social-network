@@ -344,7 +344,7 @@ exports.getCommentById = (commentId: number): QueryResult => {
 
 exports.getPrivateMsgByUsersId = (sender_id: number, receiver_id: number) => {
     const q = `SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,
-	 senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at
+	 senderUser.id AS sender_id, message_private.receiver_id,message_private.id, message_private.message, message_private.send_at
                 FROM message_private
                 INNER JOIN users AS senderUser
                 ON message_private.sender_id=senderUser.id
@@ -371,7 +371,7 @@ exports.newPrivateMsg = (
 
 exports.getPrivateMsgById = (id: number) => {
     const q = `SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,
-	 senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at
+	 senderUser.id AS sender_id, message_private.receiver_id, message_private.id, message_private.message, message_private.send_at
                 FROM message_private
                 INNER JOIN users AS senderUser
                 ON message_private.sender_id=senderUser.id

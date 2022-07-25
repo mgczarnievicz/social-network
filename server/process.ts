@@ -450,12 +450,16 @@ exports.setFriendshipStatus = (
 };
 
 exports.getFriends = (userId: number) => {
+    console.log("getFriends userId to search", userId);
     return searchFriendshipByUserId(userId)
         .then((result: QueryResult) => {
             console.log("SearchFriendshipBy Id result", result.rows);
             return result.rows;
         })
-        .catch((err: QueryResult) => err);
+        .catch((err: QueryResult): [] => {
+            console.log("Error in search Friendship By User ID", err);
+            return [];
+        });
 };
 
 /* -----------------------------------------------------------------------------

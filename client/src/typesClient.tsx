@@ -13,7 +13,8 @@ export interface EmptyProps {}
 
 export interface ChatInfo {
     id: number;
-    user_id: number;
+    sender_id: number;
+    receiver_id?: number;
     name: string;
     surname: string;
     message: string;
@@ -44,12 +45,9 @@ export interface CommentsObject {
     [key: number]: Array<CommentsId>;
 }
 
-export interface ChatInfo {
-    id: number;
-    user_id: number;
-    name: string;
-    surname: string;
-    message: string;
-    send_at: string;
-    photourl?: string;
-}
+export const GeneralChat: ProfileInfo = {
+    id: 0,
+    name: "General",
+    surname: "Chat",
+    photourl: "/toAll.png",
+};

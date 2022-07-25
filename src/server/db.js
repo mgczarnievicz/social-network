@@ -162,7 +162,7 @@ exports.getCommentById = function (commentId) {
                   PRIVATE MESSAGE TABLE
 ----------------------------------------------------------------*/
 exports.getPrivateMsgByUsersId = function (sender_id, receiver_id) {
-    var q = "SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,\n\t senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at\n                FROM message_private\n                INNER JOIN users AS senderUser\n                ON message_private.sender_id=senderUser.id\n                WHERE (message_private.sender_id = $1 AND message_private.receiver_id = $2)\n\t\t\t\tOR (message_private.sender_id = $2 AND message_private.receiver_id = $1)\n                ORDER BY message_private. send_at DESC\n                LIMIT 5";
+    var q = "SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,\n\t senderUser.id AS sender_id, message_private.receiver_id,message_private.id, message_private.message, message_private.send_at\n                FROM message_private\n                INNER JOIN users AS senderUser\n                ON message_private.sender_id=senderUser.id\n                WHERE (message_private.sender_id = $1 AND message_private.receiver_id = $2)\n\t\t\t\tOR (message_private.sender_id = $2 AND message_private.receiver_id = $1)\n                ORDER BY message_private. send_at DESC\n                LIMIT 5";
     var param = [sender_id, receiver_id];
     return db.query(q, param);
 };
@@ -172,7 +172,7 @@ exports.newPrivateMsg = function (sender_id, receiver_id, message) {
     return db.query(q, param);
 };
 exports.getPrivateMsgById = function (id) {
-    var q = "SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,\n\t senderUser.id AS user_id, message_private.id, message_private.message, message_private.send_at\n                FROM message_private\n                INNER JOIN users AS senderUser\n                ON message_private.sender_id=senderUser.id\n                WHERE message_private.id = $1 ";
+    var q = "SELECT senderUser.name AS name, senderUser.surname AS surname, senderUser.photourl,\n\t senderUser.id AS sender_id, message_private.receiver_id, message_private.id, message_private.message, message_private.send_at\n                FROM message_private\n                INNER JOIN users AS senderUser\n                ON message_private.sender_id=senderUser.id\n                WHERE message_private.id = $1 ";
     var param = [id];
     return db.query(q, param);
 };

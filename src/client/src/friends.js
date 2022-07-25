@@ -26,10 +26,12 @@ function Friends(props) {
     var friends = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.friends) === null || _a === void 0 ? void 0 : _a.filter(function (friend) { return friend.accepted; }); });
     (0, react_1.useEffect)(function () {
         var abort = false;
+        console.log("Props in Friends!", props);
         dispatch((0, slice_1.asyncReceiveFriendStatus)(abort, props.otherUserId));
         return function () {
             abort = true;
         };
+        // friends
     }, []);
     function seeFriendProfile(idUserToSee) {
         // console.log("idUserToSee", idUserToSee);

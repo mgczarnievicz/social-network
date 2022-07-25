@@ -20,27 +20,36 @@ var react_redux_1 = require("react-redux");
 var react_router_1 = require("react-router");
 var socket_1 = require("./socket");
 var profilePhoto_1 = __importDefault(require("./profilePhoto"));
+var GeneralChat = {
+    sender_id: 0,
+    name: "General",
+    surname: "",
+    photourl: "/toAll.png",
+};
 function ChatMessage(props) {
     var messagesInfo;
-    if (props.userIdToTalk) {
-        console.log("let filter our msg!", props.userIdToTalk);
+    console.log("Props in Chat Messages", props.userIdToTalk);
+    if (props.userIdToTalk.id) {
+        console.log("I am Filtering");
         messagesInfo = (0, react_redux_1.useSelector)(function (state) {
             var _a;
             return (_a = state.messages) === null || _a === void 0 ? void 0 : _a.filter(function (each) {
-                return each.user_id == props.userIdToTalk ||
-                    each.user_id == state.user.id;
+                return (each.sender_id == props.userIdToTalk.id &&
+                    each.receiver_id == state.user.id) ||
+                    (each.receiver_id == props.userIdToTalk.id &&
+                        each.sender_id == state.user.id);
             });
         });
     }
     else {
         console.log("I am here!!! :(");
-        messagesInfo = (0, react_redux_1.useSelector)(function (state) { return state.messages; });
+        messagesInfo = (0, react_redux_1.useSelector)(function (state) { var _a; return (_a = state.messages) === null || _a === void 0 ? void 0 : _a.filter(function (each) { return !each.receiver_id; }); });
     }
     var history = (0, react_router_1.useHistory)();
     console.log("messagesInfo", messagesInfo);
     (0, react_1.useEffect)(function () {
         var abort = false;
-        socket_1.socket.emit("chat-newest-message", props.userIdToTalk);
+        socket_1.socket.emit("chat-newest-message", props.userIdToTalk.id);
         return function () {
             abort = true;
         };
@@ -53,7 +62,7 @@ function ChatMessage(props) {
             console.log("event.target.value", event.target.value);
             socket_1.socket.emit("chat-new-message", {
                 message: event.target.value,
-                receiver_id: props.userIdToTalk,
+                receiver_id: props.userIdToTalk.id,
             });
             event.target.value = "";
         }
@@ -62,10 +71,10 @@ function ChatMessage(props) {
         console.log("idUserToSee", idUserToSee);
         history.push("/user/".concat(idUserToSee));
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "container-main-width message-section" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Welcome to chat" }), (0, jsx_runtime_1.jsx)("pre", { children: JSON.stringify(props.userIdToTalk) }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "message-container" }, { children: [messagesInfo && messagesInfo.length == 0 && ((0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)("h4", { children: "No Messages" }) })), messagesInfo &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "container-main-width message-section" }, { children: [(0, jsx_runtime_1.jsxs)("div", __assign({ className: "chat-to-whom" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: props.userIdToTalk.name, surname: props.userIdToTalk.surname, photourl: props.userIdToTalk.photourl }), (0, jsx_runtime_1.jsxs)("h1", { children: [props.userIdToTalk.name, " ", props.userIdToTalk.surname] })] })), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "message-container" }, { children: [messagesInfo && messagesInfo.length == 0 && ((0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)("h4", { children: "No Messages" }) })), messagesInfo &&
                         messagesInfo.map(function (each) {
                             return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "message" }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: each.name, surname: each.surname, photourl: each.photourl }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "message-info" }, { children: [(0, jsx_runtime_1.jsxs)("p", __assign({ onClick: function () {
-                                                    seeFriendProfile(each.user_id);
+                                                    seeFriendProfile(each.sender_id);
                                                 } }, { children: [each.name, " ", each.surname] })), (0, jsx_runtime_1.jsx)("h3", { children: each.message }), (0, jsx_runtime_1.jsx)("h6", { children: each.send_at })] }))] }), each.id));
                         })] })), (0, jsx_runtime_1.jsx)("textarea", { placeholder: "Write a new Message", onKeyDown: keyCheck })] })));
 }

@@ -24,7 +24,7 @@ export default function Profile(props: ProfileProps) {
                     Welcome {userInfo.name} {userInfo.surname}
                 </h1>
                 <BioEditor />
-                {/* <Friends otherUserId={userInfo.id} /> */}
+                <Friends otherUserId={userInfo.id} />
             </div>
         </div>
     );

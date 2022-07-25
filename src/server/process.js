@@ -384,12 +384,16 @@ exports.setFriendshipStatus = function (userId, actualStatus) {
     }
 };
 exports.getFriends = function (userId) {
+    console.log("getFriends userId to search", userId);
     return searchFriendshipByUserId(userId)
         .then(function (result) {
         console.log("SearchFriendshipBy Id result", result.rows);
         return result.rows;
     })
-        .catch(function (err) { return err; });
+        .catch(function (err) {
+        console.log("Error in search Friendship By User ID", err);
+        return [];
+    });
 };
 /* -----------------------------------------------------------------------------
                         SOCKET SECTION

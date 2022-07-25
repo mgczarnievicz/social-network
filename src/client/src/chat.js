@@ -18,11 +18,13 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var chatMessage_1 = __importDefault(require("./chatMessage"));
 var onlineUsers_1 = __importDefault(require("./onlineUsers"));
+var typesClient_1 = require("./typesClient");
+// GeneralChat
 function Chat() {
-    var _a = (0, react_1.useState)(0), userToChat = _a[0], setUserToChat = _a[1];
-    function changeUserToChat(userId) {
-        console.log("userId", userId);
-        setUserToChat(userId);
+    var _a = (0, react_1.useState)(typesClient_1.GeneralChat), userToChat = _a[0], setUserToChat = _a[1];
+    function changeUserToChat(userInfo) {
+        console.log("userId", userInfo);
+        setUserToChat(userInfo);
     }
     console.log("userToChat", userToChat);
     return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "chat-container" }, { children: [(0, jsx_runtime_1.jsx)(chatMessage_1.default, { userIdToTalk: userToChat }), (0, jsx_runtime_1.jsx)(onlineUsers_1.default, { changeUserToChat: changeUserToChat })] })));

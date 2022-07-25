@@ -21,11 +21,14 @@ export default function Friends(props: Friends) {
 
     useEffect(() => {
         let abort = false;
+        console.log("Props in Friends!", props);
+
         dispatch(asyncReceiveFriendStatus(abort, props.otherUserId));
 
         return () => {
             abort = true;
         };
+        // friends
     }, []);
 
     function seeFriendProfile(idUserToSee: number) {

@@ -10,29 +10,48 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { RootState } from "./redux/reducer";
 import { socket } from "./socket";
-import { ChatInfo } from "./typesClient";
+import { ChatInfo, ProfileInfo } from "./typesClient";
 import ProfilePhoto from "./profilePhoto";
 import { stat } from "fs";
 
 interface ChatMessageProp {
-    userIdToTalk: number;
+    userIdToTalk: ProfileInfo;
 }
+
+interface SenderProfileInfo {
+    sender_id: number;
+    name: string;
+    surname: string;
+    photourl?: string;
+}
+
+const GeneralChat: SenderProfileInfo = {
+    sender_id: 0,
+    name: "General",
+    surname: "",
+    photourl: "/toAll.png",
+};
+
 export default function ChatMessage(props: ChatMessageProp) {
     let messagesInfo;
+    console.log("Props in Chat Messages", props.userIdToTalk);
 
-    if (props.userIdToTalk) {
-        console.log("let filter our msg!", props.userIdToTalk);
-
+    if (props.userIdToTalk.id) {
+        console.log("I am Filtering");
         messagesInfo = useSelector((state: RootState) =>
             state.messages?.filter(
                 (each: ChatInfo) =>
-                    each.user_id == props.userIdToTalk ||
-                    each.user_id == state.user.id
+                    (each.sender_id == props.userIdToTalk.id &&
+                        each.receiver_id == state.user.id) ||
+                    (each.receiver_id == props.userIdToTalk.id &&
+                        each.sender_id == state.user.id)
             )
         );
     } else {
         console.log("I am here!!! :(");
-        messagesInfo = useSelector((state: RootState) => state.messages);
+        messagesInfo = useSelector((state: RootState) =>
+            state.messages?.filter((each: ChatInfo) => !each.receiver_id)
+        );
     }
     const history = useHistory();
 
@@ -40,7 +59,8 @@ export default function ChatMessage(props: ChatMessageProp) {
 
     useEffect(() => {
         let abort = false;
-        socket.emit("chat-newest-message", props.userIdToTalk);
+        socket.emit("chat-newest-message", props.userIdToTalk.id);
+
         return () => {
             abort = true;
         };
@@ -55,7 +75,7 @@ export default function ChatMessage(props: ChatMessageProp) {
 
             socket.emit("chat-new-message", {
                 message: event.target.value,
-                receiver_id: props.userIdToTalk,
+                receiver_id: props.userIdToTalk.id,
             });
 
             event.target.value = "";
@@ -69,8 +89,17 @@ export default function ChatMessage(props: ChatMessageProp) {
 
     return (
         <div className="container-main-width message-section">
-            <h1>Welcome to chat</h1>
-            <pre>{JSON.stringify(props.userIdToTalk)}</pre>
+            <div className="chat-to-whom">
+                <ProfilePhoto
+                    name={props.userIdToTalk.name}
+                    surname={props.userIdToTalk.surname}
+                    photourl={props.userIdToTalk.photourl}
+                />
+                <h1>
+                    {props.userIdToTalk.name} {props.userIdToTalk.surname}
+                </h1>
+            </div>
+            {/* <pre>{JSON.stringify(props.userIdToTalk)}</pre> */}
 
             <div className="message-container">
                 {messagesInfo && messagesInfo.length == 0 && (
@@ -90,7 +119,7 @@ export default function ChatMessage(props: ChatMessageProp) {
                                 <div className="message-info">
                                     <p
                                         onClick={() => {
-                                            seeFriendProfile(each.user_id);
+                                            seeFriendProfile(each.sender_id);
                                         }}
                                     >
                                         {each.name} {each.surname}

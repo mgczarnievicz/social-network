@@ -2,7 +2,7 @@ import React from "react";
 import { RootState } from "./redux/reducer";
 import { useSelector } from "react-redux";
 
-import { ProfileInfo } from "./typesClient";
+import { ProfileInfo, GeneralChat } from "./typesClient";
 import ProfilePhoto from "./profilePhoto";
 
 interface OnlineUsersProp {
@@ -20,7 +20,7 @@ export default function OnlineUsers(props: OnlineUsersProp) {
             <div
                 className="user-online"
                 onClick={() => {
-                    props.changeUserToChat(0);
+                    props.changeUserToChat(GeneralChat);
                 }}
             >
                 <ProfilePhoto
@@ -36,7 +36,7 @@ export default function OnlineUsers(props: OnlineUsersProp) {
                         <div
                             className="user-online"
                             onClick={() => {
-                                props.changeUserToChat(each.id);
+                                props.changeUserToChat(each);
                             }}
                             key={each.id}
                         >

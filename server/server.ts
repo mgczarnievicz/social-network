@@ -170,12 +170,18 @@ app.get("/getUserInfo.json", (req, res) => {
     console.log(
         `-----------------------------------------------------------------------------\n\t Get User Info`
     );
-    getUserInfo(req.session.userId).then((data: {}) => {
+    getUserInfo(req.session.userId).then((data: {} | boolean) => {
         console.log("Data from getUserInfo", data);
-        res.json({
-            status: "Success",
-            payload: data,
-        });
+        if (data) {
+            res.json({
+                status: "Success",
+                payload: data,
+            });
+        } else {
+            res.json({
+                status: "Error",
+            });
+        }
     });
 });
 
@@ -381,10 +387,16 @@ app.post("/registration.json", (req, res) => {
         registerNewUser(req.body)
             .then((currentUser: UserBasicInfo) => {
                 console.log("currentUser:", currentUser);
-                if (req.session) req.session.userId = currentUser.id;
-                res.json({
-                    status: "Success",
-                });
+                if (currentUser) {
+                    if (req.session) req.session.userId = currentUser.id;
+                    res.json({
+                        status: "Success",
+                    });
+                } else {
+                    res.json({
+                        status: "Error",
+                    });
+                }
             })
             .catch((err: QueryResult) => {
                 res.json({

@@ -142,10 +142,17 @@ app.get("/getUserInfo.json", function (req, res) {
     console.log("-----------------------------------------------------------------------------\n\t Get User Info");
     getUserInfo(req.session.userId).then(function (data) {
         console.log("Data from getUserInfo", data);
-        res.json({
-            status: "Success",
-            payload: data,
-        });
+        if (data) {
+            res.json({
+                status: "Success",
+                payload: data,
+            });
+        }
+        else {
+            res.json({
+                status: "Error",
+            });
+        }
     });
 });
 app.get("/getFriends/", function (req, res) {
@@ -308,11 +315,18 @@ app.post("/registration.json", function (req, res) {
         registerNewUser(req.body)
             .then(function (currentUser) {
             console.log("currentUser:", currentUser);
-            if (req.session)
-                req.session.userId = currentUser.id;
-            res.json({
-                status: "Success",
-            });
+            if (currentUser) {
+                if (req.session)
+                    req.session.userId = currentUser.id;
+                res.json({
+                    status: "Success",
+                });
+            }
+            else {
+                res.json({
+                    status: "Error",
+                });
+            }
         })
             .catch(function (err) {
             res.json({

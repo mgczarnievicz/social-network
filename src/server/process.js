@@ -105,9 +105,15 @@ exports.registerNewUser = function (newUser) {
         var cleanNewUser = cleanEmptySpaces(newUser);
         return registerUser(capitalizeFirstLetter(cleanNewUser.name), capitalizeFirstLetter(cleanNewUser.surname), newUser.email.toLowerCase(), hashPass)
             .then(function (dbResult) { return dbResult.rows[0]; })
-            .catch(function (err) { return err; });
+            .catch(function (err) {
+            console.log("Error in registerUser", err);
+            return false;
+        });
     })
-        .catch(function (hashErr) { return hashErr; });
+        .catch(function (hashErr) {
+        console.log("Error in registerNewUser", hashErr);
+        return false;
+    });
 };
 /*
 Response:
@@ -214,7 +220,10 @@ exports.getUserInfo = function (userId) {
         userInfo.bio = userInfo.bio.split("\n");
         return userInfo;
     })
-        .catch(function (err) { return err; });
+        .catch(function (err) {
+        console.log("Error in getUserInfo", err);
+        return false;
+    });
 };
 exports.upDateBio = function (userId, newBio) {
     /*  We want to save the array of bios, each element is separate by the enter of the user   */

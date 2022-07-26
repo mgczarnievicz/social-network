@@ -141,9 +141,15 @@ exports.registerNewUser = (newUser: NewUserRegistration): RegisterResponse => {
                 hashPass
             )
                 .then((dbResult: QueryResult) => dbResult.rows[0])
-                .catch((err: QueryResult) => err);
+                .catch((err: QueryResult) => {
+                    console.log("Error in registerUser", err);
+                    return false;
+                });
         })
-        .catch((hashErr: QueryResult) => hashErr);
+        .catch((hashErr: QueryResult) => {
+            console.log("Error in registerNewUser", hashErr);
+            return false;
+        });
 };
 
 /* 
@@ -266,7 +272,10 @@ exports.getUserInfo = (userId: number) => {
             userInfo.bio = userInfo.bio.split("\n");
             return userInfo;
         })
-        .catch((err: QueryResult) => err);
+        .catch((err: QueryResult) => {
+            console.log("Error in getUserInfo", err);
+            return false;
+        });
 };
 
 exports.upDateBio = (userId: number, newBio: string) => {

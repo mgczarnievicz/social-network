@@ -54,6 +54,9 @@ export default function FriendsAndWannabees() {
         <div className="friends-wannabees-container">
             <h1>Friends</h1>
             <div className="friends-wannabees">
+                {actualFriends.length == 0 && (
+                    <h3>It's time to make some friends</h3>
+                )}
                 {actualFriends &&
                     actualFriends.map((friend: FriendProfile) => {
                         return (
@@ -87,7 +90,7 @@ export default function FriendsAndWannabees() {
                         );
                     })}
             </div>
-            <h1>WannaBees</h1>
+            {wannabees.length != 0 && <h1>WannaBees</h1>}
             <div className="friends-wannabees">
                 {wannabees &&
                     wannabees.map((wannabee: FriendProfile) => {

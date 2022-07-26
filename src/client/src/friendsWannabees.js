@@ -41,15 +41,15 @@ function FriendsAndWannabees() {
         // console.log("idUserToSee", idUserToSee);
         history.push("/user/".concat(idUserToSee));
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-container" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends-wannabees" }, { children: actualFriends &&
-                    actualFriends.map(function (friend) {
-                        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-profile" }, { children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("img", { src: friend.photourl ||
-                                                "/defaultProfile.png", alt: "".concat(friend.name, " ").concat(friend.surname), onClick: function () {
-                                                seeFriendProfile(friend.id);
-                                            } }), (0, jsx_runtime_1.jsxs)("h3", { children: [friend.name, " ", friend.surname] })] }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: function () {
-                                        return buttonHandler("Unfriend", friend.id);
-                                    } }, { children: "Unfriend" }))] }), friend.id));
-                    }) })), (0, jsx_runtime_1.jsx)("h1", { children: "WannaBees" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends-wannabees" }, { children: wannabees &&
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-container" }, { children: [(0, jsx_runtime_1.jsx)("h1", { children: "Friends" }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees" }, { children: [actualFriends.length == 0 && ((0, jsx_runtime_1.jsx)("h3", { children: "It's time to make some friends" })), actualFriends &&
+                        actualFriends.map(function (friend) {
+                            return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-profile" }, { children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("img", { src: friend.photourl ||
+                                                    "/defaultProfile.png", alt: "".concat(friend.name, " ").concat(friend.surname), onClick: function () {
+                                                    seeFriendProfile(friend.id);
+                                                } }), (0, jsx_runtime_1.jsxs)("h3", { children: [friend.name, " ", friend.surname] })] }), (0, jsx_runtime_1.jsx)("button", __assign({ onClick: function () {
+                                            return buttonHandler("Unfriend", friend.id);
+                                        } }, { children: "Unfriend" }))] }), friend.id));
+                        })] })), wannabees.length != 0 && (0, jsx_runtime_1.jsx)("h1", { children: "WannaBees" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends-wannabees" }, { children: wannabees &&
                     wannabees.map(function (wannabee) {
                         return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-wannabees-profile  wannabees-profile" }, { children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("img", { src: wannabee.photourl ||
                                                 "/defaultProfile.png", alt: "".concat(wannabee.name, " ").concat(wannabee.surname), onClick: function () {

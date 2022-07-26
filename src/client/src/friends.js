@@ -35,13 +35,14 @@ function Friends(props) {
     }, []);
     function seeFriendProfile(idUserToSee) {
         console.log("idUserToSee", idUserToSee);
-        // history.push(`/user/${idUserToSee}`);
+        history.push("/user/".concat(idUserToSee));
+        // location.replace("/");
     }
-    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-container" }, { children: [(0, jsx_runtime_1.jsx)("h2", { children: "Friends" }), (0, jsx_runtime_1.jsx)("div", __assign({ className: "friends" }, { children: friends &&
-                    friends.map(function (friend) {
-                        return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-round", onClick: function () {
-                                seeFriendProfile(friend.id);
-                            } }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: friend.name, surname: friend.surname, photourl: friend.photourl }), (0, jsx_runtime_1.jsx)("h4", { children: friend.name })] }), friend.id));
-                    }) }))] })));
+    return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-container" }, { children: [(0, jsx_runtime_1.jsx)("h2", { children: "Friends" }), (0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends" }, { children: [friends.length == 0 && (0, jsx_runtime_1.jsx)("h3", { children: "No friends yet" }), friends &&
+                        friends.map(function (friend) {
+                            return ((0, jsx_runtime_1.jsxs)("div", __assign({ className: "friends-round", onClick: function () {
+                                    seeFriendProfile(friend.id);
+                                } }, { children: [(0, jsx_runtime_1.jsx)(profilePhoto_1.default, { name: friend.name, surname: friend.surname, photourl: friend.photourl }), (0, jsx_runtime_1.jsx)("h4", { children: friend.name })] }), friend.id));
+                        })] }))] })));
 }
 exports.default = Friends;

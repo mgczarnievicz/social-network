@@ -92,7 +92,7 @@ function BioEditor(props: BioProps) {
                         value={draftBio}
                         onChange={handleBioChange}
                         rows={5}
-                        cols={25}
+                        cols={20}
                     ></textarea>
                     <button onClick={submitBio}>Save</button>
                 </div>

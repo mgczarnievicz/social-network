@@ -68,10 +68,22 @@ A single page application that allows users to join a social network and write p
 
 ![Search Friends](./assest/search-friends.gif)
 
-### Genaeral Chat
+### General Chat
 
-![Genaeral Chat](./assest/general-chat.gif)
+![General Chat](./assest/general-chat.gif)
 
 ### Private Chat
 
 ![Private Chat](./assest/private-chat.gif)
+
+### Wall Post
+
+![Wall Post](./assest/post-write.gif)
+
+### Wall Post Comment
+
+![Wall Post Comment](./assest/post-comment.gif)
+
+### Wall Post to a Friend
+
+![Wall Post to a Friend](./assest/post-to-friend.gif)

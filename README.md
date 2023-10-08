@@ -46,6 +46,24 @@ A single page application that allows users to join a social network and write p
 
 ## Preview
 
+### Registration
+
 ### Login
 
-![Log In](./assest/login-1.gif)
+![Log In](./assest/login.gif)
+
+### Edit Bio
+
+![Edit Bio](./assest/edit-bio.gif)
+
+### Upload Profile Picture
+
+![Upload Profile Picture](./assest/upload-image.gif)
+
+### Friends and Friend Request
+
+![Friend Request](./assest/friends-and-wannabees.gif)
+
+### Search Friends
+
+![Search Friends](./assest/search-friends.gif)

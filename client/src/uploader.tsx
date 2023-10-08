@@ -20,6 +20,7 @@ export default class Uploader extends Component<UploaderProps> {
     }
     // HTMLFormElement HTMLFormElement React.SyntheticEvent
     setNewPhoto(event: React.ChangeEvent<HTMLFormElement>) {
+        
         event.preventDefault();
 
         fetch("/upload.json", {

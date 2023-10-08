@@ -19,6 +19,7 @@ exports.sendEmail = (recipient: string, message: string, subject: string) => {
     return ses
         .sendEmail({
             // Put here the mail that was provided by spiced or my own
+            //vintage.coach@spicedling.email
             Source: "Server Email. <celestial.cart@spicedling.email>",
             Destination: {
                 ToAddresses: ["celestial.cart+destimation@spicedling.email"],
